@@ -1,5 +1,6 @@
 asgiref==3.8.1
 Django==5.1.1
+django-bootstrap5==24.3
 iniconfig==2.0.0
 numpy==2.1.1
 packaging==24.1
