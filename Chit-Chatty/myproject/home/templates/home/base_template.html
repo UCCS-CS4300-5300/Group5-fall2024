@@ -6,26 +6,26 @@
           <meta charset=""UTF-8">
           <meta name ="viewport" content="width=device-width, initial-scale=1.0">
           <title>My Django Project</title>
+          
           <!-- Bootstrapp CSS -->
           <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+          <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	 
-        </head>
-
-
       </head>
+
+
       <body style="background-color: #a2d6f9;" > <!-- background color -->
         <!-- nav bar -->
-        <nav class="navbar navbar-light" style="background-color: #33a1fd;""> <!-- navbar color -->
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-person-circle"></i>
-            </a>
+        <nav class="navbar navbar-light" style="background-color: #2176FF;""> <!-- navbar color -->
+          <div class="container-fluid">
+            <div class="mx-auto"></div>   <!-- centered image -->
+              <a class="navbar-brand" href="#">
+                <img src="{% static 'images/orangeLogo.png' %}" width="70" height="60" alt="">
+              </a>
+            </div>
+
         </nav>
-        
-          <header>
-          <h1>Chit Chatty</h1>    
-          </header>
       </body>
       {% block content %}
 
