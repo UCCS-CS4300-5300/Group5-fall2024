@@ -2,22 +2,21 @@
 
 {% block content %}
 <div class="container text-center mt-5">
-    <h1 class="display-4">Welcome to ChitChatty!</h1>
-    <p class="lead">Your go-to platform for enhancing your language skills.</p>
+    <h1 class="display-4" style="color: #31393C;">Welcome to ChitChatty!</h1>
+    <p class="lead" style="color: #31393C;">Your go-to platform for enhancing your language skills.</p>
 </div>
 
-<!-- Next Quiz Section -->
+<!-- Updated Next Quiz Section -->
 <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
-    <div class="card text-center shadow-lg w-50 p-3">
-        <div class="card-header bg-primary text-white">
-            <h4>Next Lesson</h4>
-        </div>
+    <div class="card text-center shadow-lg" style="width: 60%; padding: 30px; border: 2px solid #2176FF; border-radius: 15px;">
         <div class="card-body">
-            <h5 class="card-title">Next Quiz: <span class="text-primary">{{ quiz_title }}</span></h5>
-            <p class="card-text">{{ quiz_description }}</p>
-            <!-- Dynamic Play Button -->
-            <a href="{{ quiz_url }}" class="btn btn-primary rounded-circle" style="width: 60px; height: 60px;">
-                <i class="bi bi-play-fill text-white" style="font-size: 24px;"></i>
+            <h2 class="card-title" style="font-size: 32px; color: #2176FF; font-weight: bold;">Next Quiz</h2>
+            <h4 class="text-primary mt-4" style="font-size: 28px; color: #33A1FD;">{{ quiz_title }}</h4>
+            <p class="card-text mb-4" style="color: #31393C;">{{ quiz_description }}</p>
+            <!-- Enlarged Play Button -->
+            <a href="{{ quiz_url }}" class="btn btn-primary rounded-circle d-flex justify-content-center align-items-center"
+               style="width: 100px; height: 100px; background: linear-gradient(145deg, #2176FF, #33A1FD); border: none; box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);">
+                <i class="bi bi-play-fill text-white" style="font-size: 48px; margin-left: 5px;"></i>
             </a>
         </div>
     </div>
