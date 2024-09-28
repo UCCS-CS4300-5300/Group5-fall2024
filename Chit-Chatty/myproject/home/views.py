@@ -7,7 +7,7 @@ def index(request):
     next_quiz = Quiz.objects.filter(is_next=True).first()
     
     context = {
-        'quiz_title': next_quiz.title if next_quiz else 'No Quiz Available',
+        'quiz_title': next_quiz.title if next_quiz else 'Nothing!',
         'quiz_description': next_quiz.description if next_quiz else 'Check back later for new content.',
         'quiz_url': next_quiz.url if next_quiz else '#',
     }
