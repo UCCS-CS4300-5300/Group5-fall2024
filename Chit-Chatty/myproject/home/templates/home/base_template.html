@@ -5,15 +5,48 @@
       <head>
           <meta charset=""UTF-8">
           <meta name ="viewport" content="width=device-width, initial-scale=1.0">
-          <title>My Django Project</title>
+          <title>ChitChatty</title>
           
           <!-- Bootstrapp CSS -->
           <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
           <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+          <style>
+            /* Splash screen styles */
+            .splash-screen {
+              position: fixed;
+              width: 100%;
+              height: 100%;
+              background-color: #2176FF;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 10000;
+              opacity: 1;       /* Start fully opaque */
+              transition: opacity 1s ease-in-out;
+            }
+            .splash-hidden {
+              opacity: 0;      /* Fade out */
+            }
+            .splash-logo {
+              color: #fff;
+              font-size: 80px;
+              font-weight: bold;
+              text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+              transition: transform 1s ease-in-out, opacity 1s ease-in-out; /* Animation for logo */
+            }
+          </style>
+
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
           <!-- nav bar design -->
           <style>
+            .navbar {
+              opacity: 0;
+              transition: opacity 1s ease-in-out;
+            }
+            .navbar-visible {
+              opacity: 1;
+            }
             .floating-navbar {
               background-color: #2176FF;                  /* navbar color */
               box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);   /* adds a shadow around navbar */
@@ -27,7 +60,7 @@
               background: #F79824;                          /* Button color */
               box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);  /* shadow effect */
               transform: translateY(-8px);                    /* lift animation */
-              transition: all 0.3s ease-in-out;               /* Smooth animation */
+              transition: all 0.2s ease-in-out;               /* Smooth animation */
             }
           </style>
 
@@ -35,10 +68,14 @@
           
       </head>
 
+      <!-- Splash Screen -->
+      <body style="background-color: #a2d6f9;" >
+        <div id="splash" class="splash-screen">
+          <h1 class="splash-logo">ChitChatty</h1>
+        </div>
 
-      <body style="background-color: #a2d6f9;" > <!-- background color -->
         <!-- nav bar content -->
-        <nav class="navbar navbar-light floating-navbar">
+        <nav class="navbar navbar-light floating-navbar" id="navbar">
           <div class="container-fluid d-flex justify-content-between align-items-center">
             
             <!-- left hand side -->
@@ -82,9 +119,30 @@
             </div>
           </div>
         </nav>
-        
+
         <!-- bootstrap JS for dropdown to work -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- JavaScript to hide the splash screen after a delay -->
+        <script>
+          window.addEventListener("load", function() {
+            setTimeout(function(){
+              // Start the fade-out effect by adding the splash-hidden class
+              const splash = document.getElementById("splash");
+              const logo = document.querySelector(".splash-logo");
+              splash.classList.add("splash-hidden");
+                
+              // Grow and fade out the logo
+              logo.style.transform = "scale(1.2)"; // Grow effect
+
+              // Make the navbar visible after splash screen fade-out
+              const navbar = document.getElementById("navbar");
+              setTimeout(function() {
+                  splash.style.display = "none"; // Remove splash screen
+                  navbar.classList.add("navbar-visible"); // Fade in navbar
+              }, 1000); // Delay matches the splash fade-out duration
+            }, 1000);  // Delay before starting the splash screen fade-out (1000ms = 1 second)
+          });
+        </script>
       </body>
 
       {% block content %}
