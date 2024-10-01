@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     'app-ireyes4-5.devedu.io',
     'app-dbadillo-5.devedu.io',
     'app-cromo-5.devedu.io',
+    'app-adouangp-5.devedu.io',
 ]
 
 
