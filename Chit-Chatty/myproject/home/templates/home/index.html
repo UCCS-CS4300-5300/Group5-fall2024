@@ -19,7 +19,7 @@
             <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">{{ quiz_description }}</p>
 
             <!-- Play Button attributes -->
-            <a href="{{ quiz_url }}" class="btn rounded-circle d-flex justify-content-center align-items-center"
+            <a href="{% url 'quiz' %}" class="btn rounded-circle d-flex justify-content-center align-items-center"
                style="width: 120px; height: 120px; background: #FDCA40; border: none; box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.3); transition: all 0.3s ease-in-out;">
                 <i class="bi bi-play-fill" style="font-size: 60px; color: white; margin-left: 5px;"></i>
             </a>

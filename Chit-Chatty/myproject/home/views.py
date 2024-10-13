@@ -12,3 +12,6 @@ def index(request):
         'quiz_url': next_quiz.url if next_quiz else '#',
     }
     return render(request, 'home/index.html', context)
+
+def quiz(request):
+    return render(request, 'home/quiz_question.html')
