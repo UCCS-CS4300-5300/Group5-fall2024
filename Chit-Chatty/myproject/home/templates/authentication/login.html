@@ -1,0 +1,82 @@
+<!-- Template for logging in.-->
+
+{% extends 'home/base_template.html' %}
+
+{% block content %}
+
+<style>
+
+  /* Customization for the login container  */
+  .LoginContainer {
+
+    max-width: 500px; 
+    min-height: 200px; 
+    padding: 30px;
+    margin-top: 20px;
+ }
+
+</style>
+
+  <form method="post" action="{% url 'login-page' %}">
+    {% csrf_token %}
+
+      <!-- Fields will be contained within this container-->
+      <div class =" container LoginContainer">
+
+          <!-- Field for the username -->
+          {{form.username.label_tag}}
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="Username input field" name="username" id="username">
+          </div>
+          
+          <!-- Field for the password -->
+          {{form.password.label_tag}}
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="Password input field" name="password" id="password">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')" style="margin-left: 5px;">Show Password</button>
+            </div>
+          </div>
+
+          <!-- Sign in button -->
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <input class="btn btn-primary btn-lg" style="margin-right: 10px; margin-bottom: 6px;" type="submit" value="Sign in" id="signInBtn">
+            <input type="hidden" name="next" value="{% url 'index' %}">
+          </div>
+
+          <!-- Link to go to the register page if they are not a member-->
+          <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+            <span style="margin-right: 6px;"> Don't have an account? </span>
+            <span> <a href="{% url 'registration-page' %}"> Register </a> </span>
+          </div>
+
+          <!-- Form errors -->
+          {% if form.errors %}
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+              <p style="margin-bottom: -10px; color: red; font-weight: bold;">Error: Your username and password didn't match.</p>
+            </div>
+          {% endif %}
+
+          <!-- Display success message for registering (happens when user is redirected from successfully registering) -->
+          {%for message in messages %} 
+            <div style="display: flex; align-items: center; justify-content: center; font-weight: bold;">
+              {{message}} 
+            </div>
+          {% endfor %}
+       </div>
+
+      <!-- JavaScript for Password Visibility -->
+      <script>
+        function togglePassword(inputId) {
+            var passwordInput = document.getElementById(inputId);
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+     </script>
+  
+  </form>
+
+{% endblock %}
