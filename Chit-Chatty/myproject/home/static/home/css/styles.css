@@ -1,0 +1,66 @@
+/* splash screen styles */
+
+.splash-screen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #2176FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 1;
+    /* Start fully opaque */
+    transition: opacity 1s ease-in-out;
+}
+
+.splash-hidden {
+    opacity: 0;
+    /* Fade out */
+}
+
+.splash-logo {
+    color: #fff;
+    font-size: 80px;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    /* Animation for logo */
+}
+
+/* navbar styles */
+
+.navbar {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.navbar-visible {
+    opacity: 1;
+}
+
+.floating-navbar {
+    background-color: #2176FF;
+    /* navbar color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* adds a shadow around navbar */
+    border-radius: 10px;
+    /* rounds out corners */
+    margin: 20px auto;
+    /* how far away is navbar from top of the page */
+    padding: 5px 20px;
+    /* 10px: how narrow is navbar, 20px: how much room between most outer icons & edge   */
+    max-width: 95%;
+    /* changes navbar length */
+}
+
+.btn:hover {
+    background: #F79824;
+    /* Button color */
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
+    /* shadow effect */
+    transform: translateY(-8px);
+    /* lift animation */
+    transition: all 0.2s ease-in-out;
+    /* Smooth animation */
+}

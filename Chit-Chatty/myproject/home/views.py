@@ -13,5 +13,15 @@ def index(request):
     }
     return render(request, 'home/index.html', context)
 
+# quiz views
 def quiz(request):
     return render(request, 'home/quiz_question.html')
+
+def quiz_correct(request):
+    return render(request, 'home/quiz_correct.html')
+
+def quiz_incorrect(request):
+    return render(request, 'home/quiz_incorrect.html')
+
+def quiz_recap(request):
+    return render(request, 'home/quiz_recap.html')
