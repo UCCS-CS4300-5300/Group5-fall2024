@@ -2,48 +2,51 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-12 mb-1">
-        <!-- Card containing Chit -->
-        <div class="d-flex justify-content-center align-items-center">
-            <div class="card shadow-lg"
-                style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
-                <!--Next Quiz header and placement -->
-                <h1 class="card-title"
-                    style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-                    Question 1</h1>
-                <!-- Quiz information placement -->
-                <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 100px;">
-                    <div class="container mt-0">
-                        <div class="speech-bubble">
-                            "Hola, como estas? Yayyyyyyyyyyyyyyyy"
-                        </div>
-                    </div>
-                    <p></p>
-                    <p></p>
-                    <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">٩( ᐛ
-                        )و</p>
+<!-- Card containing Chit -->
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg"
+        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        <!-- Question Header -->
+        <h1 class="card-title"
+            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+            Question 1</h1>
+        <!-- Speech Bubble -->
+        <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 100px;">
+            <div class="container mt-0">
+                <div class="speech-bubble">
+                    "Hola, como estas? Yayyyyyyyyyyyyyyyy"
                 </div>
             </div>
-        </div>
-        <div class="col-12 mb-1">
-            <!-- Card for entering translation -->
-            <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
-                <div class="card shadow-lg"
-                    style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
-                    <!--Next Quiz header and placement -->
-                    <h1 class="card-title"
-                        style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-                        Enter translation:</h1>
-
-                    <!-- Quiz information placement -->
-                    <div class="d-flex flex-column justify-content-center align-items-center"
-                        style="margin-top: 100px;">
-                        <input type="text" size="75">
-                    </div>
-                    <a class="btn btn-warning align-self-end mt-auto" href="#" role="button">Submit</a>
-                </div>
-            </div>
+            <p></p>
+            <p></p>
+            <!-- Chit -->
+            <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">٩( ᐛ
+                )و</p>
         </div>
     </div>
-    {% endblock content %}
+</div>
+
+<!-- Card for entering translation -->
+<div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
+    <div class="card shadow-lg"
+        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        <!-- Enter Translation Header -->
+        <h1 class="card-title"
+            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+            Enter translation:</h1>
+
+        <!-- Input Field -->
+        <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 100px;">
+            <input type="text" size="75">
+        </div>
+        <!-- Submit Button -->
+        <a class="btn btn-warning align-self-end mt-auto" href="#" role="button">Submit</a>
+    </div>
+</div>
+
+<!-- Delete these three buttons -->
+<a class="btn btn-success align-self-end mt-auto" href="{% url 'quiz_correct' %}" role="button">Correct</a>
+<a class="btn btn-danger align-self-end mt-auto" href="{% url 'quiz_incorrect' %}" role="button">Incorrect</a>
+<a class="btn btn-primary align-self-end mt-auto" href="{% url 'quiz_recap' %}" role="button">Recap</a>
+
+{% endblock content %}

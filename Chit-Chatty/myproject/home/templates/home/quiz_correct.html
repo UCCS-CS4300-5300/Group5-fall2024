@@ -1,5 +1,31 @@
 {% extends "home/base_template.html" %}
 
 {% block content %}
-<h1>Hello</h1>
+<!-- Card containing Chit -->
+<div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+    <div class="card shadow-lg"
+        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        <!-- Question Header -->
+        <h1 class="card-title"
+            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+            You answered correctly!</h1>
+        <!-- Speech Bubble -->
+        <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 100px;">
+            <div class="container mt-0">
+                <div class="speech-bubble">
+                    "Great Job!"
+                </div>
+            </div>
+            <p></p>
+            <p></p>
+            <!-- Chit -->
+            <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">ᕦ(ò_óˇ)ᕤ</p>
+        </div>
+    </div>
+</div>
+
+<div class="center-button">
+    <a class="btn btn-warning" href="{% url 'quiz' %}" role="button">Next</a>
+</div>
+
 {% endblock content %}
