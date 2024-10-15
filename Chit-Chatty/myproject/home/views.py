@@ -81,6 +81,7 @@ Redirects user back to the login-page no matter what (because returning render a
 def logout(request):
     auth_logout(request) 
     return render(request, 'home/index.html')
+
 # quiz views
 def quiz(request):
     return render(request, 'home/quiz_question.html')

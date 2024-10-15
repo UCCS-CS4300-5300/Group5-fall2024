@@ -24,21 +24,6 @@
       <a class="navbar-brand ms-0" href="{% url 'index' %}">
         <img src="{% static 'home/images/whiteLogo.png' %}" width="70" height="60" alt="">
       </a>
-
-      <!-- Profile Icon -->
-      <!-- TEMPORARY: when user is logged in, clicking the person circle is how they log out -->
-      <div style="display: flex; align-items: center;">
-        {% if user.is_authenticated %}
-        <span class="text-white" style="font-weight: bold; margin-right: 10px;">Welcome, {{ user }}</span>
-        <a href="{% url 'logout' %}">
-          <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
-        </a>
-        {% else %}
-        <a href="{% url 'login-page' %}">
-          <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
-        </a>
-        {% endif %}
-      </div>
     </div>
   </nav>
   {% endblock navbar %}
