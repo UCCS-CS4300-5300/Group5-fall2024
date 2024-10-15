@@ -30,15 +30,6 @@
 
 /* navbar styles */
 
-.navbar {
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-}
-
-.navbar-visible {
-    opacity: 1;
-}
-
 .floating-navbar {
     background-color: #2176FF;
     /* navbar color */
@@ -52,6 +43,7 @@
     /* 10px: how narrow is navbar, 20px: how much room between most outer icons & edge   */
     max-width: 95%;
     /* changes navbar length */
+    z-index: 1;
 }
 
 .btn:hover {

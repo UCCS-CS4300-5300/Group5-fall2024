@@ -1,4 +1,80 @@
 {% extends "home/base_template.html" %}
+{% load static %}
+
+{% block splashscreen %}
+<div id="splash" class="splash-screen">
+    <h1 class="splash-logo">ChitChatty ٩( ᐛ)و</h1>
+</div>
+
+<!-- JavaScript to hide the splash screen after a delay -->
+<script>
+    window.addEventListener("load", function () {
+        setTimeout(function () {
+            // Start the fade-out effect by adding the splash-hidden class
+            const splash = document.getElementById("splash");
+            const logo = document.querySelector(".splash-logo");
+            splash.classList.add("splash-hidden");
+
+            // Grow and fade out the logo
+            logo.style.transform = "scale(1.2)"; // Grow effect
+            setTimeout(function () {
+                splash.style.display = "none"; // Remove splash screen
+            }, 1000); // Delay matches the splash fade-out duration
+        }, 1000);  // Delay before starting the splash screen fade-out (1000ms = 1 second)
+    });
+</script>
+{% endblock splashscreen %}
+
+{% block navbar %}
+<!-- Navbar Content -->
+<nav class="navbar navbar-light floating-navbar" id="navbar">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+
+        <!-- Left Hand Side -->
+        <div class="d-flex align-items-center">
+            <!-- Flag -->
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'home/images/Spanish flag.png' %}" width="60" height="50" alt="Spanish flag"
+                    style="border-radius: 10px;"> <!-- Flag -->
+            </a>
+            <!-- Dropdown Menu -->
+            <div class="dropdown ms-1">
+                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Difficulty
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                    <li><a class="dropdown-item" href="#">Easy</a></li>
+                    <li><a class="dropdown-item" href="#">Medium</a></li>
+                    <li><a class="dropdown-item" href="#">Hard</a></li>
+                </ul>
+            </div>
+            <!-- Dropdown Menu -->
+            <div class="dropdown ms-2">
+                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Goal
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
+                    <li><a class="dropdown-item" href="#">Travel</a></li>
+                    <li><a class="dropdown-item" href="#">Fluency</a></li>
+                    <li><a class="dropdown-item" href="#">For Fun</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Logo -->
+        <a class="navbar-brand ms-0" href="{% url 'index' %}" style="margin: 0 240px;">
+            <img src="{% static 'home/images/whiteLogo.png' %}" width="70" height="60" alt="">
+        </a>
+
+        <!-- Profile Icon -->
+        <div>
+            <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
+        </div>
+    </div>
+</nav>
+{% endblock navbar %}
 
 {% block content %}
 
