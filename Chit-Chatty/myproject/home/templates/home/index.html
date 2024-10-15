@@ -1,31 +1,6 @@
 {% extends "home/base_template.html" %}
 
 {% block content %}
-<div id="splash" class="splash-screen">
-    <h1 class="splash-logo">ChitChatty</h1>
-</div>
-
-<!-- JavaScript to hide the splash screen after a delay -->
-<script>
-    window.addEventListener("load", function () {
-        setTimeout(function () {
-            // Start the fade-out effect by adding the splash-hidden class
-            const splash = document.getElementById("splash");
-            const logo = document.querySelector(".splash-logo");
-            splash.classList.add("splash-hidden");
-
-            // Grow and fade out the logo
-            logo.style.transform = "scale(1.2)"; // Grow effect
-
-            // Make the navbar visible after splash screen fade-out
-            const navbar = document.getElementById("navbar");
-            setTimeout(function () {
-                splash.style.display = "none"; // Remove splash screen
-                navbar.classList.add("navbar-visible"); // Fade in navbar
-            }, 1000); // Delay matches the splash fade-out duration
-        }, 1000);  // Delay before starting the splash screen fade-out (1000ms = 1 second)
-    });
-</script>
 
 <div class="container text-center mt-5">
     <h1 class="display-4" style="color: #31393C;">Welcome to ChitChatty!</h1>
