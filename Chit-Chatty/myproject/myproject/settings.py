@@ -132,4 +132,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #For submitting forms
 CSRF_TRUSTED_ORIGINS = [
     'https://app-adouangp-5.devedu.io',
+    'https://app-prodrig8-5.devedu.io',
+    'https://app-ireyes4-5.devedu.io',
+    'https://app-dbadillo-5.devedu.io',
+    'https://app-cromo-5.devedu.io',
 ]
