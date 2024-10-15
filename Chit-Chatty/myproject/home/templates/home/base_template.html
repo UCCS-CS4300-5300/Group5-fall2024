@@ -15,50 +15,13 @@
 </head>
 
 <body style="background-color: #a2d6f9;">
-
-  <div id="splash" class="splash-screen">
-    <h1 class="splash-logo">ChitChatty</h1>
-  </div>
-
-  <!-- Navbar Content -->
-  <nav class="navbar navbar-light floating-navbar" id="navbar">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-
-      <!-- Left Hand Side -->
-      <div class="d-flex align-items-center">
-        <!-- Flag -->
-        <a class="navbar-brand" href="#">
-          <img src="{% static 'home/images/Spanish flag.png' %}" width="60" height="50" alt="Spanish flag"
-            style="border-radius: 10px;"> <!-- Flag -->
-        </a>
-        <!-- Dropdown Menu -->
-        <div class="dropdown ms-1">
-          <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Difficulty
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-            <li><a class="dropdown-item" href="#">Easy</a></li>
-            <li><a class="dropdown-item" href="#">Medium</a></li>
-            <li><a class="dropdown-item" href="#">Hard</a></li>
-          </ul>
-        </div>
-        <!-- Dropdown Menu -->
-        <div class="dropdown ms-2">
-          <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Goal
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
-            <li><a class="dropdown-item" href="#">Travel</a></li>
-            <li><a class="dropdown-item" href="#">Fluency</a></li>
-            <li><a class="dropdown-item" href="#">For Fun</a></li>
-          </ul>
-        </div>
-      </div>
-
+  {% block splashscreen %}
+  {% endblock splashscreen %}
+  {% block navbar %}
+  <nav class="navbar navbar-light floating-navbar">
+    <div class="container d-flex justify-content-center align-items-center">
       <!-- Logo -->
-      <a class="navbar-brand ms-0" href="#" style="margin: 0 240px;">
+      <a class="navbar-brand ms-0" href="{% url 'index' %}">
         <img src="{% static 'home/images/whiteLogo.png' %}" width="70" height="60" alt="">
       </a>
 
@@ -78,35 +41,11 @@
       </div>
     </div>
   </nav>
-
-  <!-- JavaScript to hide the splash screen after a delay -->
-  <script>
-    window.addEventListener("load", function () {
-      setTimeout(function () {
-        // Start the fade-out effect by adding the splash-hidden class
-        const splash = document.getElementById("splash");
-        const logo = document.querySelector(".splash-logo");
-        splash.classList.add("splash-hidden");
-
-        // Grow and fade out the logo
-        logo.style.transform = "scale(1.2)"; // Grow effect
-
-        // Make the navbar visible after splash screen fade-out
-        const navbar = document.getElementById("navbar");
-        setTimeout(function () {
-          splash.style.display = "none"; // Remove splash screen
-          navbar.classList.add("navbar-visible"); // Fade in navbar
-        }, 1000); // Delay matches the splash fade-out duration
-      }, 1000);  // Delay before starting the splash screen fade-out (1000ms = 1 second)
-    });
-  </script>
-
+  {% endblock navbar %}
   <!-- Bootstrap JS for dropdown to work -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+  {% block content %}
+  {% endblock content %}
 </body>
-
-{% block content %}
-{% endblock content %}
 
 </html>
