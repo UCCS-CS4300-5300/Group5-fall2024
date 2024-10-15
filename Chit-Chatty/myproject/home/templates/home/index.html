@@ -69,15 +69,24 @@
         </a>
 
         <!-- Profile Icon -->
-        <div>
-            <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
+        <!-- TEMPORARY: when user is logged in, clicking the person circle is how they log out -->
+        <div style="display: flex; align-items: center;">
+            {% if user.is_authenticated %}
+            <span class="text-white" style="font-weight: bold; margin-right: 10px;">Welcome, {{ user }}</span>
+            <a href="{% url 'logout' %}">
+                <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
+            </a>
+            {% else %}
+            <a href="{% url 'login-page' %}">
+                <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
+            </a>
+            {% endif %}
         </div>
     </div>
 </nav>
 {% endblock navbar %}
 
 {% block content %}
-
 <div class="container text-center mt-5">
     <h1 class="display-4" style="color: #31393C;">Welcome to ChitChatty!</h1>
     <p class="lead" style="color: #31393C;">Your go-to platform for enhancing your language skills.</p>

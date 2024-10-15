@@ -82,7 +82,7 @@ def logout(request):
     auth_logout(request) 
     return render(request, 'home/index.html')
 
-# quiz views
+# Quiz Views
 def quiz(request):
     return render(request, 'home/quiz_question.html')
 

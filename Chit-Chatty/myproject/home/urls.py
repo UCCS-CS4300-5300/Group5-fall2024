@@ -5,7 +5,7 @@ urlpatterns = [
     # Default path (Home)
     path('', views.index, name='index'),
 
-    # quiz urls
+    # Paths for the quiz
     path('quiz/', views.quiz, name='quiz'),
     path('quiz_correct/', views.quiz_correct, name='quiz_correct'),
     path('quiz_incorrect/', views.quiz_incorrect, name='quiz_incorrect'),
