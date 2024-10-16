@@ -87,6 +87,12 @@ def logout(request):
 
 # Quiz Views
 def quiz(request):
+
+    # Reset the session when starting a new quiz
+    request.session['correct_count'] = 0
+    request.session['incorrect_count'] = 0
+    request.session['question_number'] = 1
+
     # Fetch the next quiz and the first question
     next_quiz = Quiz.objects.filter(is_next=True).first()
 
@@ -108,7 +114,6 @@ def quiz(request):
         context = {'error': "No quiz available."}
 
     return render(request, 'home/quiz_question.html', context)
-
 
 # Quiz Check view
 def quiz_check_answer(request):
