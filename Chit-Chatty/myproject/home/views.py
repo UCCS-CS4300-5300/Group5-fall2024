@@ -113,7 +113,7 @@ def quiz(request):
     else:
         context = {'error': "No quiz available."}
 
-    return render(request, 'home/quiz_question.html', context)
+    return render(request, 'quiz/quiz_question.html', context)
 
 # Quiz Check view
 def quiz_check_answer(request):
@@ -148,7 +148,7 @@ def quiz_correct(request):
         'user_answer': user_answer,
         'feedback': "Great job!"
     }
-    return render(request, 'home/quiz_correct.html', context)
+    return render(request, 'quiz/quiz_correct.html', context)
 
 
 # Quiz Incorrect View
@@ -164,7 +164,7 @@ def quiz_incorrect(request):
         'correct_answer': correct_answer,
         'feedback': "So close! You'll get it next time!"
     }
-    return render(request, 'home/quiz_incorrect.html', context)
+    return render(request, 'quiz/quiz_incorrect.html', context)
 
 # Quiz Recap
 def quiz_recap(request):
@@ -181,4 +181,4 @@ def quiz_recap(request):
         'score_percentage': (correct_count / total_questions) * 100 if total_questions > 0 else 0
     }
 
-    return render(request, 'home/quiz_recap.html', context)
+    return render(request, 'quiz/quiz_recap.html', context)

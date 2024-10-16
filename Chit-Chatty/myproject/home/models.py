@@ -17,10 +17,11 @@ class Quiz(models.Model):
 
 class Question(models.Model):
     quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE, related_name='questions')
-    translation_question = models.CharField(max_length=300)  # Phrase in the source language
-    correct_answer = models.CharField(max_length=300)  # Expected translation
-    source_language = models.CharField(max_length=50, default="Spanish")  # Optional: Language of the phrase
-    target_language = models.CharField(max_length=50, default="English")  # Optional: Expected translation language
+    # Phrase in the source language
+    translation_question = models.CharField(max_length=300)  
+    correct_answer = models.CharField(max_length=300)  
+    source_language = models.CharField(max_length=50, default="Spanish")  
+    target_language = models.CharField(max_length=50, default="English")  
     difficulty = models.CharField(max_length=10, choices=[("Easy", "Easy"), ("Medium", "Medium"), ("Hard", "Hard")], default="Easy")
 
     def __str__(self):
