@@ -14,6 +14,18 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
+# Question Model
+class Question(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
+    translation_question = models.CharField(max_length=300)
+    correct_answer = models.CharField(max_length=300)  
+    # Optional feedback if wrong
+    feedback = models.TextField(null=True, blank=True)  
+
+    def __str__(self):
+        return self.translation_question
+
+
 # User model
 class Member(models.Model):
 

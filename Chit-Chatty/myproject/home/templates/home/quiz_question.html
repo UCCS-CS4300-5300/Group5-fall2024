@@ -14,7 +14,7 @@
         <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 100px;">
             <div class="container mt-0">
                 <div class="speech-bubble">
-                    "Hola, como estas?"
+                    "{{ question.translation_question }}"  <!-- Dynamically display the question -->
                 </div>
             </div>
             <p></p>
@@ -34,18 +34,19 @@
             style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
             Enter translation:</h1>
 
-        <!-- Input Field -->
-        <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 100px;">
-            <input type="text" size="75">
-        </div>
-        <!-- Submit Button -->
-        <a class="btn btn-warning align-self-end mt-auto" href="#" role="button">Submit</a>
+        <!-- Input Field for User's Answer -->
+        <form method="post" action="{% url 'quiz_check_answer' %}">
+            {% csrf_token %}
+            <input type="hidden" name="question_id" value="{{ question.id }}">  <!-- Pass the question ID -->
+            
+            <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 100px;">
+                <input type="text" name="user_answer" size="75" placeholder="Enter your translation">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-warning align-self-end mt-auto">Submit</button>
+        </form>
     </div>
 </div>
-
-<!-- Delete these three buttons -->
-<a class="btn btn-success align-self-end mt-auto" href="{% url 'quiz_correct' %}" role="button">Correct</a>
-<a class="btn btn-danger align-self-end mt-auto" href="{% url 'quiz_incorrect' %}" role="button">Incorrect</a>
-<a class="btn btn-primary align-self-end mt-auto" href="{% url 'quiz_recap' %}" role="button">Recap</a>
 
 {% endblock content %}

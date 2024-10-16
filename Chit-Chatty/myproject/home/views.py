@@ -84,13 +84,65 @@ def logout(request):
 
 # Quiz Views
 def quiz(request):
-    return render(request, 'home/quiz_question.html')
+    # Fetch the quiz marked as the next one
+    next_quiz = Quiz.objects.filter(is_next=True).first()
+    
+    if next_quiz:
+        # Get the first question from this quiz
+        first_question = next_quiz.questions.first()
+        context = {
+            'quiz': next_quiz,
+            'question': first_question
+        }
+    else:
+        # If no next quiz is found, you could display a message
+        context = {'error': "No quiz available."}
+    
+    return render(request, 'home/quiz_question.html', context)
 
+# Quiz Check view
+def quiz_check_answer(request):
+    if request.method == 'POST':
+        question_id = request.POST.get('question_id')
+        user_answer = request.POST.get('user_answer').strip().lower()
+
+        question = get_object_or_404(Question, id=question_id)
+        correct_answer = question.correct_answer.strip().lower()
+
+        # Store question, user's answer, and correct answer in the session
+        request.session['question'] = question.translation_question
+        request.session['user_answer'] = user_answer
+        request.session['correct_answer'] = correct_answer
+
+        if user_answer == correct_answer:
+            return redirect('quiz_correct')
+        else:
+            return redirect('quiz_incorrect')
+
+    return redirect('quiz')
+
+
+# Quiz Correct
 def quiz_correct(request):
-    return render(request, 'home/quiz_correct.html')
+    # Assuming the question and answer have been saved in the session during quiz_check_answer
+    question = request.session.get('question')
+    user_answer = request.session.get('user_answer')
 
+    context = {
+        'question': question,
+        'user_answer': user_answer,
+        'feedback': "Great job!"
+    }
+    return render(request, 'home/quiz_correct.html', context)
+
+
+# Quiz Incorrect View
 def quiz_incorrect(request):
-    return render(request, 'home/quiz_incorrect.html')
+    context = {
+        'message': "You'll get it next time!"
+    }
+    return render(request, 'home/quiz_incorrect.html', context)
 
+# Quiz Recap
 def quiz_recap(request):
     return render(request, 'home/quiz_recap.html')

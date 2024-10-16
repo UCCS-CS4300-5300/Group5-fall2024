@@ -46,6 +46,8 @@
     z-index: 1;
 }
 
+/* play button values */
+
 .btn:hover {
     background: #F79824;
     /* Button color */
