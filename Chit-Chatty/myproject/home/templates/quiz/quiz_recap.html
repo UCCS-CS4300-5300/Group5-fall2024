@@ -10,22 +10,18 @@
             style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
             Quiz Results</h1>
         <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 80px;">
-            <p>You got 1 question correct.</p>
-            <p>You got 1 question incorrect.</p>
-            <p>You got a 50% on this quiz.</p>
+            <p>You answered {{ correct_count }} questions correctly.</p>
+            <p>You answered {{ incorrect_count }} questions incorrectly.</p>
+            <p>Total Questions: {{ total_questions }}</p>
+            <p>Your Score: {{ score_percentage }}%</p>
         </div>
-        <!-- Speech Bubble -->
-        <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 20px;">
-            <p></p>
-            <!-- Chit -->
-            <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">(ﾉ´ヮ`)ﾉ*: ･ﾟ
-            </p>
-        </div>
+        <!-- Chit -->
+        <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">(ﾉ´ヮ`)ﾉ*: ･ﾟ</p>
     </div>
 </div>
 
 <div class="center-button">
-    <a class="btn btn-warning" href="{% url 'index' %}" role="button">Home</a>
+    <a class="btn btn-warning" href="{% url 'quiz' %}" role="button">Start Again</a>
 </div>
 
 {% endblock content %}

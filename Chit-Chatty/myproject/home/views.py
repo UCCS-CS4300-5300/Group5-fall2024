@@ -153,6 +153,18 @@ def quiz_incorrect(request):
     }
     return render(request, 'home/quiz_incorrect.html', context)
 
-# Quiz Recap
 def quiz_recap(request):
-    return render(request, 'home/quiz_recap.html')
+    # Fetch progress from the session
+    correct_count = request.session.get('correct_count', 0)
+    incorrect_count = request.session.get('incorrect_count', 0)
+    total_questions = correct_count + incorrect_count
+
+    # Prepare the context for the recap page
+    context = {
+        'correct_count': correct_count,
+        'incorrect_count': incorrect_count,
+        'total_questions': total_questions,
+        'score_percentage': (correct_count / total_questions) * 100 if total_questions > 0 else 0
+    }
+
+    return render(request, 'home/quiz_recap.html', context)
