@@ -46,6 +46,37 @@
     z-index: 1;
 }
 
+/* navbar dropdown styles */
+.navbar .dropdown-menu {
+    /* Remains in document flow */
+    position: absolute;  
+    /* Position directly below the button */
+    top: 100%;  
+    left: 0;
+    margin-top: 0;
+    padding: 10px;
+    /* Rounding */
+    border-radius: 5px;  
+    box-shadow: none; 
+    /* Remove any floating/animation effects */ 
+    transform: none;  
+    /* No transitions on dropdown */
+    transition: none;  
+    /* Standard dropdown background */
+    background-color: white;  
+    z-index: 1000;  /* Ensure it's on top of other elements */
+}
+git 
+/* dropdown menus style */
+.dropdown-menu {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    /* Subtle rounded corners */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    /* Soft shadow for the dropdown */
+}
+
 /* play button values */
 
 .btn:hover {
