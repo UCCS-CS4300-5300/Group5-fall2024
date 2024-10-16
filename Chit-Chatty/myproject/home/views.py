@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout, login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .models import Quiz, Member
+from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
 
+# Home Page View
 def index(request):
     # Fetch the quiz that is marked as the next quiz
     next_quiz = Quiz.objects.filter(is_next=True).first()
@@ -14,9 +15,11 @@ def index(request):
     context = {
         'quiz_title': next_quiz.title if next_quiz else 'Nothing!',
         'quiz_description': next_quiz.description if next_quiz else 'Check back later for new content.',
-        'quiz_url': next_quiz.url if next_quiz else '#',
+        'quiz_url': next_quiz.url if next_quiz else '#',  # URL if available, otherwise default to '#'
+        'quiz_available': bool(next_quiz)  # Boolean flag to indicate if a quiz is available
     }
     return render(request, 'home/index.html', context)
+
 
 '''
 View for user registration
@@ -84,21 +87,28 @@ def logout(request):
 
 # Quiz Views
 def quiz(request):
-    # Fetch the quiz marked as the next one
+    # Fetch the next quiz and the first question
     next_quiz = Quiz.objects.filter(is_next=True).first()
-    
+
     if next_quiz:
-        # Get the first question from this quiz
         first_question = next_quiz.questions.first()
-        context = {
-            'quiz': next_quiz,
-            'question': first_question
-        }
+
+        # Check if there is no question in the quiz (temporary debugging)
+        if not first_question:
+            context = {
+                'quiz': next_quiz,
+                'error': "No questions available for this quiz."
+            }
+        else:
+            context = {
+                'quiz': next_quiz,
+                'question': first_question
+            }
     else:
-        # If no next quiz is found, you could display a message
         context = {'error': "No quiz available."}
-    
+
     return render(request, 'home/quiz_question.html', context)
+
 
 # Quiz Check view
 def quiz_check_answer(request):
