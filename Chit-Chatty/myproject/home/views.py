@@ -153,11 +153,20 @@ def quiz_correct(request):
 
 # Quiz Incorrect View
 def quiz_incorrect(request):
+    # Retrieve data from the session
+    question = request.session.get('question')
+    user_answer = request.session.get('user_answer')
+    correct_answer = request.session.get('correct_answer')
+
     context = {
-        'message': "You'll get it next time!"
+        'question': question,
+        'user_answer': user_answer,
+        'correct_answer': correct_answer,
+        'feedback': "So close! You'll get it next time!"
     }
     return render(request, 'home/quiz_incorrect.html', context)
 
+# Quiz Recap
 def quiz_recap(request):
     # Fetch progress from the session
     correct_count = request.session.get('correct_count', 0)

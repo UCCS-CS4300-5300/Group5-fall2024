@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -14,16 +15,17 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
-# Question Model
 class Question(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
-    translation_question = models.CharField(max_length=300)
-    correct_answer = models.CharField(max_length=300)  
-    # Optional feedback if wrong
-    feedback = models.TextField(null=True, blank=True)  
+    quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE, related_name='questions')
+    translation_question = models.CharField(max_length=300)  # Phrase in the source language
+    correct_answer = models.CharField(max_length=300)  # Expected translation
+    source_language = models.CharField(max_length=50, default="Spanish")  # Optional: Language of the phrase
+    target_language = models.CharField(max_length=50, default="English")  # Optional: Expected translation language
+    difficulty = models.CharField(max_length=10, choices=[("Easy", "Easy"), ("Medium", "Medium"), ("Hard", "Hard")], default="Easy")
 
     def __str__(self):
         return self.translation_question
+
 
 
 # User model
