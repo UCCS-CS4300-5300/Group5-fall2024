@@ -121,7 +121,6 @@
    - Hid the "Goal" dropdown in the navbar for now, as that feature is pending future development.
    - Ensured the Play button has a consistent 3D appearance with enhanced depth and shadows for better visual feedback.
 
----
 - **Navbar Dropdown Menus**
    - The dropdown menus in the navbar no longer hover or float unintentionally.
    - Dropdown selections are now properly displayed, reflecting the chosen difficulty level.
@@ -131,7 +130,7 @@
    - Fixed the hover behavior of the Play button to lift up instead of enlarging.
    - Made the Play button dynamically scale when active and ensured it remains aligned with the card element.
    - Disabled the Play button if no quiz is available.
-   - 
+---
 sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 
 ### Feature Added: User Registration (10/14/2024)
