@@ -115,6 +115,31 @@ def quiz(request):
 
     return render(request, 'quiz/quiz_question.html', context)
 
+# Generate Quiz view
+@login_required
+def generate_quiz(request):
+    # Check for POST request with selected difficulty
+    if request.method == 'POST':
+        difficulty - request.POST.get('difficulty')
+
+        #Retrieve 10 random questions based on the selected difficulty
+        questions = Question.objects.filter(difficulty=difficulty).order_by('?')[:10]
+
+        if questions.exists():
+            # Create a new quiz for the user 
+            quiz.questions.set(questions)
+
+            # Mark the quiz as the "Next" quiz for the user
+            quiz.objects.filter(user=request.user).update(is_next=False)
+            quiz.is_next = True
+            quiz.save()
+
+            # Redirect to the main page with an activated "Play" button
+            return redirect('home/index.html')
+    
+    # Invalid request default redirect
+    return redirect('home/index.html')
+    
 # Quiz Check view
 def quiz_check_answer(request):
     if request.method == 'POST':
@@ -134,7 +159,7 @@ def quiz_check_answer(request):
         else:
             return redirect('quiz_incorrect')
 
-    return redirect('quiz')
+    return redirect('quiz/quiz')
 
 # Quiz Correct
 def quiz_correct(request):
