@@ -1,24 +1,4 @@
 # Group5-fall2024
-
----
-
-## Updates
-
-### **October 17, 2024**
-
-#### Implemented Features and Fixes (Darion Badillo)
-
-- **Navbar Dropdown Menus**
-   - The dropdown menus in the navbar no longer hover or float unintentionally.
-   - Dropdown selections are now properly displayed, reflecting the chosen difficulty level.
-   
-- **Play Button**
-   - Separated the Play button styling from other items in the `styles.css` file.
-   - Fixed the hover behavior of the Play button to lift up instead of enlarging.
-   - Made the Play button dynamically scale when active and ensured it remains aligned with the card element.
-   - Disabled the Play button if no quiz is available.
-# ChitChatty Language Learning Application
-
 ## Overview
 
 **ChitChatty** is a language learning platform designed to help users improve their language skills through quizzes and dynamic content generation. The app integrates AI tools to generate translation questions and leverages the Googletrans library for handling multiple languages. The app aims to provide an engaging and personalized learning experience by adapting quiz difficulty and user progress.
@@ -135,6 +115,25 @@
    - Ensured the Play button has a consistent 3D appearance with enhanced depth and shadows for better visual feedback.
 
 ---
+
+---
+
+## Updates
+
+### **October 17, 2024**
+
+#### Implemented Features and Fixes (Darion Badillo)
+
+- **Navbar Dropdown Menus**
+   - The dropdown menus in the navbar no longer hover or float unintentionally.
+   - Dropdown selections are now properly displayed, reflecting the chosen difficulty level.
+   
+- **Play Button**
+   - Separated the Play button styling from other items in the `styles.css` file.
+   - Fixed the hover behavior of the Play button to lift up instead of enlarging.
+   - Made the Play button dynamically scale when active and ensured it remains aligned with the card element.
+   - Disabled the Play button if no quiz is available.
+# ChitChatty Language Learning Application
 
 sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 
