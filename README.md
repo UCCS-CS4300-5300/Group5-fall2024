@@ -63,7 +63,7 @@
 4. Load the sample data:
 
    ```bash
-   python manage.py load_questions
+   python manage.py add_questions
    ```
 
 5. Run the server:
