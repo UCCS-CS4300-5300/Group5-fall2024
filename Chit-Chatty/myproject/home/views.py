@@ -7,6 +7,7 @@ from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
 import random
+import requests
 
 # Home Page View
 def index(request):

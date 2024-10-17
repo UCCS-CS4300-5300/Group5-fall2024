@@ -1,9 +1,14 @@
 asgiref==3.8.1
+certifi==2024.8.30
+charset-normalizer==3.4.0
 Django==5.1.1
 django-bootstrap5==24.3
+idna==3.10
 iniconfig==2.0.0
 numpy==2.1.1
 packaging==24.1
 pluggy==1.5.0
 pytest==8.3.3
+requests==2.32.3
 sqlparse==0.5.1
+urllib3==2.2.3
