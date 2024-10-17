@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
+import random
 
 # Home Page View
 def index(request):
@@ -174,23 +175,42 @@ def quiz_check_answer(request):
     # Redirect to the quiz page if the request method is not POST
     return redirect('quiz')
 
-# Quiz Correct View
+# Quiz Correct View 
 @login_required
 def quiz_correct(request):
     # Retrieve data from the session
     question = request.session.get('question')
     user_answer = request.session.get('user_answer')
 
+    # Pool of positive feedback remarks
+    positive_feedback = [
+        "Great job!",
+        "Fantastic!",
+        "Well done!",
+        "You're nailing it!",
+        "Impressive!",
+        "You got it!",
+        "Correct!",
+        "You're on a roll!",
+        "Keep up the great work!",
+        "Awesome job!",
+        "You're doing amazing!",
+        "Nice work!",
+    ]
+
+    # Randomly select a positive feedback remark
+    feedback = random.choice(positive_feedback)
+
     # Load feedback for correct answers
     context = {
         'question': question,
         'user_answer': user_answer,
-        'feedback': "Great job! Correct answer!"
+        'feedback': feedback
     }
 
     return render(request, 'quiz/quiz_correct.html', context)
 
-# Quiz Incorrect View
+# Quiz Incorrect View 
 @login_required
 def quiz_incorrect(request):
     # Retrieve data from the session
@@ -198,12 +218,24 @@ def quiz_incorrect(request):
     user_answer = request.session.get('user_answer')
     correct_answer = request.session.get('correct_answer')
 
+    # Pool of negative feedback remarks
+    negative_feedback = [
+        "So close! You'll get it next time!",
+        "Almost! Keep it up!",
+        "Don't give up, you're learning!",
+        "Nice try! Keep practicing!",
+        "Keep going, you'll get it soon!"
+    ]
+
+    # Randomly select a negative feedback remark
+    feedback = random.choice(negative_feedback)
+
     # Load feedback for incorrect answers
     context = {
         'question': question,
         'user_answer': user_answer,
         'correct_answer': correct_answer,
-        'feedback': "So close! You'll get it next time!"
+        'feedback': feedback
     }
 
     return render(request, 'quiz/quiz_incorrect.html', context)
