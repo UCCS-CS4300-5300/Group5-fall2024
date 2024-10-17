@@ -16,7 +16,7 @@ class Quiz(models.Model):
     # Link quiz to user
     user = models.ForeignKey('Member', on_delete=models.CASCADE, default=None)
 
-    # 
+    # Holds all questions in model
     questions = models.ManyToManyField('Question')
 
     def __str__(self):
