@@ -84,6 +84,11 @@
 
 ---
 
+## Updates
+
+### **October 17, 2024**
+
+#### Implemented Features and Fixes
 - **Quiz and Question Models**
    - Adjusted the `Quiz` model to include a boolean `is_next` flag to indicate the next quiz.
    - Created the `Question` model with the following fields:
@@ -117,15 +122,6 @@
    - Ensured the Play button has a consistent 3D appearance with enhanced depth and shadows for better visual feedback.
 
 ---
-
----
-
-## Updates
-
-### **October 17, 2024**
-
-#### Implemented Features and Fixes (Darion Badillo)
-
 - **Navbar Dropdown Menus**
    - The dropdown menus in the navbar no longer hover or float unintentionally.
    - Dropdown selections are now properly displayed, reflecting the chosen difficulty level.
