@@ -13,10 +13,10 @@ def index(request):
     next_quiz = Quiz.objects.filter(is_next=True).first()
     
     context = {
-        'quiz_title': next_quiz.title if next_quiz else 'Nothing!',
-        'quiz_description': next_quiz.description if next_quiz else 'Check back later for new content.',
-        'quiz_url': next_quiz.url if next_quiz else '#',  # URL if available, otherwise default to '#'
         'quiz_available': bool(next_quiz)  # Boolean flag to indicate if a quiz is available
+        'quiz_title': next_quiz.title if next_quiz else 'No Quiz Loaded!',
+        'quiz_description': next_quiz.description if next_quiz else 'Check back later for new content.',
+        
     }
     return render(request, 'home/index.html', context)
 
@@ -139,58 +139,77 @@ def generate_quiz(request):
     
     # Invalid request default redirect
     return redirect('home/index.html')
-    
-# Quiz Check view
+
+# Quiz Check Answer View
+@login_required
 def quiz_check_answer(request):
     if request.method == 'POST':
         question_id = request.POST.get('question_id')
         user_answer = request.POST.get('user_answer').strip().lower()
 
+        # Get the question object
         question = get_object_or_404(Question, id=question_id)
         correct_answer = question.correct_answer.strip().lower()
+
+        # Retrieve the current quiz from session
+        current_quiz = request.session.get('current_quiz', None)
 
         # Store question, user's answer, and correct answer in the session
         request.session['question'] = question.translation_question
         request.session['user_answer'] = user_answer
         request.session['correct_answer'] = correct_answer
 
+        # Increment correct/incorrect counts in session
+        correct_count = request.session.get('correct_count', 0)
+        incorrect_count = request.session.get('incorrect_count', 0)
+
+        # Determine if the answer is correct or incorrect
         if user_answer == correct_answer:
+            request.session['correct_count'] = correct_count + 1
             return redirect('quiz_correct')
         else:
+            request.session['incorrect_count'] = incorrect_count + 1
             return redirect('quiz_incorrect')
 
-    return redirect('quiz/quiz')
+    # Redirect to the quiz page if the request method is not POST
+    return redirect('quiz')
 
-# Quiz Correct
+# Quiz Correct View
+@login_required
 def quiz_correct(request):
-    # Assuming the question and answer have been saved in the session during quiz_check_answer
+    # Retrieve data from the session
     question = request.session.get('question')
     user_answer = request.session.get('user_answer')
 
+    # Load feedback for correct answers
     context = {
         'question': question,
         'user_answer': user_answer,
-        'feedback': "Great job!"
+        'feedback': "Great job! Correct answer!"
     }
+
     return render(request, 'quiz/quiz_correct.html', context)
 
-
 # Quiz Incorrect View
+@login_required
 def quiz_incorrect(request):
     # Retrieve data from the session
     question = request.session.get('question')
     user_answer = request.session.get('user_answer')
     correct_answer = request.session.get('correct_answer')
 
+    # Load feedback for incorrect answers
     context = {
         'question': question,
         'user_answer': user_answer,
         'correct_answer': correct_answer,
         'feedback': "So close! You'll get it next time!"
     }
+
     return render(request, 'quiz/quiz_incorrect.html', context)
 
-# Quiz Recap
+# Quiz Recap View
+@login_required
 def quiz_recap(request):
     # Fetch progress from the session
     correct_count = request.session.get('correct_count', 0)
@@ -204,6 +223,10 @@ def quiz_recap(request):
         'total_questions': total_questions,
         'score_percentage': (correct_count / total_questions) * 100 if total_questions > 0 else 0
     }
+
+    # Clear progress after showing the recap
+    request.session['correct_count'] = 0
+    request.session['incorrect_count'] = 0
 
     return render(request, 'quiz/quiz_recap.html', context)
 
