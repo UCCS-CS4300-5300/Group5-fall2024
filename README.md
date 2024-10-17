@@ -1,4 +1,6 @@
 # Group5-fall2024
+# ChitChatty Language Learning Application
+
 ## Overview
 
 **ChitChatty** is a language learning platform designed to help users improve their language skills through quizzes and dynamic content generation. The app integrates AI tools to generate translation questions and leverages the Googletrans library for handling multiple languages. The app aims to provide an engaging and personalized learning experience by adapting quiz difficulty and user progress.
@@ -133,8 +135,7 @@
    - Fixed the hover behavior of the Play button to lift up instead of enlarging.
    - Made the Play button dynamically scale when active and ensured it remains aligned with the card element.
    - Disabled the Play button if no quiz is available.
-# ChitChatty Language Learning Application
-
+   - 
 sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 
 ### Feature Added: User Registration (10/14/2024)
