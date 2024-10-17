@@ -15,8 +15,9 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
+# Class model
 class Question(models.Model):
-    quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE, related_name='questions')
+    #quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE, related_name='questions')
     # Phrase in the source language
     translation_question = models.CharField(max_length=300)  
     correct_answer = models.CharField(max_length=300)  
@@ -26,8 +27,6 @@ class Question(models.Model):
 
     def __str__(self):
         return self.translation_question
-
-
 
 # User model
 class Member(models.Model):

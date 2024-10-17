@@ -77,6 +77,12 @@
     /* Soft shadow for the dropdown */
 }
 
+/* generate quiz style */
+.generate-quiz-btn .btn-warning {
+    padding: 6px 12px;
+    margin-left: 12px; /* Adjusts the space between the dropdown and button */
+}
+
 /* floating play button */
 .play-btn {
     background: #FDCA40;
@@ -90,6 +96,7 @@
     transform: translateY(-8px);
     box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
 }
+
 
 /* speech bubble for chit 
 created using ChatGPT: https://chatgpt.com/share/670d9db3-aab8-8003-9f19-bf0783aefd0e */

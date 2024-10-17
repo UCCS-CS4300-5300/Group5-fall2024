@@ -37,20 +37,27 @@
                 <img src="{% static 'home/images/Spanish flag.png' %}" width="60" height="50" alt="Spanish flag"
                     style="border-radius: 10px;"> <!-- Flag -->
             </a>
-            <!-- Dropdown Menu -->
+            <!-- Difficulty dropdown -->
             <div class="dropdown ms-1">
                 <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     Difficulty
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                    <li><a class="dropdown-item" href="#">Easy</a></li>
-                    <li><a class="dropdown-item" href="#">Medium</a></li>
-                    <li><a class="dropdown-item" href="#">Hard</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Easy')">Easy</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Medium')">Medium</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Hard')">Hard</a></li>
                 </ul>
             </div>
-            <!-- Dropdown Menu -->
-            <div class="dropdown ms-2">
+
+            <!-- Generate Quiz Button -->
+            <div id="generate-quiz-btn" style="display: none;"" class="ms-3">
+                <button class="btn btn-warning" onclick="generateQuiz()">Confirm</button>
+            </div>
+
+            <!-- Goal dropdown (hidden for now) -->
+            <!-- To change visibility, remove 'style="display: none;'" -->
+            <div class="dropdown ms-2" style="display: none;">
                 <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     Goal
@@ -64,9 +71,11 @@
         </div>
 
         <!-- Logo -->
-        <a class="navbar-brand ms-0" href="{% url 'index' %}" style="margin: 0 240px;">
-            <img src="{% static 'home/images/whiteLogo.png' %}" width="70" height="60" alt="">
-        </a>
+        <div class="d-flex justify-content-center flex-grow-1">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'home/images/whiteLogo.png' %}" width="70" height="60" alt="">
+            </a>
+        </div>
 
         <!-- Profile Icon -->
         <!-- TEMPORARY: when user is logged in, clicking the person circle is how they log out -->
@@ -84,6 +93,31 @@
         </div>
     </div>
 </nav>
+
+
+<!-- Quiz Generation script -->
+<script>
+    let selectedDifficulty = null;
+
+    function selectDifficulty(difficulty) {
+        selectedDifficulty = difficulty;
+
+        // Change the button text to reflect the selected difficulty
+        document.getElementById('dropdownMenuLink1').textContent = difficulty;
+
+        // Show the "Generate Quiz" button
+        document.getElementById('generate-quiz-btn').style.display = 'block';
+    }
+
+    // Generates a quiz based on the selected difficulty
+    function generateQuiz() {
+        if (selectedDifficulty) {
+            // Redirect to a view to generate a quiz based on the selected difficulty
+            window.location.href = `/quiz/${selectedDifficulty}/`;
+        }
+    }
+</script>
+
 {% endblock navbar %}
 
 {% block content %}

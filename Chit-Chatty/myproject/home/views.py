@@ -136,7 +136,6 @@ def quiz_check_answer(request):
 
     return redirect('quiz')
 
-
 # Quiz Correct
 def quiz_correct(request):
     # Assuming the question and answer have been saved in the session during quiz_check_answer
@@ -182,3 +181,4 @@ def quiz_recap(request):
     }
 
     return render(request, 'quiz/quiz_recap.html', context)
+
