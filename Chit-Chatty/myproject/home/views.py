@@ -321,3 +321,8 @@ def next_question(request):
 
     # No more questions left, redirect to the recap page or finish quiz
     return redirect('quiz_recap')
+
+
+# word of the day
+def word_of_the_day(request):
+    return render(request, 'word_of_the_day.html', context)

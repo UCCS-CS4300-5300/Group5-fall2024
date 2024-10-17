@@ -1,0 +1,67 @@
+{% extends "home/base_template.html" %}
+
+{% block content %}
+<!-- Word of the Day Card -->
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card shadow-lg"
+        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        <!-- Word Header -->
+        <h1 class="card-title"
+            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+            Word of the Day</h1>
+
+        <!-- Word Details -->
+        <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 100px;">
+            <div class="container mt-0">
+                <div class="speech-bubble" id="word" style="font-size: 36px; font-weight: bold; color: #31393C;">
+                    Placeholder
+                </div>
+            </div>
+
+            <p class="card-text mb-2" id="pronunciation" style="font-size: 24px; color: #555;">/ˈpleɪshoʊldər/</p>
+            <p class="card-text mb-4" id="definition" style="font-size: 20px; color: #777; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">
+                A temporary placeholder for the word of the day.
+            </p>
+            <p class="card-text mb-4" id="example" style="font-size: 18px; color: #999; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">
+                "This is just an example sentence for the placeholder."
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Submit Button (Optional if needed for interaction) -->
+<div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
+    <div class="card shadow-lg"
+        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        <!-- Enter Translation Header (or any action you'd like here) -->
+        <h1 class="card-title"
+            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+            Want to submit your translation?</h1>
+
+        <!-- Input Field -->
+        <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 100px;">
+            <input type="text" size="75" placeholder="Enter your translation...">
+        </div>
+        <!-- Submit Button -->
+        <a class="btn btn-warning align-self-end mt-auto" href="#" role="button">Submit</a>
+    </div>
+</div>
+
+{% endblock content %}
+
+<script>
+    // Example function to integrate with your API
+    async function fetchWordOfTheDay() {
+        const response = await fetch('YOUR_API_ENDPOINT');
+        const data = await response.json();
+
+        // Update the DOM with the API data
+        document.getElementById('word').textContent = data.word;
+        document.getElementById('pronunciation').textContent = data.pronunciation;
+        document.getElementById('definition').textContent = data.definition;
+        document.getElementById('example').textContent = data.example;
+    }
+
+    // Fetch the word of the day on page load
+    window.onload = fetchWordOfTheDay;
+</script>
