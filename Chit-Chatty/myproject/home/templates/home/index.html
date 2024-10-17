@@ -51,8 +51,12 @@
             </div>
 
             <!-- Generate Quiz Button -->
-            <div id="generate-quiz-btn" style="display: none;"" class="ms-3">
-                <button class="btn btn-warning" onclick="generateQuiz()">Confirm</button>
+            <div id="generate-quiz-btn" style="display: none;" class="ms-3">
+                <form method="POST" action="{% url 'generate_quiz' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
+                    <button class="btn btn-warning" type="submit">Confirm</button>
+                </form>
             </div>
 
             <!-- Goal dropdown (hidden for now) -->
@@ -101,20 +105,15 @@
 
     function selectDifficulty(difficulty) {
         selectedDifficulty = difficulty;
-
+        
         // Change the button text to reflect the selected difficulty
         document.getElementById('dropdownMenuLink1').textContent = difficulty;
-
+        
+        // Set the hidden input's value to the selected difficulty
+        document.getElementById('selectedDifficultyInput').value = difficulty;
+        
         // Show the "Generate Quiz" button
         document.getElementById('generate-quiz-btn').style.display = 'block';
-    }
-
-    // Generates a quiz based on the selected difficulty
-    function generateQuiz() {
-        if (selectedDifficulty) {
-            // Redirect to a view to generate a quiz based on the selected difficulty
-            window.location.href = `/quiz/${selectedDifficulty}/`;
-        }
     }
 </script>
 
