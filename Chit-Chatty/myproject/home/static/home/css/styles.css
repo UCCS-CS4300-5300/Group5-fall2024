@@ -58,9 +58,7 @@
     /* Rounding */
     border-radius: 5px;  
     box-shadow: none; 
-    /* Remove any floating/animation effects */ 
     transform: none;  
-    /* No transitions on dropdown */
     transition: none;  
     /* Standard dropdown background */
     background-color: white;  
@@ -83,19 +81,64 @@
     margin-left: 12px; /* Adjusts the space between the dropdown and button */
 }
 
-/* floating play button */
+/* Play Button Styles */
 .play-btn {
-    background: #FDCA40;
-    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
-    transform: translateY(-8px);
-    transition: all 0.2s ease-in-out;
+    background: linear-gradient(145deg, #FFDD75, #FDCA40);  /* Light gradient for 3D effect */
+    border: none;
+    width: 150px;  /* Increased width */
+    height: 150px;  /* Increased height */
+    box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.6);  /* Light from top-left */
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;  /* Smooth transition for all changes */
+    position: relative;  /* Ensures the button moves in place */
+    display: flex;  /* Ensure icon is centered */
+    justify-content: center;  /* Horizontally center icon */
+    align-items: center;  /* Vertically center icon */
 }
 
-.play-btn:hover {
-    background: #F79824;
-    transform: translateY(-8px);
-    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
+/* Adjust the Play Button when Active */
+.play-btn.active {
+    width: 200px;  /* Dynamic size when active */
+    height: 200px;
 }
+
+/* Play Button Hover Effect */
+.play-btn:hover {
+    transform: translateY(-10px);  /* Lift the button up by 10px */
+    box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.4), -6px -6px 12px rgba(255, 255, 255, 0.7);  /* Stronger shadow for 3D lift */
+}
+
+/* Icon inside the Play Button */
+.play-btn i {
+    font-size: 10px;  /* Increase the font size to make the triangle larger */
+    color: white;
+    position: relative;
+    z-index: 2;  /* Ensure the icon stays on top */
+    transform: translateZ(10px);  /* Lift the icon forward in the 3D space */
+}
+
+/* More 3D effects */
+.play-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    /* Light reflection on the button */
+    background: rgba(255, 255, 255, 0.2);  
+    /* Ensures this layer doesn't interfere with button clicks */
+    pointer-events: none;  
+    transition: all 0.3s ease-in-out;
+}
+
+.play-btn:hover::before {
+    /* Increase light reflection on hover */
+    background: rgba(255, 255, 255, 0.3);  
+}
+
+
 
 
 /* speech bubble for chit 
