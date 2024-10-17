@@ -100,6 +100,12 @@
             </a>
         </div>
 
+        <!-- Word of the day -->
+         <div style="display: flex; align-items: center;">
+            <i class="bi bi-lightbulb-fill"></i>
+         </div>
+
+
         <!-- Profile Icon -->
         <!-- TEMPORARY: when user is logged in, clicking the person circle is how they log out -->
         <div style="display: flex; align-items: center;">
@@ -158,10 +164,5 @@
         </div>
     </div>
 </div>
-
-<!-- Word of the Day Section -->
-<a id="wordOfTheDayLink" href="{% url 'word_of_the_day' %}">
-    <img id="wordOfTheDayImage" src="{% static 'home/images/word_of_the_day.png' %}" alt="Word of the Day">
-</a>
-
 {% endblock content %}
+

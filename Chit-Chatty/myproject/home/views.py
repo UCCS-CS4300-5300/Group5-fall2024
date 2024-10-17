@@ -325,4 +325,30 @@ def next_question(request):
 
 # word of the day
 def word_of_the_day(request):
-    return render(request, 'word_of_the_day.html', context)
+    # Fetch random word from the API
+    response = requests.get('https://random-words-api.vercel.app/word/spanish')
+
+    if response.status_code == 200:
+        word_data = response.json()[0]
+        spanish_word = word_data['word']
+        english_translation = word_data['definition']
+    else:
+        spanish_word = None
+        english_translation = None
+
+    if request.method == 'POST':
+        user_guess = request.POST.get('user_guess')
+        # Check if the guess matches the translation
+        if user_guess.lower() == english_translation.lower():
+            result = 'Correct! ᕦ(ò_óˇ)ᕤ'
+        else:
+            result = f'Uh oh, better luck next time ʅ（◞‿◟）ʃ. The correct answer is: {english_translation}'
+    else:
+        result = None
+
+    context = {
+        'spanish_word': spanish_word,
+        'result': result
+    }
+
+    return render(request, 'home/word_of_the_day.html', context)
