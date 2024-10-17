@@ -152,7 +152,7 @@ Here’s a comprehensive `README.md` file for your GitHub repository with an "Up
 ## Future Features
 
 - **Goal-based Learning**: A dropdown to select specific learning goals (e.g., travel, fluency) and generate quizzes based on these goals.
-- **AI Integration for an even more dynamic quiz generation
+- **AI Integration** for an even more dynamic quiz generation
 - **Expanded Language Support**: Adding more languages and improving translation accuracy.
 
 ---
