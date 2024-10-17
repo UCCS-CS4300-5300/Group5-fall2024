@@ -81,8 +81,6 @@ Here’s a comprehensive `README.md` file for your GitHub repository with an "Up
 ## Features
 
 ### 1. **Dynamic Quiz Generation**
-   - AI-driven question generation (using ChatGPT/Langchain).
-   - Automatic translation of quiz questions via Googletrans.
    - Store generated and translated questions in a database.
    - Support for multiple languages, with the ability to set source and target languages.
 
