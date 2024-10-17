@@ -6,10 +6,12 @@
 <div class="d-flex justify-content-center align-items-center">
     <div class="card shadow-lg"
         style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
-        <!-- Question Header -->
+        
+        <!-- Dynamic Question Header -->
         <h1 class="card-title"
             style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-            Question 1</h1>
+            Question {{ question_number }} <!-- Display current question number -->
+        </h1>
 
         {% if question %}
         <!-- If question exists, display the form -->
@@ -32,10 +34,12 @@
 <div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
     <div class="card shadow-lg"
         style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        
         <!-- Enter Translation Header -->
         <h1 class="card-title"
             style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-            Enter translation:</h1>
+            Enter translation:
+        </h1>
 
         <!-- Input Field for User's Answer -->
         <form method="post" action="{% url 'quiz_check_answer' %}">

@@ -29,7 +29,10 @@
 </div>
 
 <div class="center-button">
-    <a class="btn btn-warning" href="{% url 'quiz' %}" role="button">Next</a>
+    <form method="POST" action="{% 'next_question' %}">
+        {% csrf_token %}
+        <button class="btn btn-warning" type="submit">Next Question</button>
+    </form>
 </div>
 
 {% endblock content %}

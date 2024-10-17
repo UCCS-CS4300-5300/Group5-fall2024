@@ -59,6 +59,25 @@
                 </form>
             </div>
 
+            <!-- Quiz Generation JS -->
+            <script>
+                let selectedDifficulty = null;
+
+                function selectDifficulty(difficulty) {
+                    selectedDifficulty = difficulty;
+
+                    // Change the button text to reflect the selected difficulty
+                    document.getElementById('dropdownMenuLink1').textContent = difficulty;
+
+                    // Set the hidden input's value to the selected difficulty
+                    document.getElementById('selectedDifficultyInput').value = difficulty;
+
+                    // Show the "Generate Quiz" button
+                    document.getElementById('generate-quiz-btn').style.display = 'block';
+                }
+            </script>
+
+
             <!-- Goal dropdown (hidden for now) -->
             <!-- To change visibility, remove 'style="display: none;'" -->
             <div class="dropdown ms-2" style="display: none;">
@@ -97,25 +116,6 @@
         </div>
     </div>
 </nav>
-
-
-<!-- Quiz Generation script -->
-<script>
-    let selectedDifficulty = null;
-
-    function selectDifficulty(difficulty) {
-        selectedDifficulty = difficulty;
-        
-        // Change the button text to reflect the selected difficulty
-        document.getElementById('dropdownMenuLink1').textContent = difficulty;
-        
-        // Set the hidden input's value to the selected difficulty
-        document.getElementById('selectedDifficultyInput').value = difficulty;
-        
-        // Show the "Generate Quiz" button
-        document.getElementById('generate-quiz-btn').style.display = 'block';
-    }
-</script>
 
 {% endblock navbar %}
 

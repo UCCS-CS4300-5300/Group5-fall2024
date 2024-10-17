@@ -14,7 +14,7 @@ def index(request):
     next_quiz = Quiz.objects.filter(is_next=True).first()
     
     context = {
-        'quiz_available': bool(next_quiz)  # Boolean flag to indicate if a quiz is available
+        'quiz_available': bool(next_quiz),  # Boolean flag to indicate if a quiz is available
         'quiz_title': next_quiz.title if next_quiz else 'No Quiz Loaded!',
         'quiz_description': next_quiz.description if next_quiz else 'Check back later for new content.',
         
@@ -88,11 +88,10 @@ def logout(request):
 
 # Quiz Views
 def quiz(request):
-
     # Reset the session when starting a new quiz
     request.session['correct_count'] = 0
     request.session['incorrect_count'] = 0
-    request.session['question_number'] = 1
+    request.session['question_id'] = 1
 
     # Fetch the next quiz and the first question
     next_quiz = Quiz.objects.filter(is_next=True).first()
@@ -100,46 +99,68 @@ def quiz(request):
     if next_quiz:
         first_question = next_quiz.questions.first()
 
-        # Check if there is no question in the quiz (temporary debugging)
+        # Ensure there is at least one question in the quiz
         if not first_question:
             context = {
                 'quiz': next_quiz,
                 'error': "No questions available for this quiz."
             }
+            
         else:
+            request.session['question_id'] = first_question.id
+
+            # Set the question number for the first question (it will always be 1)
+            question_number = 1
+
             context = {
                 'quiz': next_quiz,
-                'question': first_question
+                'question': first_question,
+                'question_number': question_number  # Include question number in context
             }
     else:
         context = {'error': "No quiz available."}
 
     return render(request, 'quiz/quiz_question.html', context)
 
+
 # Generate Quiz view
 @login_required
 def generate_quiz(request):
     # Check for POST request with selected difficulty
+    print(request)
     if request.method == 'POST':
-        difficulty - request.POST.get('difficulty')
+        difficulty = request.POST.get('difficulty')
 
-        #Retrieve 10 random questions based on the selected difficulty
-        questions = Question.objects.filter(difficulty=difficulty).order_by('?')[:10]
+        # Ensure difficulty is received
+        if difficulty:
+            #Retrieve 10 random questions based on the selected difficulty
+            questions = Question.objects.filter(difficulty=difficulty).order_by('?')[:10]
 
-        if questions.exists():
-            # Create a new quiz for the user 
-            quiz.questions.set(questions)
+            # Quiz creation
+            if questions.exists():
+                # Create user instance
+                member = get_object_or_404(Member, user=request.user)
 
-            # Mark the quiz as the "Next" quiz for the user
-            quiz.objects.filter(user=request.user).update(is_next=False)
-            quiz.is_next = True
-            quiz.save()
+                # Create a new quiz for the user 
+                quiz = Quiz.objects.create(user=member, is_next=True)
+                #print(request)
+                quiz.questions.set(questions)
 
-            # Redirect to the main page with an activated "Play" button
-            return redirect('home/index.html')
-    
+                # Mark the quiz as the "Next" quiz for the user
+                Quiz.objects.filter(user=member).update(is_next=False)
+                quiz.is_next = True
+                quiz.save()
+                request.session['quiz_id'] = quiz.id
+                # Redirect to the main page with an activated "Play" button
+                return redirect('index')
+
+        # Difficulty is missing, handle error
+        else:  
+            print("Error: difficulty not found in POST request.")
+            return redirect('index')  
+
     # Invalid request default redirect
-    return redirect('home/index.html')
+    return redirect('index')
 
 # Quiz Check Answer View
 @login_required
@@ -151,9 +172,6 @@ def quiz_check_answer(request):
         # Get the question object
         question = get_object_or_404(Question, id=question_id)
         correct_answer = question.correct_answer.strip().lower()
-
-        # Retrieve the current quiz from session
-        current_quiz = request.session.get('current_quiz', None)
 
         # Store question, user's answer, and correct answer in the session
         request.session['question'] = question.translation_question
@@ -235,7 +253,7 @@ def quiz_incorrect(request):
         'question': question,
         'user_answer': user_answer,
         'correct_answer': correct_answer,
-        'feedback': feedback
+        'feedback': feedback,
     }
 
     return render(request, 'quiz/quiz_incorrect.html', context)
@@ -262,3 +280,44 @@ def quiz_recap(request):
 
     return render(request, 'quiz/quiz_recap.html', context)
 
+# Next/Try again should send POST or SOME kind of request after question feedback to update and load next question
+def next_question(request):
+    # Get the current question ID from the POST request
+    question_id = request.session.get('question_id')
+    quiz_id = request.session.get('quiz_id')
+
+    # Get the quiz object
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+
+    # Get the list of question IDs from the quiz
+    question_ids = list(quiz.questions.values_list('id', flat=True))
+
+    # Find the index of the current question
+    current_index = question_ids.index(int(question_id))
+
+    # Check if there is a next question
+    if current_index < len(question_ids) - 1:
+        # Get the next question ID
+        next_question_id = question_ids[current_index + 1]
+
+        # Retrieve the next question object
+        next_question = get_object_or_404(Question, id=next_question_id)
+
+        # Update the session with the next question data
+        request.session['question'] = next_question.translation_question
+        request.session['question_id'] = next_question.id
+
+        # Pass the question number to the context
+        question_number = current_index + 2  # Since we are 0-based, we add 2 to get the next question number
+
+        context = {
+            'quiz': quiz,
+            'question': next_question,
+            'question_number': question_number  # Add question number to the context
+        }
+
+        # Redirect to the quiz question page to display the next question
+        return render(request, 'quiz/quiz_question.html', context)
+
+    # No more questions left, redirect to the recap page or finish quiz
+    return redirect('quiz_recap')

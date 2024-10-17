@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
+
 # Create your models here.
 
 # Quiz model
@@ -11,6 +12,12 @@ class Quiz(models.Model):
     url = models.CharField(max_length=100)
     # Flag to identify the next quiz
     is_next = models.BooleanField(default=False)  
+    
+    # Link quiz to user
+    user = models.ForeignKey('Member', on_delete=models.CASCADE, default=None)
+
+    # 
+    questions = models.ManyToManyField('Question')
 
     def __str__(self):
         return self.title

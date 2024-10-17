@@ -11,7 +11,8 @@ urlpatterns = [
     path('quiz/quiz_incorrect/', views.quiz_incorrect, name='quiz_incorrect'),
     path('quiz/quiz_recap/', views.quiz_recap, name='quiz_recap'),
     path('quiz/check_answer/', views.quiz_check_answer, name='quiz_check_answer'),
-    path('generate_quiz/', views.generate_quiz, name='generate_quiz')
+    path('generate_quiz/', views.generate_quiz, name='generate_quiz'),
+    path('next_question/', views.next_question, name = 'next_question'),
     
     # Path for registering
     path('register/', views.registerPage, name = 'registration-page'),
