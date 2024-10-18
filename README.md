@@ -148,3 +148,10 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 - **BUG**: The logout view doesn't redirect users back to the homepage but instead to the login page, even though there is logic that states otherwise...
 
 ---
+### Feature Added: Word of the Day
+- **Added** installed requests and updates requirements.txt
+- **Added** `Random Words API` in order to fetch a random word in `Spanish` as well as its `English` translation. Also supports `Dutch, French, Chinese, Japanese, and Turkish`.
+- **Added** `word_of_the_day.html` and the ability to redirect to this page from the navbar.
+- **Updated** `views.py` to handle user input for word of the day as well as word generation & translation
+- **Updated** `urls.py` to include paths for word of the day
+- **Modified** the base template to display the word of the day icon. Currently appears at all times for testing. Eventually will only be clickable once a day.
