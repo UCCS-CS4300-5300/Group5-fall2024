@@ -157,28 +157,44 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 - **Modified** the base template to display the word of the day icon. Currently appears at all times for testing. Eventually will only be clickable once a day.
 
 ---
-### Changes
-##### urls.py
-- **added** quiz url 
-- **added** quiz_correct url 
-- **added** quiz_incorrect url 
-- **added** quiz_recap url 
-##### views.py 
-- **added** quiz view
-- **added** quiz_correct view 
-- **added** quiz_incorrect view 
-- **added** quiz_recap view 
-##### templates 
-- **added** quiz_question.html 
-- **added** quiz_correct.html 
-- **added** quiz_incorrect.html 
-- **added** quiz_recap.html 
-- **changed**: "static/images/", "static/styles.css" to: "static/home/images/", "static/home/css/styles.css" 
-- **changed** all {% static %} tags to match new file hierarchy
-- moved all <style></style> to styles.css 
-- moved splash screen to index.html including <div></div> and <script></script> ^^^ did this because the splash screen would display on every page since it was was on the base template, now it only shows when opening index.html * splash screen is now lower than normal, needs to be fixed
+
+### Feature Added: Templates (10/14/2024)
+
+urls.py
+- **Added** quiz url (linked to play button)
+- **Added** quiz_correct url
+- **Added** quiz_incorrect url
+- **Added** quiz_recap url
+
+views.py
+- **Added** quiz view (linked to play button)
+- **Added** quiz_correct view
+- **Added** quiz_incorrect view
+- **Added** quiz_recap view
+
+templates
+- **Added** quiz_question.html (linked to play button) (complete)
+- **Added** quiz_correct.html (complete)
+- **Added** quiz_incorrect.html (complete)
+- **Added** quiz_recap.html (complete)
+
+- **Changed:** "static/images/", "static/styles.css"
+	to: "static/home/images/", "static/home/css/styles.css"
+
+- **Changed:** all {% static %} tags to match new file heirarchy
+
+- **Moved** all <style></style> to styles.css
+
+navbar/splash screen changes
+- **Added** splash screen block in base.html
+- **Added** navbar block in base.html
+- **Added** new general navbar in base.html
+
+- **Moved** splash screen functionality to splash screen block in index.html
+- **Changed** navbar in navbar block in index.html
 
 ---
+
 #### Testing
 
 - **Added** `UserRegistrationLogin` to check if a user is able to have their information successfully stored in the system & then log in
