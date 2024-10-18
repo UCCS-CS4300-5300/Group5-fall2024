@@ -177,3 +177,12 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 - **changed** all {% static %} tags to match new file hierarchy
 - moved all <style></style> to styles.css 
 - moved splash screen to index.html including <div></div> and <script></script> ^^^ did this because the splash screen would display on every page since it was was on the base template, now it only shows when opening index.html * splash screen is now lower than normal, needs to be fixed
+
+---
+#### Testing
+
+- **Added** `UserRegistrationLogin` to check if a user is able to have their information successfully stored in the system & then log in
+- **Added** `UserLogoutTest` to see is a user can log out
+- **Added** `UserFailSafe` to see if a logged in user will be redirected back to the home page if they try to access the register link
+- **Added** `QuizSessionTrackingTest` to track session data
+- **Added** `QuestionPoolTest` for question pool consistency
