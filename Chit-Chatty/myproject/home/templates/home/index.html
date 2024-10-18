@@ -100,6 +100,14 @@
             </a>
         </div>
 
+        <!-- Word of the day -->
+         <div style="display: flex; align-items: center;">
+            <a href="{% url 'word_of_the_day' %}">
+                <i<i class="bi bi-lightbulb" style="color:white; font-size: 1.5rem; margin-right: 20px;"></i>
+            </a>
+         </div>
+
+
         <!-- Profile Icon -->
         <!-- TEMPORARY: when user is logged in, clicking the person circle is how they log out -->
         <div style="display: flex; align-items: center;">
@@ -159,3 +167,4 @@
     </div>
 </div>
 {% endblock content %}
+

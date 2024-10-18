@@ -1,0 +1,23 @@
+{% extends "home/base_template.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container text-center">
+    <h1 class="text-center">Word of the Day: {{ spanish_word }}</h1>
+
+    {% if result %}
+        <p>{{ result }}</p>
+        <a href="{% url 'index' %}" class="btn btn-secondary mt-4">Back to Home</a>
+    {% else %}
+        <form method="post" class="d-inline-block">
+            {% csrf_token %}
+            <!--mt-# for margins-->
+            <div class="mb-6">
+                <label for="user_guess" class="form-label mt-5">Enter your guess:</label>
+                <input type="text" id="user_guess" name="user_guess" class="form-control" style="display: inline-block; width: auto;">
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Submit</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

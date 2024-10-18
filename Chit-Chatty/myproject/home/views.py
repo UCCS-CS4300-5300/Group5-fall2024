@@ -7,6 +7,7 @@ from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
 import random
+import requests
 
 # Home Page View
 def index(request):
@@ -321,3 +322,53 @@ def next_question(request):
 
     # No more questions left, redirect to the recap page or finish quiz
     return redirect('quiz_recap')
+
+
+# word of the day
+# using random-words-api
+# https://github.com/mcnaveen/Random-Words-API
+def word_of_the_day(request):
+    # Check if the word is already in the session (each click)
+    if 'spanish_word' not in request.session or 'english_translation' not in request.session:
+        # Fetch the word of the day from the API
+        response = requests.get('https://random-words-api.vercel.app/word/spanish')
+        if response.status_code == 200:
+            word_data = response.json()[0]
+            spanish_word = word_data['word']
+            english_translation = word_data['definition']
+
+            # Store the word and its translation in the session
+            request.session['spanish_word'] = spanish_word
+            request.session['english_translation'] = english_translation
+        else:
+            return render(request, 'home/word_of_the_day.html', {
+                'error': "Sorry, we can't find a word!"
+            })
+
+    # Retrieve the word and translation from the session
+    spanish_word = request.session['spanish_word']
+    english_translation = request.session['english_translation']
+    result = None
+
+    # Check if the user has hit the submit button
+    if request.method == 'POST':
+        user_guess = request.POST.get('user_guess')
+        
+        # Compare user guess with the correct translation
+        if user_guess.lower() == english_translation.lower():
+            result = 'Correct! ᕦ(ò_óˇ)ᕤ'
+            # Clear the session to get a new word on next click
+            del request.session['spanish_word']
+            del request.session['english_translation']
+        else:
+            result = f'Uh oh, better luck next time ʅ（◞‿◟）ʃ. The correct answer is: {english_translation}'
+            # Clear the session to get a new word on next click
+            del request.session['spanish_word']
+            del request.session['english_translation']
+
+    return render(request, 'home/word_of_the_day.html', {
+        'spanish_word': spanish_word,
+        'english_translation': english_translation,
+        'result': result
+    })
+
