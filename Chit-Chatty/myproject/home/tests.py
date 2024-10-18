@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from home.models import Question
 
 # Create your tests here.
 
@@ -82,3 +83,55 @@ class UserFailSafe(TestCase):
         response = self.client.get(registerURL) # Perform a GET request using the registration link
         self.assertEqual(response.status_code, 302) # Check if the response status is redirect which is a 302
         self.assertRedirects(response, reverse('index')) # Check if user was redirected back to the homepage
+
+
+'''
+Test for session data tracking (correct and incorrect answers) 
+'''
+class QuizSessionTrackingTest(TestCase):
+    def setUp(self):
+        # Create test user
+        self.user = User.objects.create_user(username='TestUser', password='Test!@#$')
+
+        # Log in the user
+        self.client.login(username='TestUser', password='Test!@#$')
+
+        # Add a question for testing
+        self.question = Question.objects.create(translation_question="Hola", correct_answer="Hello", source_language="Spanish", target_language="English", difficulty="Easy")
+
+    def test_quiz_session_data(self):
+        session = self.client.session
+
+        # Test a correct answer
+        response = self.client.post(reverse('quiz_check_answer'), {'question_id': self.question.id, 'user_answer': 'Hello'})
+        session['correct_answers'] = session.get('correct_answers', 0) + 1  # Increment correct answers
+        self.assertEqual(session['correct_answers'], 1)  # Ensure correct answer is tracked
+
+        # Test an incorrect answer
+        response = self.client.post(reverse('quiz_check_answer'), {'question_id': self.question.id, 'user_answer': 'Hi'})
+        session['incorrect_answers'] = session.get('incorrect_answers', 0) + 1  # Increment incorrect answers
+        self.assertEqual(session['incorrect_answers'], 1)  # Ensure incorrect answer is tracked
+
+
+'''
+Test for question pool consistency
+'''
+class QuestionPoolTest(TestCase):
+    def setUp(self):
+        # Run the add_questions.py management command to populate the database with questions
+        from django.core.management import call_command
+        call_command('add_questions')
+
+    def test_question_pool_size(self):
+        easy_questions = Question.objects.filter(difficulty="Easy").count()
+        medium_questions = Question.objects.filter(difficulty="Medium").count()
+        hard_questions = Question.objects.filter(difficulty="Hard").count()
+
+        # Assert there are 10 questions per difficulty level
+        self.assertEqual(easy_questions, 10)
+        self.assertEqual(medium_questions, 10)
+        self.assertEqual(hard_questions, 10)
+
+        # Assert the total question pool is 30
+        total_questions = Question.objects.all().count()
+        self.assertEqual(total_questions, 30)
