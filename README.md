@@ -155,3 +155,25 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 - **Updated** `views.py` to handle user input for word of the day as well as word generation & translation
 - **Updated** `urls.py` to include paths for word of the day
 - **Modified** the base template to display the word of the day icon. Currently appears at all times for testing. Eventually will only be clickable once a day.
+
+---
+### Changes
+##### urls.py
+- **added** quiz url 
+- **added** quiz_correct url 
+- **added** quiz_incorrect url 
+- **added** quiz_recap url 
+##### views.py 
+- **added** quiz view
+- **added** quiz_correct view 
+- **added** quiz_incorrect view 
+- **added** quiz_recap view 
+##### templates 
+- **added** quiz_question.html 
+- **added** quiz_correct.html 
+- **added** quiz_incorrect.html 
+- **added** quiz_recap.html 
+- **changed**: "static/images/", "static/styles.css" to: "static/home/images/", "static/home/css/styles.css" 
+- **changed** all {% static %} tags to match new file hierarchy
+- moved all <style></style> to styles.css 
+- moved splash screen to index.html including <div></div> and <script></script> ^^^ did this because the splash screen would display on every page since it was was on the base template, now it only shows when opening index.html * splash screen is now lower than normal, needs to be fixed
