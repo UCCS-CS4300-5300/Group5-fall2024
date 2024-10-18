@@ -129,6 +129,7 @@ def generate_quiz(request):
     # Check for POST request with selected difficulty
     print(request)
     if request.method == 'POST':
+        print(f"Received POST request with data: {request.POST}")
         difficulty = request.POST.get('difficulty')
 
         # Ensure difficulty is received
