@@ -139,4 +139,10 @@ CSRF_TRUSTED_ORIGINS = [
     'https://app-cromo-5.devedu.io',
 ]
 
-OPENAI_API_KEY="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"
+from decouple import config
+
+OPENAI_API_KEY = config('OPENAI_API_KEY')
+
+# Raise an error if the key is not set (optional)
+if OPENAI_API_KEY is None:
+    raise ValueError("The OPENAI_API_KEY environment variable is not set.")
