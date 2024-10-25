@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
+from .services import generate_translation_questions, translate_sentence
 import random
 import requests
 
@@ -136,7 +137,7 @@ def generate_quiz(request):
         # Ensure difficulty is received
         if difficulty:
             #Retrieve 10 random questions based on the selected difficulty
-            questions = Question.objects.filter(difficulty=difficulty).order_by('?')[:10]
+            questions = generate_translation_questions('Easy', 'Spanish', 'English', 10)
 
             # Quiz creation
             if questions.exists():
@@ -145,9 +146,16 @@ def generate_quiz(request):
 
                 # Create a new quiz for the user 
                 quiz = Quiz.objects.create(user=member, is_next=True)
-                #print(request)
-                quiz.questions.set(questions)
-
+                
+                for i in range(0,10):
+                    question = Question.objects.create(
+                        translation_question=questions[i],
+                        correct_answer=translate_sentence(questions[i], 'Spanish', 'English'),
+                        source_language='Spanish',
+                        target_language='English'
+                    )
+                    quiz.questions.add(question)
+                    
                 # Mark the quiz as the "Next" quiz for the user
                 Quiz.objects.filter(user=member).update(is_next=False)
                 quiz.is_next = True
