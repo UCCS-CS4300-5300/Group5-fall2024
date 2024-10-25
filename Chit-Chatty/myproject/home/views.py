@@ -139,30 +139,28 @@ def generate_quiz(request):
             #Retrieve 10 random questions based on the selected difficulty
             questions = generate_translation_questions('Easy', 'Spanish', 'English', 10)
 
-            # Quiz creation
-            if questions.exists():
-                # Create user instance
-                member = get_object_or_404(Member, user=request.user)
+            # Create user instance
+            # member = get_object_or_404(Member, user=request.user)
+            
+            # Create a new quiz for the user 
+            quiz = Quiz.objects.create(is_next=True) # user=member,
 
-                # Create a new quiz for the user 
-                quiz = Quiz.objects.create(user=member, is_next=True)
-                
-                for i in range(0,10):
-                    question = Question.objects.create(
-                        translation_question=questions[i],
-                        correct_answer=translate_sentence(questions[i], 'Spanish', 'English'),
-                        source_language='Spanish',
-                        target_language='English'
-                    )
-                    quiz.questions.add(question)
+            for i in range(0,10):
+                question = Question.objects.create(
+                    translation_question=questions[i],
+                    correct_answer=translate_sentence(questions[i], 'Spanish', 'English'),
+                    source_language='Spanish',
+                    target_language='English'
+                )
+                quiz.questions.add(question)
                     
-                # Mark the quiz as the "Next" quiz for the user
-                Quiz.objects.filter(user=member).update(is_next=False)
-                quiz.is_next = True
-                quiz.save()
-                request.session['quiz_id'] = quiz.id
-                # Redirect to the main page with an activated "Play" button
-                return redirect('index')
+            # Mark the quiz as the "Next" quiz for the user
+            # Quiz.objects.filter(user=member).update(is_next=False)
+            quiz.is_next = True
+            quiz.save()
+            request.session['quiz_id'] = quiz.id
+            # Redirect to the main page with an activated "Play" button
+            return redirect('index')
 
         # Difficulty is missing, handle error
         else:  

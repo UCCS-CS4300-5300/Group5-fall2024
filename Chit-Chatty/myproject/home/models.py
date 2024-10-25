@@ -15,7 +15,7 @@ class Quiz(models.Model):
     is_next = models.BooleanField(default=False)  
     
     # Link quiz to user
-    user = models.ForeignKey('Member', on_delete=models.CASCADE, default=None)
+    # user = models.ForeignKey('Member', on_delete=models.CASCADE, default=None)
 
     # Holds all questions in model
     questions = models.ManyToManyField('Question')
