@@ -1,6 +1,7 @@
 {% extends "home/base_template.html" %}
 {% load static %}
 
+
 {% block splashscreen %}
 <div id="splash" class="splash-screen">
     <h1 class="splash-logo">ChitChatty ٩( ᐛ)و</h1>
@@ -32,11 +33,82 @@
 
         <!-- Left Hand Side -->
         <div class="d-flex align-items-center">
-            <!-- Flag -->
-            <a class="navbar-brand" href="#">
-                <img src="{% static 'home/images/Spanish flag.png' %}" width="60" height="50" alt="Spanish flag"
-                    style="border-radius: 10px;"> <!-- Flag -->
+
+        <!-- Flag Dropdown -->
+        <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <!-- Add ID to target the main flag image -->
+                <img id="currentFlag" src="{% static 'home/images/chinese.png' %}" width="55" height="45" alt="Current flag" style="border-radius: 10px;">
             </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <!-- Language options with data attributes for JavaScript -->
+                <li>
+                    <a class="dropdown-item" href="#" data-flag="{% static 'home/images/chinese.png' %}" data-lang="Chinese">
+                        <img src="{% static 'home/images/chinese.png' %}" width="50" height="40" style="border-radius: 5px;">
+                        Chinese
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" data-flag="{% static 'home/images/netherlands.png' %}" data-lang="Dutch">
+                        <img src="{% static 'home/images/netherlands.png' %}" width="50" height="40" style="border-radius: 5px;">
+                        Dutch
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" data-flag="{% static 'home/images/french.png' %}" data-lang="French">
+                        <img src="{% static 'home/images/french.png' %}" width="50" height="40" style="border-radius: 5px;">
+                        French
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" data-flag="{% static 'home/images/japanese.png' %}" data-lang="Japanese">
+                        <img src="{% static 'home/images/japanese.png' %}" width="50" height="40" style="border-radius: 5px;">
+                        Japanese
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" data-flag="{% static 'home/images/Spanish.png' %}" data-lang="Spanish">
+                        <img src="{% static 'home/images/Spanish.png' %}" width="50" height="40" style="border-radius: 5px;">
+                        Spanish
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" data-flag="{% static 'home/images/turkish.png' %}" data-lang="Turkish">
+                        <img src="{% static 'home/images/turkish.png' %}" width="50" height="40" style="border-radius: 5px;">
+                        Turkish
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- JavaScript to Update Flag Image -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () 
+            {
+                // Select all dropdown items
+                const languageOptions = document.querySelectorAll('.dropdown-menu .dropdown-item');
+                const currentFlag = document.getElementById('currentFlag');
+
+                // Add click event to each language option
+                languageOptions.forEach(option => {
+                    option.addEventListener('click', function (event) {
+                        event.preventDefault(); // Prevent link from navigating
+
+                        // Get the new flag image from the data attribute
+                        const newFlagSrc = this.getAttribute('data-flag');
+                        const selectedLang = this.getAttribute('data-lang');
+
+                        // Update the main flag image
+                        currentFlag.src = newFlagSrc;
+
+                        // Optionally, log or use the selected language if needed
+                        console.log("Selected Language:", selectedLang);
+                    });
+                });
+            });
+        </script>
+
+
             <!-- Difficulty dropdown -->
             <div class="dropdown ms-1">
                 <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
