@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-from home.models import Question
+from home.models import Question, Member
+from home.tasks import resetStreak
 
 # Create your tests here.
 
@@ -37,52 +38,49 @@ class UserRegistrationLogin(TestCase):
         self.assertEqual(response.status_code, 302) # Check if the user is redirected to the homepage after successful login
 
 
+
 '''
 Test for seeing if a user can log out
 '''
 class UserLogoutTest(TestCase):
 
     def test_logout(self):
+        # Create a user and member to test on
+        user = User.objects.create_user(username='Test1', password='Test!@#$')
+        Member.objects.create(user=user)  
 
-        # Create a user to test on
-        self.user = User.objects.create_user(username='Test1', password='Test!@#$')
-
-        # Have this user be logged in
+        # Have them log in
         self.client.login(username='Test1', password="Test!@#$")
 
         # Have them initially be at the homepage
         response = self.client.get(reverse('index'))
-
-        # Check if the user is logged in 
         self.assertEqual(response.status_code, 200)
 
         # Step 1: Log the user out
         response = self.client.get(reverse('logout'))
-        
-        #Step 2: Check if the user is on homepage after logging out
-        self.assertTemplateUsed(response, 'home/index.html')
-
+ 
+        # Step 2: Check if the user is redirected after logging out
+        self.assertTemplateUsed(response, 'home/index.html') 
 
 '''
 Test for seeing if a logged in user will be redirected back to the home page if they try to access the register link 
 '''
 class UserFailSafe(TestCase):
+    
     def test_goodCatch(self):
-
-        # Create a test user
-        self.user = User.objects.create_user(username='Test1', password='Test!@#$')
+        # Create a test user and member to test on
+        user = User.objects.create_user(username='Test1', password='Test!@#$')
+        Member.objects.create(user=user)  
 
         # Have them log in
         self.client.login(username='Test1', password='Test!@#$')
-
-        # Have them initially at homepage
-        response = self.client.get(reverse('index'))
 
         # Step 1: Have user try to access the register link when they are logged in already
         registerURL = reverse('registration-page')  # Get the registration URL
         response = self.client.get(registerURL) # Perform a GET request using the registration link
         self.assertEqual(response.status_code, 302) # Check if the response status is redirect which is a 302
         self.assertRedirects(response, reverse('index')) # Check if user was redirected back to the homepage
+
 
 
 '''
@@ -135,3 +133,46 @@ class QuestionPoolTest(TestCase):
         # Assert the total question pool is 30
         total_questions = Question.objects.all().count()
         self.assertEqual(total_questions, 30)
+
+'''
+Series of tests for resetting streak implementation
+'''
+class ResetStreakTests(TestCase):
+    # Create members to use in tests
+    def setUp(self):
+        self.member1 = Member.objects.create(hasCompletedQuiz = False, streakCount = 4)
+        self.member2 = Member.objects.create(hasCompletedQuiz = True, streakCount = 5)
+        self.member3 = Member.objects.create(hasCompletedQuiz = False, streakCount = 3)
+    
+    # Test that a member who hasn't completed a quiz has their streak reset.
+    def test_reset_streak_no_quiz_completed(self):
+        resetStreak()
+        self.member1.refresh_from_db()
+
+        self.assertEqual(self.member1.streakCount, 0)
+        self.assertFalse(self.member1.hasCompletedQuiz)
+
+    # Test that a member who completed a quiz does not reset their streak.
+    def test_reset_streak_quiz_completed(self):
+        resetStreak()
+        self.member2.refresh_from_db()
+
+        self.assertEqual(self.member2.streakCount, 5)  
+        self.assertFalse(self.member2.hasCompletedQuiz)  
+
+    # Test that streaks are correctly reset for multiple members.
+    def test_reset_streak_multiple_members(self):
+        resetStreak()
+        self.member1.refresh_from_db()
+        self.member3.refresh_from_db()
+        
+        self.assertEqual(self.member1.streakCount, 0)  
+        self.assertEqual(self.member3.streakCount, 0)  
+        self.assertFalse(self.member1.hasCompletedQuiz)
+        self.assertFalse(self.member3.hasCompletedQuiz)
+
+    # Test that running the resetStreak function with NO members in the database still works without errors
+    def test_reset_streak_no_members(self):
+        Member.objects.all().delete()
+        resetStreak()  
+        self.assertEqual(Member.objects.count(), 0) 

@@ -36,15 +36,25 @@ class Question(models.Model):
 
 # User model
 class Member(models.Model):
-
     # Fields that makes a user unique
     userName = models.CharField(max_length= 50)
     firstName = models.CharField(max_length= 50, default="")
     lastName = models.CharField(max_length= 50, default="")
     email = models.CharField(max_length= 50, default="")
 
+    # Streak information 
+    streakCount = models.IntegerField(default = 0)
+    hasCompletedQuiz = models.BooleanField(default = False)
+
     # One to one relationship with user
     user = models.OneToOneField(User, null= True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.userName
+
+# Tracks last reset for streaks (since our servers aren't always running)
+class LastStreakReset(models.Model):
+    lastReset = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return f"Last streak reset was at: {self.lastReset}"

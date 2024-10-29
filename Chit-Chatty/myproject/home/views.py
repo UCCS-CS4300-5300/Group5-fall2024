@@ -19,10 +19,9 @@ def index(request):
         'quiz_available': bool(next_quiz),  # Boolean flag to indicate if a quiz is available
         'quiz_title': next_quiz.title if next_quiz else 'No Quiz Loaded!',
         'quiz_description': next_quiz.description if next_quiz else 'Check back later for new content.',
-        
+        'member': request.user.member if request.user.is_authenticated else None,
     }
     return render(request, 'home/index.html', context)
-
 
 '''
 View for user registration
@@ -281,6 +280,14 @@ def quiz_recap(request):
         'total_questions': total_questions,
         'score_percentage': (correct_count / total_questions) * 100 if total_questions > 0 else 0
     }
+
+    # Grab the user that completed the quiz
+    member = request.user.member
+    # Check if they have completed a quiz today. If not, then update information
+    if member.hasCompletedQuiz == False:
+        member.hasCompletedQuiz = True
+        member.streakCount += 1
+        member.save()
 
     # Clear progress after showing the recap
     request.session['correct_count'] = 0

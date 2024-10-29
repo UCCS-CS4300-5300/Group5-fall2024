@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'django_bootstrap5',
-    'openai'
+    'openai',
+    'django_apscheduler'
 ]
 
 MIDDLEWARE = [
