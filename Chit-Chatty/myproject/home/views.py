@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
-from .services import generate_translation_questions, translate_sentence
+from .services import generate_translation_questions
 import random
 import requests
 import json
@@ -16,7 +16,7 @@ import json
 # Home Page View
 def index(request):
     # Fetch the quiz that is marked as the next quiz
-    next_quiz = Quiz.objects.filter(is_next=True).first()
+    next_quiz = Quiz.objects.filter(is_next=True, is_completed=False).first()
     
     context = {
         'quiz_available': bool(next_quiz),  # Boolean flag to indicate if a quiz is available
@@ -91,6 +91,7 @@ def logout(request):
     return render(request, 'home/index.html')
 
 # Quiz Views
+@login_required
 def quiz(request):
     # Reset the session when starting a new quiz
     request.session['correct_count'] = 0
@@ -98,8 +99,7 @@ def quiz(request):
     request.session['question_id'] = 1
 
     # Fetch the next quiz and the first question
-    next_quiz = Quiz.objects.filter(is_next=True).first()
-
+    next_quiz = Quiz.objects.filter(is_next=True, is_completed=False).first()
     if next_quiz:
         first_question = next_quiz.questions.first()
 
@@ -127,16 +127,13 @@ def quiz(request):
     return render(request, 'quiz/quiz_question.html', context)
 
 
-# Generate Quiz view
 @login_required
 def generate_quiz(request):
     # Check for POST request with selected difficulty
-    print(request)
     if request.method == 'POST':
         print(f"Received POST request with data: {request.POST}")
         difficulty = request.POST.get('difficulty')
 
-        # Ensure difficulty is received
         if difficulty:
 
             # Create user instance
@@ -146,35 +143,56 @@ def generate_quiz(request):
             source_lang = request.session.get('selected_language', 'Chinese')   # default to first language
             target_lang = 'English'
 
+            # Generate structured output with title, description, and questions
+            structured_output = generate_translation_questions(difficulty, source_lang, target_lang, 10)
+            print("Generated structured output:", structured_output)  # Debug statement
+
+            # Create a new quiz with title and description
+            quiz = Quiz.objects.create(
+                title=structured_output.get('title', 'Default Title'),
+                description=structured_output.get('description', 'Default Description'),
+                is_next=True
+            )
+
             #Retrieve 10 random questions based on the selected difficulty
-            questions = generate_translation_questions(difficulty, source_lang, target_lang, 10)
+            # questions = generate_translation_questions(difficulty, source_lang, target_lang, 10)
             
             # Create a new quiz for the user 
-            quiz = Quiz.objects.create(is_next=True) # user=member,
+            # quiz = Quiz.objects.create(is_next=True) # user=member,
 
-            for i in range(len(questions)):
+            # for i in range(len(questions)):
+            #     question = Question.objects.create(
+            #         translation_question=questions[i],
+            #         correct_answer=translate_sentence(questions[i], source_lang, target_lang),
+            #         source_language=source_lang,
+            #         target_language=target_lang
+
+            # Loop through questions and save each to the database
+            for item in structured_output.get('questions', []):
+                question_text = item['question']
+                translated_answer = item['translation']
+                print("Saving question:", question_text)  # Debug statement
+
+                # Save question to the database
                 question = Question.objects.create(
-                    translation_question=questions[i],
-                    correct_answer=translate_sentence(questions[i], source_lang, target_lang),
+                    translation_question=question_text,
+                    correct_answer=translated_answer,
                     source_language=source_lang,
-                    target_language=target_lang
+                    target_language=target_lang,
                 )
-                quiz.questions.add(question)
-                    
-            # Mark the quiz as the "Next" quiz for the user
-            # Quiz.objects.filter(user=member).update(is_next=False)
+                quiz.questions.add(question)  # Link question to quiz
+
+            # Mark the quiz as "Next" and save it
             quiz.is_next = True
             quiz.save()
-            request.session['quiz_id'] = quiz.id
-            # Redirect to the main page with an activated "Play" button
-            return redirect('index')
 
-        # Difficulty is missing, handle error
-        else:  
+            # Store quiz ID in the session and redirect
+            request.session['quiz_id'] = quiz.id
+            return redirect('index')
+        else:
             print("Error: difficulty not found in POST request.")
             return redirect('index')  
 
-    # Invalid request default redirect
     return redirect('index')
 
 # Quiz Check Answer View
@@ -280,28 +298,56 @@ def quiz_recap(request):
     correct_count = request.session.get('correct_count', 0)
     incorrect_count = request.session.get('incorrect_count', 0)
     total_questions = correct_count + incorrect_count
+    score_percentage = (correct_count / total_questions) * 100 if total_questions > 0 else 0
+
+    # Retrieve the quiz from the session and mark it as completed
+    quiz_id = request.session.get('quiz_id')
+    if quiz_id:
+        quiz = get_object_or_404(Quiz, id=quiz_id)
+        quiz.is_completed = True
+        quiz.is_next = False  # Always mark as not the next quiz
+        quiz.score = score_percentage
+        quiz.save()
+
+        # Check if the action is 'try_again' or 'finish'
+        if request.method == 'POST':
+            action = request.POST.get('action')
+            if action == 'try_again':
+                # Reset the quiz for retry
+                quiz.is_next = True
+                quiz.is_completed = False
+                quiz.save()
+                
+                # Reset session progress
+                request.session['correct_count'] = 0
+                request.session['incorrect_count'] = 0
+                request.session['quiz_id'] = quiz.id
+                
+                return redirect('quiz')
+            elif action == 'finish':
+                # Clear quiz session ID and progress as quiz is complete
+                request.session.pop('quiz_id', None)
+                request.session['correct_count'] = 0
+                request.session['incorrect_count'] = 0
+                return redirect('index')
 
     # Prepare the context for the recap page
     context = {
         'correct_count': correct_count,
         'incorrect_count': incorrect_count,
         'total_questions': total_questions,
-        'score_percentage': (correct_count / total_questions) * 100 if total_questions > 0 else 0
+        'score_percentage': score_percentage,
     }
 
-    # Grab the user that completed the quiz
+    # Update user's quiz completion status
     member = request.user.member
-    # Check if they have completed a quiz today. If not, then update information
-    if member.hasCompletedQuiz == False:
+    if not member.hasCompletedQuiz:
         member.hasCompletedQuiz = True
         member.streakCount += 1
         member.save()
 
-    # Clear progress after showing the recap
-    request.session['correct_count'] = 0
-    request.session['incorrect_count'] = 0
-
     return render(request, 'quiz/quiz_recap.html', context)
+
 
 # Next/Try again should send POST or SOME kind of request after question feedback to update and load next question
 def next_question(request):

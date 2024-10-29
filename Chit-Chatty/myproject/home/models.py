@@ -20,6 +20,10 @@ class Quiz(models.Model):
     # Holds all questions in model
     questions = models.ManyToManyField('Question')
 
+    # For quiz tracking
+    is_completed = models.BooleanField(default=False)
+    score = models.IntegerField(null=True, blank=True)
+
     def __str__(self):
         return self.title
 
