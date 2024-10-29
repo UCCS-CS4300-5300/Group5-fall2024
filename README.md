@@ -79,14 +79,18 @@
 ## Future Features
 
 - **Goal-based Learning**: A dropdown to select specific learning goals (e.g., travel, fluency) and generate quizzes based on these goals.
-- **AI Integration** for an even more dynamic quiz generation
 - **Expanded Language Support**: Adding more languages and improving translation accuracy.
 
 ---
 
 ## Updates
 
-### Quiz Streaks (10/28/2024)
+### Quiz Streaks and AI Integration (10/28/2024)
+
+We've upgraded ChitChatty with AI-powered quiz generation and a streak tracking system, enhancing both personalization and motivation.
+
+#### Key Changes:
+- **Dynamic Quiz Generation**: AI-generated question-answer pairs with titles and descriptions, adapting content based on difficulty level.
 
 - **New Feature: Quiz Streaks**
    - Streaks increment daily when a user completes a quiz.
@@ -96,6 +100,10 @@
    - Enables scheduling of tasks to run at specified times.
    - Updated `requirements.txt` to include this new package.
    - [Package link ](https://pypi.org/project/django-apscheduler/)
+
+- **New file: `services.py`**
+   - Handles all openai prompts and parses the response from it
+
 
 - **New file: `scheduler.py`**
    - Contains code to initiate the background process that resets streaks.
@@ -121,7 +129,17 @@
 - **Modified `tests.py`**
    - Added new tests to ensure that the streak reset function works properly and adjusts the database as needed
 
+
+#### Bug Fixes 
+
+In this update, we addressed key bugs to improve ChitChatty’s functionality:
+
+- **Login Check for Quiz Generation**: The difficulty selection now verifies if a user is logged in. If not, it redirects to the login page.
+- **Next Quiz Logic**: Ensured that the “Next Quiz” button only activates for uncompleted quizzes and restricted multiple quiz generation until the current quiz is complete.
+- **Quiz Model Enhancements**: Added `is_completed` and `score` attributes for more precise quiz tracking.
+- **Quiz Recap Logic**: Adjusted the recap view to reset or finalize the quiz based on user selection.
 ---
+
 
 ### **October 17, 2024**
 
