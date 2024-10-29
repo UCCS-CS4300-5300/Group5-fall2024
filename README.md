@@ -86,6 +86,43 @@
 
 ## Updates
 
+### Quiz Streaks (10/28/2024)
+
+- **New Feature: Quiz Streaks**
+   - Streaks increment daily when a user completes a quiz.
+   - Resets automatically everyday at midnight.
+
+- **New Package: `django-apscheduler`**
+   - Enables scheduling of tasks to run at specified times.
+   - Updated `requirements.txt` to include this new package.
+   - [Package link ](https://pypi.org/project/django-apscheduler/)
+
+- **New file: `scheduler.py`**
+   - Contains code to initiate the background process that resets streaks.
+   - Schedules a daily midnight job to reset streak information.
+   - If the server was shut off and it is turned on the next day, it force runs the reset streak function!
+
+- **New file: `tasks.py`**
+   - The only task in this file is the one that contains the logic to reset streak information for users. Executes everyday at midnight.
+
+- **Model Adjustments**
+   - Modified the `Member` model to hold streak information such as if they have completed a quiz for the day and the current streak count.
+   - Created a new model called `LastStreakReset` to record the last streak reset time, accommodating server downtime.
+
+- **View Adjustments**
+   - Updated the home page view to display user streak data when logged in.
+
+- **HTML Adjustments**
+   - Modified `index.html` to display the streak count when it is greater than 0
+
+- **Modified `apps.py`**
+   - Added code to start `scheduler.py` to run whenever the app starts
+
+- **Modified `tests.py`**
+   - Added new tests to ensure that the streak reset function works properly and adjusts the database as needed
+
+---
+
 ### **October 17, 2024**
 
 #### Implemented Features and Fixes
