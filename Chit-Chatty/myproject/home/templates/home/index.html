@@ -27,7 +27,7 @@
 
 {% block navbar %}
 <!-- Navbar Content -->
-<nav class="navbar navbar-light floating-navbar" id="navbar">
+<nav class="navbar navbar-light floating-navbar" id="navbar" data-authenticated="{{ user.is_authenticated }}">
     <div class="container-fluid d-flex justify-content-between align-items-center">
 
         <!-- Left Hand Side -->
@@ -58,17 +58,14 @@
                 </form>
             </div>
 
-            <!-- Quiz Generation JS -->
             <script>
-                let selectedDifficulty = null;
-
                 function selectDifficulty(difficulty) {
                     selectedDifficulty = difficulty;
                     document.getElementById('dropdownMenuLink1').textContent = difficulty;
                     document.getElementById('selectedDifficultyInput').value = difficulty;
-
+            
                     // Check if user is authenticated
-                    const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+                    const isAuthenticated = document.getElementById('navbar').getAttribute('data-authenticated') === "True";
                     if (isAuthenticated) {
                         // Show "Generate Quiz" button
                         document.getElementById('generate-quiz-btn').style.display = 'block';
@@ -78,8 +75,7 @@
                     }
                 }
             </script>
-
-
+            
             <!-- Goal dropdown (hidden for now) -->
             <!-- To change visibility, remove 'style="display: none;'" -->
             <div class="dropdown ms-2" style="display: none;">
