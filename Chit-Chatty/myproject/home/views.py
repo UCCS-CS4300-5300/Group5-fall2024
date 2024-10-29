@@ -88,6 +88,7 @@ def logout(request):
     return render(request, 'home/index.html')
 
 # Quiz Views
+@login_required
 def quiz(request):
     # Reset the session when starting a new quiz
     request.session['correct_count'] = 0
@@ -123,7 +124,7 @@ def quiz(request):
     return render(request, 'quiz/quiz_question.html', context)
 
 
-
+@login_required
 def generate_quiz(request):
     # Check for POST request with selected difficulty
     if request.method == 'POST':
@@ -280,12 +281,31 @@ def quiz_recap(request):
     if quiz_id:
         quiz = get_object_or_404(Quiz, id=quiz_id)
         quiz.is_completed = True
-        quiz.is_next = False
+        quiz.is_next = False  # Always mark as not the next quiz
         quiz.score = score_percentage
         quiz.save()
 
-        # Clear the quiz session ID as the quiz is now complete
-        request.session.pop('quiz_id', None)
+        # Check if the action is 'try_again' or 'finish'
+        if request.method == 'POST':
+            action = request.POST.get('action')
+            if action == 'try_again':
+                # Reset the quiz for retry
+                quiz.is_next = True
+                quiz.is_completed = False
+                quiz.save()
+                
+                # Reset session progress
+                request.session['correct_count'] = 0
+                request.session['incorrect_count'] = 0
+                request.session['quiz_id'] = quiz.id
+                
+                return redirect('quiz')
+            elif action == 'finish':
+                # Clear quiz session ID and progress as quiz is complete
+                request.session.pop('quiz_id', None)
+                request.session['correct_count'] = 0
+                request.session['incorrect_count'] = 0
+                return redirect('index')
 
     # Prepare the context for the recap page
     context = {
@@ -295,19 +315,15 @@ def quiz_recap(request):
         'score_percentage': score_percentage,
     }
 
-    # Grab the user that completed the quiz
+    # Update user's quiz completion status
     member = request.user.member
-    # Check if they have completed a quiz today. If not, then update information
-    if member.hasCompletedQuiz == False:
+    if not member.hasCompletedQuiz:
         member.hasCompletedQuiz = True
         member.streakCount += 1
         member.save()
 
-    # Clear progress after showing the recap
-    request.session['correct_count'] = 0
-    request.session['incorrect_count'] = 0
-
     return render(request, 'quiz/quiz_recap.html', context)
+
 
 # Next/Try again should send POST or SOME kind of request after question feedback to update and load next question
 def next_question(request):

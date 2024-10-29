@@ -8,7 +8,8 @@
         <!-- Question Header -->
         <h1 class="card-title"
             style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-            Quiz Results</h1>
+            Quiz Results
+        </h1>
         <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 80px;">
             <p>You answered {{ correct_count }} questions correctly.</p>
             <p>You answered {{ incorrect_count }} questions incorrectly.</p>
@@ -21,10 +22,16 @@
 </div>
 
 <div class="center-button">
-    <a class="btn btn-warning" href="{% url 'quiz' %}" role="button">Try Again</a>
+    <form method="POST" action="{% url 'quiz_recap' %}">
+        {% csrf_token %}
+        <button type="submit" name="action" value="try_again" class="btn btn-warning">Try Again</button>
+    </form>
 </div>
 <p></p>
 <div class="center-button">
-    <a class="btn btn-warning" href="{% url 'index' %}" role="button">Home</a>
+    <form method="POST" action="{% url 'index' %}">
+        {% csrf_token %}
+        <button type="submit" name="action" value="finish" class="btn btn-warning">Finish</button>
+    </form>
 </div>
 {% endblock content %}

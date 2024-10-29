@@ -37,10 +37,9 @@
                 <img src="{% static 'home/images/Spanish flag.png' %}" width="60" height="50" alt="Spanish flag"
                     style="border-radius: 10px;"> <!-- Flag -->
             </a>
-            <!-- Difficulty dropdown -->
+            <!-- Difficulty Dropdown -->
             <div class="dropdown ms-1">
-                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false">
                     Difficulty
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
@@ -65,15 +64,18 @@
 
                 function selectDifficulty(difficulty) {
                     selectedDifficulty = difficulty;
-
-                    // Change the button text to reflect the selected difficulty
                     document.getElementById('dropdownMenuLink1').textContent = difficulty;
-
-                    // Set the hidden input's value to the selected difficulty
                     document.getElementById('selectedDifficultyInput').value = difficulty;
 
-                    // Show the "Generate Quiz" button
-                    document.getElementById('generate-quiz-btn').style.display = 'block';
+                    // Check if user is authenticated
+                    const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+                    if (isAuthenticated) {
+                        // Show "Generate Quiz" button
+                        document.getElementById('generate-quiz-btn').style.display = 'block';
+                    } else {
+                        // Redirect to login page with next parameter
+                        window.location.href = "{% url 'login-page' %}?next={% url 'index' %}";
+                    }
                 }
             </script>
 
