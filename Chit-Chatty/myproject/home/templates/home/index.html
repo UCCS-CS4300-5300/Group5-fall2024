@@ -38,10 +38,9 @@
         <div class="dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <!-- Add ID to target the main flag image -->
-                <img id="currentFlag" src="{% static 'home/images/chinese.png' %}" width="55" height="45" alt="Current flag" style="border-radius: 10px;">
+                <img id="currentFlag" src="{% static 'home/images/' %}{{ request.session.selected_language|default:'chinese'|lower }}.png" width="55" height="45" alt="Current flag" style="border-radius: 10px;">
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <!-- Language options with data attributes for JavaScript -->
                 <li>
                     <a class="dropdown-item" href="#" data-flag="{% static 'home/images/chinese.png' %}" data-lang="Chinese">
                         <img src="{% static 'home/images/chinese.png' %}" width="50" height="40" style="border-radius: 5px;">
@@ -81,6 +80,7 @@
             </ul>
         </div>
 
+        <!-- Move these eventually!! javascript files were having a huge issue-->
         <!-- JavaScript to Update Flag Image -->
         <script>
             document.addEventListener("DOMContentLoaded", function () 
@@ -107,6 +107,47 @@
                 });
             });
         </script>
+
+        <!-- JavaScript to store language selection -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () 
+            {
+                const languageOptions = document.querySelectorAll('.dropdown-menu .dropdown-item');
+                const currentFlag = document.getElementById('currentFlag');
+
+                languageOptions.forEach(option => {
+                    option.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        const newFlagSrc = this.getAttribute('data-flag');
+                        const selectedLang = this.getAttribute('data-lang');
+
+                        currentFlag.src = newFlagSrc;
+
+                        // Send an AJAX request to save the selected language in the session
+                        fetch("{% url 'set_language' %}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            body: JSON.stringify({ language: selectedLang.toLowerCase() })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            console.log("Language saved:", selectedLang);
+                        })
+                        .catch(error => console.error('Error:', error));
+                    });
+                });
+            });
+        </script>
+
+
+
+
 
 
             <!-- Difficulty dropdown -->

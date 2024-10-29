@@ -25,4 +25,8 @@ urlpatterns = [
 
     # Path for logging out
     path('logout/', views.logout, name ='logout'),
+
+    # path for selecting language
+    path('set_language/', views.set_language, name='set_language'),
+
 ]

@@ -3,12 +3,15 @@ from django.contrib import messages
 from django.contrib.auth import logout as auth_logout, login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
 from .services import generate_translation_questions, translate_sentence
 import random
 import requests
+import json
 
 # Home Page View
 def index(request):
@@ -135,21 +138,26 @@ def generate_quiz(request):
 
         # Ensure difficulty is received
         if difficulty:
-            #Retrieve 10 random questions based on the selected difficulty
-            questions = generate_translation_questions('Easy', 'Spanish', 'English', 10)
 
             # Create user instance
             # member = get_object_or_404(Member, user=request.user)
+
+            # retrieve selected languages from session
+            source_lang = request.session.get('selected_language', 'Chinese')   # default to first language
+            target_lang = 'English'
+
+            #Retrieve 10 random questions based on the selected difficulty
+            questions = generate_translation_questions(difficulty, source_lang, target_lang, 10)
             
             # Create a new quiz for the user 
             quiz = Quiz.objects.create(is_next=True) # user=member,
 
-            for i in range(0,10):
+            for i in range(len(questions)):
                 question = Question.objects.create(
                     translation_question=questions[i],
-                    correct_answer=translate_sentence(questions[i], 'Spanish', 'English'),
-                    source_language='Spanish',
-                    target_language='English'
+                    correct_answer=translate_sentence(questions[i], source_lang, target_lang),
+                    source_language=source_lang,
+                    target_language=target_lang
                 )
                 quiz.questions.add(question)
                     
@@ -342,25 +350,30 @@ def next_question(request):
 # using random-words-api
 # https://github.com/mcnaveen/Random-Words-API
 def word_of_the_day(request):
-    # Check if the word is already in the session (each click)
-    if 'spanish_word' not in request.session or 'english_translation' not in request.session:
-        # Fetch the word of the day from the API
-        response = requests.get('https://random-words-api.vercel.app/word/spanish')
+    # Get the selected language from the session, default a language
+    selected_language = request.session.get('selected_language', 'chinese').lower()
+
+    # Check if the word for the selected language is already in the session
+    if 'word_of_the_day' not in request.session or request.session.get('language_for_word') != selected_language:
+        # Fetch the word of the day for the selected language from the API
+        api_url = f'https://random-words-api.vercel.app/word/{selected_language}'
+        response = requests.get(api_url)
         if response.status_code == 200:
             word_data = response.json()[0]
-            spanish_word = word_data['word']
-            english_translation = word_data['definition']
+            word_of_the_day = word_data['word']
+            english_translation = word_data['definition']  # Keep English translation as a backup
 
-            # Store the word and its translation in the session
-            request.session['spanish_word'] = spanish_word
+            # Store the word, its translation, and language in the session
+            request.session['word_of_the_day'] = word_of_the_day
             request.session['english_translation'] = english_translation
+            request.session['language_for_word'] = selected_language
         else:
             return render(request, 'home/word_of_the_day.html', {
                 'error': "Sorry, we can't find a word!"
             })
 
     # Retrieve the word and translation from the session
-    spanish_word = request.session['spanish_word']
+    word_of_the_day = request.session['word_of_the_day']
     english_translation = request.session['english_translation']
     result = None
 
@@ -371,18 +384,36 @@ def word_of_the_day(request):
         # Compare user guess with the correct translation
         if user_guess.lower() == english_translation.lower():
             result = 'Correct! ᕦ(ò_óˇ)ᕤ'
-            # Clear the session to get a new word on next click
-            del request.session['spanish_word']
+            # Clear the session to get a new word on the next click
+            del request.session['word_of_the_day']
             del request.session['english_translation']
+            del request.session['language_for_word']
         else:
             result = f'Uh oh, better luck next time ʅ（◞‿◟）ʃ. The correct answer is: {english_translation}'
-            # Clear the session to get a new word on next click
-            del request.session['spanish_word']
+            # Clear the session to get a new word on the next click
+            del request.session['word_of_the_day']
             del request.session['english_translation']
+            del request.session['language_for_word']
 
     return render(request, 'home/word_of_the_day.html', {
-        'spanish_word': spanish_word,
+        'word_of_the_day': word_of_the_day,
         'english_translation': english_translation,
+        'selected_language': selected_language.capitalize(),
         'result': result
     })
+
+
+@csrf_exempt
+def set_language(request):
+    
+    if request.method == "POST":
+        data = json.loads(request.body)
+        language = data.get('language')
+        
+        # Save to session
+        request.session['selected_language'] = language
+        return JsonResponse({"success": True})
+    
+    return JsonResponse({"success": False}, status=400)
+
 
