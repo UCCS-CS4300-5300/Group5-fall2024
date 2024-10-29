@@ -7,9 +7,9 @@
 
 ## Features
 
-### 1. **Dynamic Quiz Generation**
+### 1. **Dynamic AI Quiz Generation**
    - Store generated and translated questions in a database.
-   - Support for multiple languages, with the ability to set source and target languages.
+   - FUTURE Support for multiple languages, with the ability to set source and target languages.
 
 ### 2. **User Authentication**
    - User registration, login, and session management.
@@ -35,9 +35,6 @@
    - Play button lifts upon hover to create a sense of depth.
    - Active quiz indicator that enables or disables the Play button based on quiz availability.
 
-### 7. **Question Pool**
-   - 30 questions preloaded into the app, with 10 questions available for each difficulty level.
-   - Questions cover basic translation phrases and vocabulary.
 
 
 ## Installation
