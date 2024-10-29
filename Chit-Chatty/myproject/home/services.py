@@ -1,50 +1,53 @@
-# https://chatgpt.com/share/671ad8cb-0dcc-8003-b9df-ae777d2c402d
-
 import openai
+import re
 from django.conf import settings
 
+# Set the OpenAI API key
 openai.api_key = settings.OPENAI_API_KEY
 
 def generate_translation_questions(difficulty, source_lang, target_lang, num_questions):
-    prompt = f"Generate {num_questions} sentences in {source_lang} to be translated to {target_lang} with {difficulty} difficulty. Provide only the sentences without additional text and without question numbers. Ensure sentences are family friendly."
-
-    # Prepare the message format for the chat model
-    messages = [
-        {"role": "user", "content": prompt}
-    ]
-
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",  # or another model you prefer
-        messages=messages,
-        max_tokens=300,
-        n=1,
-        stop=None
+    prompt = (
+        f"Generate {num_questions} {source_lang} sentences, questions, phrases, or words at a(n) {difficulty} difficulty level."
+        f"Provide a TITLE and DESCRIPTION for the set of questions. TITLE should be witty and DESCRIPTION should be brief."
+        f"Output the title within <TITLE></TITLE> tags and the description within <DESCRIPTION></DESCRIPTION> tags. "
+        f"Output each original sentence within <ORIGINAL></ORIGINAL> tags, and wrap the entire set within <ORIGINALS></ORIGINALS> tags. "
+        f"Translate these sentences to {target_lang} without pronunciation. Output each translation within <TRANSLATION></TRANSLATION> tags."
     )
-    
-    # Get the content from the response
-    questions = response.choices[0].message.content.strip().split('\n')
-    
-    # Filter out any empty lines, just in case
-    questions = [q.strip() for q in questions if q.strip()]
-    
-    return questions
 
-def translate_sentence(sentence, source_lang, target_lang):
-    prompt = f"Translate the following sentence from {source_lang} to {target_lang}: '{sentence}'. Please provide translation without any quotations."
-    
-    messages = [
-        {"role": "user", "content": prompt}
-    ]
+    messages = [{"role": "user", "content": prompt}]
 
+    # Get the response
     response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",  # or another model you prefer
+        model="gpt-3.5-turbo",
         messages=messages,
-        max_tokens=60,
-        n=1,
-        stop=None
+        max_tokens=500,
+        temperature=0.7
     )
-    
-    # Get the translated text from the response
-    translated_sentence = response.choices[0].message.content.strip()
-    
-    return translated_sentence
+
+    # Access Message Content
+    content = response.choices[0].message.content.strip()
+    questions = []
+    translations = []
+    print(f'Ai response: {content}')
+
+    # Extract title and description
+    title = re.search(r'<TITLE>(.*?)</TITLE>', content, re.DOTALL)
+    description = re.search(r'<DESCRIPTION>(.*?)</DESCRIPTION>', content, re.DOTALL)
+
+    # Use regex to extract all <ORIGINAL> and <TRANSLATION> tags
+    questions = re.findall(r'<ORIGINAL>(.*?)</ORIGINAL>', content, re.DOTALL)
+    print('Questions: {questions}')
+    translations = re.findall(r'<TRANSLATION>(.*?)</TRANSLATION>', content, re.DOTALL)
+    print('Translations: {translations}')
+
+    clean_questions = [q.replace("<ORIGINAL>", "").replace("</ORIGINAL>", "").strip() for q in questions]
+    clean_translations = [t.replace("<TRANSLATION>", "").replace("</TRANSLATION>", "").strip() for t in translations]
+
+    # Combine questions and translations into a structured format
+    structured_output = {
+        "title": title.group(1).strip() if title else "",
+        "description": description.group(1).strip() if description else "",
+        "questions": [{"question": q, "translation": t} for q, t in zip(clean_questions, clean_translations)]
+    }
+    print('Structured: {structured_output}')
+    return structured_output
