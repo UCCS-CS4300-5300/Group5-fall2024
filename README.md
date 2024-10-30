@@ -209,7 +209,7 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 - **Modified** the base template to display the word of the day icon. Currently appears at all times for testing. Eventually will only be clickable once a day.
 
 ***
-#### Feature Added: Language Selection
+### Feature Added: Language Selection
 ***
 
 `index.html`
@@ -232,7 +232,7 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 
 **Error fixed**: `UnicodeEncodeError` fixed in `services.py`
 ***
-#### Future Features
+### Future Features
 ***
 **LibreTranslate API**
 - Add more languages by implementing an API to translate English sentences. Supports 34 languages.
