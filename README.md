@@ -252,5 +252,7 @@ navbar/splash screen changes
 - **Added** `UserRegistrationLogin` to check if a user is able to have their information successfully stored in the system & then log in
 - **Added** `UserLogoutTest` to see is a user can log out
 - **Added** `UserFailSafe` to see if a logged in user will be redirected back to the home page if they try to access the register link
-- **Added** `QuizSessionTrackingTest` to track session data
-- **Added** `QuestionPoolTest` for question pool consistency
+- **Added** `QuizTests` to verify that the quiz is generated correctly with the expected attributes and completed by the logged-in user
+- **Added** `ResetStreakTests` to verify that daily streak implementation properly resets
+- **Added** `WordOfTheDay` to check if a user can access the word of the day
+- **Added** `SetLanguageTest` to see if user can select a language to learn
