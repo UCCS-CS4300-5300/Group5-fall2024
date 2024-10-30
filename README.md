@@ -285,3 +285,14 @@ navbar/splash screen changes
 - **Added** `ResetStreakTests` to verify that daily streak implementation properly resets
 - **Added** `WordOfTheDay` to check if a user can access the word of the day
 - **Added** `SetLanguageTest` to see if user can select a language to learn
+
+### Feature Added: AI Integration (10/25/2025)
+**ADDED**
+- services.py (new file to handle open AI logic)
+- generate_translation_questions function (prompts open AI to generate ten questions based on a number of incoming parameters such as difficulty, source language, etc.)
+- translate_sentence function (prompts open AI to translate the incoming phrase to the base language)
+- open AI organization (invited all teammates to join the organization so they can all have API keys and added $15 worth of credits so that we can all test the AI)
+
+**UPDATES**
+- updated quiz_recap template to include a home button (button takes you to index for better flow)
+- updated generate_quiz view in views.py (added logic to incorporate the new functions in services.py) (now generates questions using open AI) (uses a loop to translate each sentence, create a question object for each, and adds those objects to a quiz object)
