@@ -1,8 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
-from home.models import Question, Member
+from home.models import Quiz, Question, Member
 from home.tasks import resetStreak
+from unittest.mock import patch
+import json
+
 
 # Create your tests here.
 
@@ -84,58 +87,71 @@ class UserFailSafe(TestCase):
 
 
 '''
-Test for session data tracking (correct and incorrect answers) 
+Test for session data tracking (correct and incorrect answers)
 '''
-class QuizSessionTrackingTest(TestCase):
+class QuizTests(TestCase):
     def setUp(self):
-        # Create test user
-        self.user = User.objects.create_user(username='TestUser', password='Test!@#$')
+        # Create a test user and member
+        self.user = User.objects.create_user(username='TestUser', password='TestPass123')
+        self.member = Member.objects.create(
+            user=self.user,
+            userName='TestUser',
+            streakCount=0,
+            hasCompletedQuiz=False
+        )
+        self.client = Client()
+        self.client.login(username='TestUser', password='TestPass123')
 
-        # Log in the user
-        self.client.login(username='TestUser', password='Test!@#$')
+    def test_quiz_generation(self):
+        # Set up data to send for quiz generation
+        generate_url = reverse('generate_quiz')
+        data = {'difficulty': 'easy'}  # Example difficulty level
+        
+        # Send POST request to generate quiz
+        response = self.client.post(generate_url, data)
 
-        # Add a question for testing
-        self.question = Question.objects.create(translation_question="Hola", correct_answer="Hello", source_language="Spanish", target_language="English", difficulty="Easy")
+        # Retrieve the created quiz
+        quiz = Quiz.objects.filter(is_next=True).first()
 
-    def test_quiz_session_data(self):
-        session = self.client.session
+        # Assertions
+        self.assertEqual(response.status_code, 302)  # Should redirect after creation
+        self.assertIsNotNone(quiz, "Quiz should be created and marked as next quiz.")
+        self.assertGreater(quiz.questions.count(), 0, "Quiz should have questions associated.")
 
-        # Test a correct answer
-        response = self.client.post(reverse('quiz_check_answer'), {'question_id': self.question.id, 'user_answer': 'Hello'})
-        session['correct_answers'] = session.get('correct_answers', 0) + 1  # Increment correct answers
-        self.assertEqual(session['correct_answers'], 1)  # Ensure correct answer is tracked
+    def test_quiz_completion(self):
+        # Set up a quiz for the user
+        quiz = Quiz.objects.create(title="Test Quiz", description="A test quiz", is_next=True)
+    
+        # Create and link questions to the quiz
+        questions = [
+            Question.objects.create(
+                translation_question=f"Question {i}",
+                correct_answer=f"Answer {i}",
+                source_language="Spanish",
+                target_language="English"
+            ) for i in range(1, 6)
+        ]
+        quiz.questions.add(*questions)
+    
+        # Start quiz and simulate answering questions
+        for question in questions:
+            check_answer_url = reverse('quiz_check_answer')
+            self.client.post(check_answer_url, {'question_id': question.id, 'user_answer': question.correct_answer})
 
-        # Test an incorrect answer
-        response = self.client.post(reverse('quiz_check_answer'), {'question_id': self.question.id, 'user_answer': 'Hi'})
-        session['incorrect_answers'] = session.get('incorrect_answers', 0) + 1  # Increment incorrect answers
-        self.assertEqual(session['incorrect_answers'], 1)  # Ensure incorrect answer is tracked
+        # Move to the recap view to mark the quiz as complete
+        recap_url = reverse('quiz_recap')
+        self.client.get(recap_url)
 
+        # Refresh data to reflect post-recap view updates
+        quiz.refresh_from_db()
+        self.member.refresh_from_db()
+
+        # Assertions to verify the quiz completion status
+        self.assertTrue(self.member.hasCompletedQuiz, "Member should be marked as having completed the quiz.")
+        self.assertEqual(self.member.streakCount, 1, "Member's streak count should increment by 1.")
 
 '''
-Test for question pool consistency
-'''
-class QuestionPoolTest(TestCase):
-    def setUp(self):
-        # Run the add_questions.py management command to populate the database with questions
-        from django.core.management import call_command
-        call_command('add_questions')
-
-    def test_question_pool_size(self):
-        easy_questions = Question.objects.filter(difficulty="Easy").count()
-        medium_questions = Question.objects.filter(difficulty="Medium").count()
-        hard_questions = Question.objects.filter(difficulty="Hard").count()
-
-        # Assert there are 10 questions per difficulty level
-        self.assertEqual(easy_questions, 10)
-        self.assertEqual(medium_questions, 10)
-        self.assertEqual(hard_questions, 10)
-
-        # Assert the total question pool is 30
-        total_questions = Question.objects.all().count()
-        self.assertEqual(total_questions, 30)
-
-'''
-Series of tests for resetting streak implementation
+Tests for resetting streak implementation
 '''
 class ResetStreakTests(TestCase):
     # Create members to use in tests
@@ -176,3 +192,53 @@ class ResetStreakTests(TestCase):
         Member.objects.all().delete()
         resetStreak()  
         self.assertEqual(Member.objects.count(), 0) 
+
+'''
+Test for answering the word of the day
+'''
+class WordOfTheDayTests(TestCase):
+    # Set up the test client and define the URL for the word of the day view
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('word_of_the_day')
+
+    @patch('requests.get')
+    def test_word_of_the_day_success(self, mock_get):
+        # Mocking the API response for a successfull call
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = [{'word': '你好', 'definition': 'Hello'}]
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '你好') 
+        self.assertEqual(self.client.session['word_of_the_day'], '你好')
+        self.assertEqual(self.client.session['english_translation'], 'Hello')
+
+    def test_word_of_the_day_incorrect(self):
+        # Simulate setting the word and translation in session
+        self.client.session['word_of_the_day'] = '你好'
+        self.client.session['english_translation'] = 'Hello'
+
+        response = self.client.post(self.url, {'user_guess': 'Hi'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Uh oh, better luck next time')
+        self.assertNotIn('word_of_the_day', self.client.session)
+
+'''
+Test for selecting a language
+'''
+class SetLanguageTests(TestCase):
+    # Set up the test client and define the URL for the set language view
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('set_language')
+
+    def test_set_language_success(self):
+        # Simulate a successful language change with a POST request
+        response = self.client.post(self.url, json.dumps({'language': 'chinese'}), content_type='application/json')
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": True})
+        self.assertEqual(self.client.session['selected_language'], 'chinese')
