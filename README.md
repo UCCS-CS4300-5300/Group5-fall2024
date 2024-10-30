@@ -208,6 +208,35 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 - **Updated** `urls.py` to include paths for word of the day
 - **Modified** the base template to display the word of the day icon. Currently appears at all times for testing. Eventually will only be clickable once a day.
 
+***
+#### Feature Added: Language Selection
+***
+
+`index.html`
+- *Flag image on top left corner now dynamic. Click to open a dropdown menu to select language to learn. When a language is selected, the flag will update and display the language the user has selected.*
+
+**Modified**: static Spanish flag image to dropdown selection
+**Added**: Javascript to update the flag image to selected language
+**Added**: Javascript to store language selection
+
+`views.py`
+**Modified**: `generate_quiz` to use selected language rather than a hardcoded language. Also now uses a selected difficulty rather than a hardcoded one.
+**Modified**: `word_of_the_day` to use selected language rather than a hard coded one.
+**Added**: `set_language` to store the selected language in the user's session and returns a JSON response.
+
+`urls.py`
+**Modified**: added `set_language` path
+
+`word_of_the_day.html`
+**Modified**: updated to verify language selection has been successful
+
+**Error fixed**: `UnicodeEncodeError` fixed in `services.py`
+***
+#### Future Features
+***
+**LibreTranslate API**
+- Add more languages by implementing an API to translate English sentences. Supports 34 languages.
+
 ---
 
 ### Feature Added: Templates (10/14/2024)
