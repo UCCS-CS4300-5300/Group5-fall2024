@@ -144,55 +144,11 @@
                 });
             });
         </script>
-
-
-
-
-
-
-            <!-- Difficulty dropdown -->
-            <div class="dropdown ms-1">
-                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Difficulty
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Easy')">Easy</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Medium')">Medium</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Hard')">Hard</a></li>
-                </ul>
-            </div>
-
-            <!-- Generate Quiz Button -->
-            <div id="generate-quiz-btn" style="display: none;" class="ms-3">
-                <form method="POST" action="{% url 'generate_quiz' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
-                    <button class="btn btn-warning" type="submit">Confirm</button>
-                </form>
-            </div>
-
-            <script>
-                function selectDifficulty(difficulty) {
-                    selectedDifficulty = difficulty;
-                    document.getElementById('dropdownMenuLink1').textContent = difficulty;
-                    document.getElementById('selectedDifficultyInput').value = difficulty;
-            
-                    // Check if user is authenticated
-                    const isAuthenticated = document.getElementById('navbar').getAttribute('data-authenticated') === "True";
-                    if (isAuthenticated) {
-                        // Show "Generate Quiz" button
-                        document.getElementById('generate-quiz-btn').style.display = 'block';
-                    } else {
-                        // Redirect to login page with next parameter
-                        window.location.href = "{% url 'login-page' %}?next={% url 'index' %}";
-                    }
-                }
-            </script>
             
             <!-- Goal dropdown (hidden for now) -->
             <!-- To change visibility, remove 'style="display: none;'" -->
             <div class="dropdown ms-2" style="display: none;">
-                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
+                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink6"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     Goal
                 </a>
@@ -243,48 +199,110 @@
     <h1 class="display-4" style="color: #31393C;">Welcome to ChitChatty!</h1>
     <p class="lead" style="color: #31393C;">Your go-to platform for enhancing your language skills.</p>
 </div>
-
-<!-- Next Quiz section -->
+<!-- Quiz Section -->
 <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
     <div class="card shadow-lg"
         style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
-        <!-- Next Quiz header -->
-        <h1 class="card-title"
-            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-            Next Quiz</h1>
-        
-        <!-- Streak Count Display-->
-        {% if user.is_authenticated %}
-            {% if member.streakCount > 0 %}
-            <div style="position: absolute; bottom: 20px; right: 30px; font-size: 32px; color: #2176FF;"> 
-                {{ member.streakCount }} Day Streak 
+
+        <div class="card-body d-flex flex-column justify-content-between" style="margin-top: 100px;"></div>
+            <!-- Create a Quiz header -->
+            <h1 class="card-title"
+                style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+                Create a Quiz
+            </h1>
+
+            <div class="card-body d-flex justify-content-between">
+                <!-- Play Button -->
+                <form method="POST" action="{% url 'generate_quiz' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
+                    <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
+                    <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
+                    <button type="submit" class="btn play-btn rounded-circle d-flex justify-content-center align-items-center"
+                        style="background: #FDCA40; border: none; width: 120px; height: 120px;">
+                        <i class="bi bi-play-fill" style="font-size: 60px; color: white; margin-left: 5px;"></i>
+                    </button>
+                </form>
+
+                <div class="d-flex flex-column align-items-end">
+                    <!-- Difficulty Dropdown -->
+                    <div class="dropdown ms-1">
+                        <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Difficulty of Questions
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                            <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Easy')">Easy</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Medium')">Medium</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Hard')">Hard</a></li>
+                        </ul>
+                    </div>
+
+                    <p></p>
+
+                    <!-- Number of Questions Dropdown -->
+                    <div class="dropdown ms-1">
+                        <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Number of Questions
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
+                            <li><a class="dropdown-item" href="#" onclick="selectLength(5)">5</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectLength(10)">10</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectLength(15)">15</a></li>
+                        </ul>
+                    </div>
+
+                    <p></p>
+
+                    <!-- Learning Goal Dropdown -->
+                    <div class="dropdown ms-1">
+                        <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink3"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Learning Goal of the Quiz
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
+                            <li><a class="dropdown-item" href="#" onclick="selectGoal('Travel')">Travel</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectGoal('Fluency')">Fluency</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectGoal('For Fun')">For Fun</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            {% endif %}
-        {% endif %}
-
-        <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 100px;">
-            <!-- Display the quiz title and description -->
-            <h4 class="text-primary mt-4"
-                style="font-size: 32px; color: #33A1FD; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">{{ quiz_title }}
-            </h4>
-            <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">{{ quiz_description }}</p>
-
-            <!-- Play Button -->
-            {% if quiz_available %}
-            <!-- Active play button if quiz is available -->
-            <a href="{% url 'quiz' %}" class="btn play-btn rounded-circle d-flex justify-content-center align-items-center active"
-                style="background: #FDCA40; border: none;">
-                <i class="bi bi-play-fill" style="font-size: 60px; color: white; margin-left: 5px;"></i>
-            </a>
-            {% else %}
-            <!-- Disabled play button if no quiz is available -->
-            <button class="btn rounded-circle d-flex justify-content-center align-items-center"
-                style="width: 120px; height: 120px; background: gray; border: none; box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.3); transition: all 0.3s ease-in-out;" disabled>
-                <i class="bi bi-play-fill" style="font-size: 60px; color: white; margin-left: 5px;"></i>
-            </button>
-            {% endif %}
         </div>
     </div>
 </div>
-{% endblock content %}
 
+<script>
+    function selectDifficulty(difficulty) {
+        document.getElementById('dropdownMenuLink1').textContent = difficulty;
+        document.getElementById('selectedDifficultyInput').value = difficulty;
+    }
+
+    function selectLength(length) {
+        document.getElementById('dropdownMenuLink2').textContent = length;
+        document.getElementById('selectedLengthInput').value = length;
+    }
+
+    function selectGoal(goal) {
+        document.getElementById('dropdownMenuLink3').textContent = goal;
+        document.getElementById('selectedGoalInput').value = goal;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    // Set default dropdown values based on session
+    const difficulty = "{{ request.session.selected_difficulty|default:'' }}";
+    const length = "{{ request.session.selected_length|default:'' }}";
+    const goal = "{{ request.session.selected_goal|default:'' }}";
+
+    if (difficulty) document.getElementById('dropdownMenuLink1').textContent = difficulty;
+    if (length) document.getElementById('dropdownMenuLink2').textContent = length;
+    if (goal) document.getElementById('dropdownMenuLink3').textContent = goal;
+
+    // Ensure flag remains visible
+    const selectedLanguage = "{{ request.session.selected_language|default:'chinese' }}";
+    document.getElementById('currentFlag').src = "{% static 'home/images/' %}" + selectedLanguage + ".png";
+});
+
+</script>
+{% endblock content %}

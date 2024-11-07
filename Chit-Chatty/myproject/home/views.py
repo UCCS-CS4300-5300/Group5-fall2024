@@ -15,16 +15,27 @@ import json
 
 # Home Page View
 def index(request):
-    # Fetch the quiz that is marked as the next quiz
-    next_quiz = Quiz.objects.filter(is_next=True, is_completed=False).first()
-    
+    if request.method == "POST":
+        selected_difficulty = request.POST.get("difficulty")
+        selected_length = request.POST.get("num_questions")
+        selected_goal = request.POST.get("learning_goal")
+
+        # Update session with submitted values
+        if selected_difficulty:
+            request.session["selected_difficulty"] = selected_difficulty
+        if selected_length:
+            request.session["selected_length"] = selected_length
+        if selected_goal:
+            request.session["selected_goal"] = selected_goal
+
     context = {
-        'quiz_available': bool(next_quiz),  # Boolean flag to indicate if a quiz is available
-        'quiz_title': next_quiz.title if next_quiz else 'No Quiz Loaded!',
-        'quiz_description': next_quiz.description if next_quiz else 'Check back later for new content.',
-        'member': request.user.member if request.user.is_authenticated else None,
+        "selected_language": request.session.get("selected_language", "chinese"),
+        "selected_difficulty": request.session.get("selected_difficulty", "Easy"),
+        "selected_length": request.session.get("selected_length", 5),
+        "selected_goal": request.session.get("selected_goal", "Travel"),
     }
-    return render(request, 'home/index.html', context)
+    return render(request, "home/index.html", context)
+
 
 '''
 View for user registration
