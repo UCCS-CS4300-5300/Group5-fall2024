@@ -140,22 +140,22 @@ def quiz(request):
 
 @login_required
 def generate_quiz(request):
-    # Check for POST request with selected difficulty
+    # Check for POST request with selected parameters
     if request.method == 'POST':
         print(f"Received POST request with data: {request.POST}")
+        
+        # Retrieve quiz parameters from POST data
         difficulty = request.POST.get('difficulty')
+        num_questions = request.POST.get('num_questions')
+        goal = request.POST.get('learning_goal')
 
-        if difficulty:
-
-            # Create user instance
-            # member = get_object_or_404(Member, user=request.user)
-
-            # retrieve selected languages from session
-            source_lang = request.session.get('selected_language', 'Chinese')   # default to first language
+        if difficulty and num_questions and goal:
+            # Retrieve selected languages from session
+            source_lang = request.session.get('selected_language', 'Chinese')  # default to 'Chinese'
             target_lang = 'English'
 
             # Generate structured output with title, description, and questions
-            structured_output = generate_translation_questions(difficulty, source_lang, target_lang, 10)
+            structured_output = generate_translation_questions(difficulty, source_lang, target_lang, int(num_questions), goal)
             print("Generated structured output:", structured_output)  # Debug statement
 
             # Create a new quiz with title and description
@@ -164,19 +164,6 @@ def generate_quiz(request):
                 description=structured_output.get('description', 'Default Description'),
                 is_next=True
             )
-
-            #Retrieve 10 random questions based on the selected difficulty
-            # questions = generate_translation_questions(difficulty, source_lang, target_lang, 10)
-            
-            # Create a new quiz for the user 
-            # quiz = Quiz.objects.create(is_next=True) # user=member,
-
-            # for i in range(len(questions)):
-            #     question = Question.objects.create(
-            #         translation_question=questions[i],
-            #         correct_answer=translate_sentence(questions[i], source_lang, target_lang),
-            #         source_language=source_lang,
-            #         target_language=target_lang
 
             # Loop through questions and save each to the database
             for item in structured_output.get('questions', []):
@@ -197,14 +184,37 @@ def generate_quiz(request):
             quiz.is_next = True
             quiz.save()
 
-            # Store quiz ID in the session and redirect
+            # Save quiz details to session and redirect
             request.session['quiz_id'] = quiz.id
-            return redirect('index')
+            request.session['quiz_title'] = structured_output.get('title', 'Default Title')
+            request.session['quiz_description'] = structured_output.get('description', 'Default Description')
+            request.session['difficulty'] = difficulty
+            request.session['length'] = num_questions
+            return redirect('quiz_start')  
         else:
-            print("Error: difficulty not found in POST request.")
+            print("Error: missing one or more parameters in POST request.")
             return redirect('index')  
 
     return redirect('index')
+
+
+# Quiz Start View
+@login_required
+def quiz_start(request):
+    # Retrieve quiz details from session
+    quiz_title = request.session.get('quiz_title', 'Quiz Title')
+    quiz_description = request.session.get('quiz_description', 'Quiz Description')
+    difficulty = request.session.get('difficulty', 'Easy')
+    length = request.session.get('length', 5)
+
+    context = {
+        'quiz_title': quiz_title,
+        'quiz_description': quiz_description,
+        'difficulty': difficulty,
+        'length': length,
+    }
+    return render(request, 'quiz/quiz_start.html', context)
+
 
 # Quiz Check Answer View
 @login_required

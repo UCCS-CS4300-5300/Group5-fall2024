@@ -5,10 +5,11 @@ from django.conf import settings
 # Set the OpenAI API key
 openai.api_key = settings.OPENAI_API_KEY
 
-def generate_translation_questions(difficulty, source_lang, target_lang, num_questions):
+def generate_translation_questions(difficulty, source_lang, target_lang, num_questions, goal):
     prompt = (
         f"Generate {num_questions} {source_lang} sentences, questions, phrases, or words at a(n) {difficulty} difficulty level."
-        f"Provide a TITLE and DESCRIPTION for the set of questions. TITLE should be witty and DESCRIPTION should be brief."
+        f"The context for these questions is the learning goal: {goal}."
+        f"Provide a TITLE and DESCRIPTION for the set of questions. The TITLE should be witty and relevant to the goal, and the DESCRIPTION should briefly but accurately explain what the set covers."
         f"Output the title within <TITLE></TITLE> tags and the description within <DESCRIPTION></DESCRIPTION> tags. "
         f"Output each original sentence within <ORIGINAL></ORIGINAL> tags, and wrap the entire set within <ORIGINALS></ORIGINALS> tags. "
         f"Translate these sentences to {target_lang} without pronunciation. Output each translation within <TRANSLATION></TRANSLATION> tags."
