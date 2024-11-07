@@ -199,18 +199,21 @@
     <h1 class="display-4" style="color: #31393C;">Welcome to ChitChatty!</h1>
     <p class="lead" style="color: #31393C;">Your go-to platform for enhancing your language skills.</p>
 </div>
+
 <!-- Quiz Section -->
 <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
     <div class="card shadow-lg"
         style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
 
+
+        <!-- Create a Quiz header -->
         <div class="card-body d-flex flex-column justify-content-between" style="margin-top: 100px;"></div>
-            <!-- Create a Quiz header -->
             <h1 class="card-title"
                 style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
                 Create a Quiz
             </h1>
-
+            
+            {% if user.is_authenticated %}
             <div class="card-body d-flex justify-content-between">
                 <!-- Play Button -->
                 <form method="POST" action="{% url 'generate_quiz' %}">
@@ -269,6 +272,12 @@
                     </div>
                 </div>
             </div>
+
+                    {% else %}
+        <div class="d-flex justify-content-center align-items-center" style="height: 120px;">
+            <p class="lead" style="color: #31393C;">Please log in to create a quiz.</p>
+        </div>
+        {% endif %}
         </div>
     </div>
 </div>
