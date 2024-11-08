@@ -190,6 +190,7 @@ def generate_quiz(request):
             request.session['quiz_description'] = structured_output.get('description', 'Default Description')
             request.session['difficulty'] = difficulty
             request.session['length'] = num_questions
+            
             return redirect('quiz_start')  
         else:
             print("Error: missing one or more parameters in POST request.")
