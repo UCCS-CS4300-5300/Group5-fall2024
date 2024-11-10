@@ -151,7 +151,7 @@ def generate_quiz(request):
 
         if difficulty and num_questions and goal:
             # Retrieve selected languages from session
-            source_lang = request.session.get('selected_language', 'Chinese')  # default to 'Chinese'
+            source_lang = request.session.get('selected_language', 'Arabic')  # default to 'Chinese'
             target_lang = 'English'
 
             # Generate structured output with title, description, and questions
@@ -414,11 +414,11 @@ def next_question(request):
     return redirect('quiz_recap')
 
 
-# word of the day
-# using random-words-api
+# Word of the Day
+# Using Random Words API
 # https://github.com/mcnaveen/Random-Words-API
 def word_of_the_day(request):
-    # Get the selected language from the session, default a language
+    # Get the selected language from the session, defaulting to Chinese
     selected_language = request.session.get('selected_language', 'chinese').lower()
 
     # Check if the word for the selected language is already in the session
@@ -426,6 +426,7 @@ def word_of_the_day(request):
         # Fetch the word of the day for the selected language from the API
         api_url = f'https://random-words-api.vercel.app/word/{selected_language}'
         response = requests.get(api_url)
+        
         if response.status_code == 200:
             word_data = response.json()[0]
             word_of_the_day = word_data['word']
@@ -445,7 +446,7 @@ def word_of_the_day(request):
     english_translation = request.session['english_translation']
     result = None
 
-    # Check if the user has hit the submit button
+    # Check if the user has submitted a guess
     if request.method == 'POST':
         user_guess = request.POST.get('user_guess')
         

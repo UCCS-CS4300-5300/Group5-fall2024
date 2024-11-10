@@ -1,0 +1,163 @@
+{% load static %}
+
+<style>
+    .dropdown-menu {
+        max-height: 300px;  /* adjust this value based on the number of flags */
+        overflow-y: auto;   /* enables vertical scrolling if the content exceeds the max height */
+        width: 200px;       /* fixed width */
+    }
+</style>
+
+
+<div class="dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <img id="currentFlag" src="{% static 'home/images/' %}{{ request.session.selected_language|default:'chinese'|lower }}.png" width="55" height="45" alt="Current flag" style="border-radius: 10px;">
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/arabic.png' %}" data-lang="Arabic">
+                <img src="{% static 'home/images/arabic.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Arabic
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/chinese.png' %}" data-lang="Chinese">
+                <img src="{% static 'home/images/chinese.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Chinese
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/netherlands.png' %}" data-lang="Dutch">
+                <img src="{% static 'home/images/netherlands.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Dutch
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/french.png' %}" data-lang="French">
+                <img src="{% static 'home/images/french.png' %}" width="50" height="40" style="border-radius: 5px;">
+                French
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/german.png' %}" data-lang="German">
+                <img src="{% static 'home/images/german.png' %}" width="50" height="40" style="border-radius: 5px;">
+                German
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/greek.png' %}" data-lang="Greek">
+                <img src="{% static 'home/images/greek.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Greek
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/hindi.png' %}" data-lang="Hindi">
+                <img src="{% static 'home/images/hindi.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Hindi
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/italian.png' %}" data-lang="Italian">
+                <img src="{% static 'home/images/italian.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Italian
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/japanese.png' %}" data-lang="Japanese">
+                <img src="{% static 'home/images/japanese.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Japanese
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/korean.png' %}" data-lang="Korean">
+                <img src="{% static 'home/images/korean.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Korean
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/portuguese.png' %}" data-lang="Portuguese">
+                <img src="{% static 'home/images/portuguese.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Portuguese
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/russian.png' %}" data-lang="Russian">
+                <img src="{% static 'home/images/russian.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Russian
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/Spanish.png' %}" data-lang="Spanish">
+                <img src="{% static 'home/images/Spanish.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Spanish
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/swedish.png' %}" data-lang="Swedish">
+                <img src="{% static 'home/images/swedish.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Swedish
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/turkish.png' %}" data-lang="Turkish">
+                <img src="{% static 'home/images/turkish.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Turkish
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-flag="{% static 'home/images/vietnamese.png' %}" data-lang="Vietnamese">
+                <img src="{% static 'home/images/vietnamese.png' %}" width="50" height="40" style="border-radius: 5px;">
+                Vietnamese
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- JavaScript to Update Flag Image and Store Language Selection -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Select all dropdown items
+        const languageOptions = document.querySelectorAll('.dropdown-menu .dropdown-item');
+        const currentFlag = document.getElementById('currentFlag');
+
+        // Add click event to each language option
+        languageOptions.forEach(option => {
+            option.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent link from navigating
+
+                // Get the new flag image and language from the data attributes
+                const newFlagSrc = this.getAttribute('data-flag');
+                const selectedLang = this.getAttribute('data-lang');
+
+                if (!selectedLang) {
+                    console.error('Selected language is undefined or empty!');
+                    return;
+                }
+
+                // Update the main flag image
+                currentFlag.src = newFlagSrc;
+
+                // Log the selected language for debugging
+                console.log("Selected Language:", selectedLang);
+
+                // Send an AJAX request to save the selected language in the session
+                fetch("{% url 'set_language' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ language: selectedLang.toLowerCase() })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log("Language saved:", selectedLang);
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+</script>
+
