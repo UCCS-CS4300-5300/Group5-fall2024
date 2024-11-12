@@ -45,9 +45,11 @@ class Member(models.Model):
     firstName = models.CharField(max_length= 50, default="")
     lastName = models.CharField(max_length= 50, default="")
     email = models.CharField(max_length= 50, default="")
+    dateJoined = models.DateField(auto_now_add=True)
 
     # Streak information 
     streakCount = models.IntegerField(default = 0)
+    longestStreak = models.IntegerField(default = 0)
     hasCompletedQuiz = models.BooleanField(default = False)
 
     # One to one relationship with user

@@ -27,6 +27,12 @@ urlpatterns = [
     # Path for logging out
     path('logout/', views.logout, name ='logout'),
 
+    # Path for account details
+    path('account-details/<int:userID>', views.accountPage, name='account_details'),
+
+    # Path for editing account details
+    path('update_account_details/', views.update_account_details, name='update_account_details'),
+
     # path for selecting language
     path('set_language/', views.set_language, name='set_language'),
 
