@@ -238,6 +238,26 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 - Add more languages by implementing an API to translate English sentences. Supports 34 languages.
 
 ---
+### Updated: Language Selection Extended
+
+`settings.py`
+- **Modified**: Added Server Side Includes (SSI) to clear up javascript from `index.html`. 
+
+`language_selection.html`
+- **Added**: Cleaned up `index.html`. Language selection is now it's own section.
+
+`templates`
+- **Added**: `language_selection.html`. Moved the flag dropdown from `index.html` into it's own html file to clean up code. Updated dropdown menu to be scrollable.
+- **Added**: Ten new flags users can select from.
+- **Fixed**: When clicking any of the drop-downs, the flag would disappear. Flag is now fixed once selected.
+
+`services.py`
+- **Added**: `get_word_of_the_day` function using openai rather than using random words API.
+
+`views.py`
+- **Modified**: `word_of_the_day` to work with openai logic
+
+---
 
 ### Feature Added: Templates (10/14/2024)
 
