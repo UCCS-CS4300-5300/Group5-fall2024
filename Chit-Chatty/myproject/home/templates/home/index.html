@@ -174,19 +174,43 @@
             </a>
          </div>
 
-
         <!-- Profile Icon -->
-        <!-- TEMPORARY: when user is logged in, clicking the person circle is how they log out -->
         <div style="display: flex; align-items: center;">
-            {% if user.is_authenticated %}
-            <span class="text-white" style="font-weight: bold; margin-right: 10px;">Welcome, {{ user }}</span>
-            <a href="{% url 'logout' %}">
-                <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
-            </a>
+            {% if user.is_authenticated %}    
+                <!-- Dropdown menu stuff -->
+                <div class="dropdown">
+                    <!-- Toggle button for the dropdown menu -->
+                    <a class="d-flex align-items-center" id="accountDropdownOptions" role="button" data-bs-toggle="dropdown" aria-expanded="false" 
+                        style="border: 3px solid white; border-radius: 15px; padding: 5px;">
+                        <!-- Profile Icon -->
+                        <i class="bi bi-person-circle text-white" style="font-size: 2rem; margin-right: 10px;"></i>
+                        <!-- Username -->
+                        <span class="text-white" style="font-weight: bold; margin-right: 10px;">{{ user }}</span>
+                        <!-- Chevron Icon -->
+                        <i class="bi bi-chevron-down text-white"></i>
+                    </a>
+                    <!-- The dropdown menu -->
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdownOptions" style="margin-top: 5px;">
+                        <!-- Profile Option -->
+                        <li>
+                            <a class="dropdown-item" href="{% url 'account_details' user.id %}">
+                                <i class="bi bi-person me-2"></i> Profile
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <!-- Logout Option -->
+                        <li>
+                            <a class="dropdown-item" href="{% url 'logout' %}">
+                                <i class="bi bi-box-arrow-right me-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             {% else %}
-            <a href="{% url 'login-page' %}">
-                <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
-            </a>
+                <!-- Login Icon for Unauthenticated Users -->
+                <a href="{% url 'login-page' %}">
+                    <i class="bi bi-person-circle text-white" style="font-size: 2rem;"></i>
+                </a>
             {% endif %}
         </div>
     </div>
