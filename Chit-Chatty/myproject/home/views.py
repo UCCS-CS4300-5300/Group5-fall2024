@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
-from .services import generate_translation_questions
+from .services import generate_translation_questions, get_word_of_the_day
 import random
 import requests
 import json
@@ -111,8 +111,11 @@ def quiz(request):
 
     # Fetch the next quiz and the first question
     next_quiz = Quiz.objects.filter(is_next=True, is_completed=False).first()
+    print("Fetched quiz:", next_quiz)
+
     if next_quiz:
         first_question = next_quiz.questions.first()
+        print("First question in quiz:", first_question)
 
         # Ensure there is at least one question in the quiz
         if not first_question:
@@ -414,61 +417,49 @@ def next_question(request):
     return redirect('quiz_recap')
 
 
-# Word of the Day
-# Using Random Words API
-# https://github.com/mcnaveen/Random-Words-API
+# word of the day using openai
 def word_of_the_day(request):
-    # Get the selected language from the session, defaulting to Chinese
     selected_language = request.session.get('selected_language', 'chinese').lower()
 
-    # Check if the word for the selected language is already in the session
+    # Fetch word and translation if necessary
     if 'word_of_the_day' not in request.session or request.session.get('language_for_word') != selected_language:
-        # Fetch the word of the day for the selected language from the API
-        api_url = f'https://random-words-api.vercel.app/word/{selected_language}'
-        response = requests.get(api_url)
-        
-        if response.status_code == 200:
-            word_data = response.json()[0]
-            word_of_the_day = word_data['word']
-            english_translation = word_data['definition']  # Keep English translation as a backup
+        word_data = get_word_of_the_day(selected_language)
+        word_of_the_day = word_data.get('word_of_the_day')
+        english_translation = word_data.get('english_translation')
+        print("Returned from get_word_of_the_day:", word_of_the_day, english_translation)
 
-            # Store the word, its translation, and language in the session
+        if word_of_the_day:
             request.session['word_of_the_day'] = word_of_the_day
             request.session['english_translation'] = english_translation
             request.session['language_for_word'] = selected_language
+            print("Fetched word of the day:", word_of_the_day)
         else:
             return render(request, 'home/word_of_the_day.html', {
-                'error': "Sorry, we can't find a word!"
+                'error': "Could not find a word of the day."
             })
 
-    # Retrieve the word and translation from the session
-    word_of_the_day = request.session['word_of_the_day']
-    english_translation = request.session['english_translation']
+    # Retrieve values from session
+    word_of_the_day = request.session.get('word_of_the_day')
+    print("Word of the Day in session:", word_of_the_day)
+    english_translation = request.session.get('english_translation')
     result = None
 
-    # Check if the user has submitted a guess
+    # Handle user guess
     if request.method == 'POST':
         user_guess = request.POST.get('user_guess')
-        
-        # Compare user guess with the correct translation
         if user_guess.lower() == english_translation.lower():
             result = 'Correct! ᕦ(ò_óˇ)ᕤ'
-            # Clear the session to get a new word on the next click
-            del request.session['word_of_the_day']
-            del request.session['english_translation']
-            del request.session['language_for_word']
         else:
-            result = f'Uh oh, better luck next time ʅ（◞‿◟）ʃ. The correct answer is: {english_translation}'
-            # Clear the session to get a new word on the next click
-            del request.session['word_of_the_day']
-            del request.session['english_translation']
-            del request.session['language_for_word']
+            result = f'Uh oh, the correct answer is: {english_translation}'
+
+        # Clear session for a new word on the next visit
+        for key in ['word_of_the_day', 'english_translation']:
+            request.session.pop(key, None)
 
     return render(request, 'home/word_of_the_day.html', {
         'word_of_the_day': word_of_the_day,
-        'english_translation': english_translation,
         'selected_language': selected_language.capitalize(),
-        'result': result
+        'result': result,
     })
 
 
