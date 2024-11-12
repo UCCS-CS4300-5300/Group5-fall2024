@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import logout as auth_logout, login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz, Member, Question
 from .forms import CreateUserForm
@@ -91,6 +91,86 @@ def loginPage(request):
         form = AuthenticationForm()
     
     return render(request, 'authentication/login.html', {'form': form})
+
+'''
+View for the account details page of a user
+'''
+@login_required(login_url='login-page')
+def accountPage(request, userID):
+    
+    # Ensures that only the user can view their own account details page and not view others
+    # Returns user back to homepage
+    if (request.user.id != userID):
+          return redirect('index')
+
+    # Otherwise, grab the Member object associated with the user
+    member = get_object_or_404(Member, user=request.user)
+
+    # Go to the account page 
+    return render(request, 'authentication/account_details.html', {'member': member})
+
+'''
+View for updating account details
+The reason it's so long is because the 'User' object in the 'Member' object also has a username, first_name, last_name, and email field so it has to be update there too.
+'''
+@login_required(login_url='login-page')
+def update_account_details(request):
+    if request.method == 'POST':
+        # Grab the member from the database
+        member = Member.objects.filter(user = request.user).first()
+        
+        # Get data from the POST request
+        username = request.POST.get('usernameEditField')
+        email = request.POST.get('emailEditField')
+        firstName = request.POST.get('firstNameEditField')
+        lastName = request.POST.get('lastNameEditField')
+
+        # Update the username field
+        if username and username != member.userName:
+            # Checks if username already exists in the database. If it does, return an error.
+            if Member.objects.filter(userName=username).exists():
+                messages.error(request, "Username already taken. Please choose another.")
+                return redirect('account_details', request.user.id)
+
+            # Update the username in the database
+            member.userName = username
+            member.user.username = username  
+            messages.success(request, "Updated username")
+
+        # Update the email field
+        if email and email != member.email: 
+            member.email = email
+            member.user.email = email 
+            messages.success(request, "Updated email")
+
+        # Update the first name field
+        if firstName and firstName != member.firstName:
+            member.firstName = firstName
+            member.user.first_Name = firstName 
+            messages.success(request, "Updated first name")
+        
+        # Update the last name field
+        if lastName and lastName != member.lastName:
+            member.lastName = lastName
+            member.user.last_Name = lastName  
+            messages.success(request, "Updated last name")
+
+        # Save both the User and Member updates
+        member.save() 
+        member.user.save()  
+
+        # Redirect to the account page
+        return redirect('account_details', request.user.id )
+
+    # If the request method is not POST, redirect to homepage
+    return redirect('index')
+
+def update_account(request):
+    if request.method == 'POST':
+        user = request.user.member
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        full_name = request.POST.get('full_name')
 
 '''
 View for logging out
@@ -362,10 +442,13 @@ def quiz_recap(request):
     }
 
     # Update user's quiz completion status
+    # Also updates their longest streak variable
     member = request.user.member
     if not member.hasCompletedQuiz:
         member.hasCompletedQuiz = True
         member.streakCount += 1
+        if (member.streakCount > member.longestStreak):
+            member.longestStreak = member.streakCount
         member.save()
 
     return render(request, 'quiz/quiz_recap.html', context)

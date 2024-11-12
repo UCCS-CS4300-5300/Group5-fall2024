@@ -1,0 +1,205 @@
+<!-- Template that displays the account details for a logged in user. -->
+
+{% extends 'home/base_template.html' %}
+
+{% block content %}
+<style>
+    /* Specific container for this page */
+    .account-details .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 40px;
+        background-color: white;
+        border-radius: 8px;
+    }
+
+    /* The line that seperates each section on this page */
+    .divider {
+        width: 100%;
+        height: 2px;
+        background-color: black;
+        margin: 20px 0;
+    }
+
+    /* The style of the buttons on this page */
+    .button-style {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        background: #FDCA40; 
+        border: none; 
+    }
+
+    /* Hover effect on the custom button */
+    .button-style:hover {
+        background: #FFDD75;
+        transform: scale(1.05);
+    }
+    
+</style>
+
+<!-- The overall area for ALL information that is displayed on this screen -->
+<div style="display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <!-- Start of where information is written -->
+    <div class="content" style="width: 100%; max-width: 1000px;">
+        <!-- Title of the container-->
+        <div style="font-size: 30px; font-weight: bold;">
+            Account Details
+        </div>
+        <!-- Information to put inside the container -->
+        <div class="account-details">
+            <div class="container">
+                <!-- Initial greeting -->
+                <div style="font-size: 24px; text-align: center; text-decoration: underline; font-weight: bold;">
+                    ~Hello, {{member.userName}}~
+                </div>
+
+                <!-- Divider -->
+                <div class="divider"></div>
+
+                <!-- Account Information section -->
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h2>Account Information</h2>
+                    <button type="button" class="btn button-style" data-bs-toggle="modal" data-bs-target="#editInfoModal" id="editInfoBtn">Edit</button>
+                </div>
+                <div>
+                    <p><strong>Username:</strong> <span id="displayedUsername"> {{member.userName}}</span></p>
+                    <p><strong>Email:</strong> <span id="displayedEmail"> {{member.email}}</span></p>
+                    <p><strong>Full Name:</strong> <span id="displayedFullName"> {{member.firstName}} {{member.lastName}}</span></p>
+                    <p><strong>Member Since:</strong> {{member.dateJoined}}</p>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider"></div>
+
+                <!-- Statistics Section -->
+                <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+                    <h2>Statistics</h2>
+                </div>
+                <div>
+                    <p><strong>Current Streak:</strong><span id="longestStreak"> {{member.streakCount}}</span> days</p> 
+                </div>
+                <div>
+                    <p><strong>Longest Streak:</strong><span id="longestStreak"> {{member.longestStreak}}</span> days</p> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Information Modal -->
+<!-- Submits a form to have changes reflect in the database -->
+<form method="POST" action="{% url 'update_account_details' %}" id="editInfoForm">
+    {% csrf_token %}
+    <div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Title -->
+                <div class="modal-header">
+                    <h1 class="modal-title" id="editInfoModalLabel">Edit Account Information</h1>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <!-- Edit username field -->
+                    <div class="mb-3">
+                        <label for="editUsername" class="form-label" style="font-weight: bold;">Username</label>
+                        <input type="text" class="form-control" placeholder="Edit Username" id="editUsername" name="usernameEditField">
+                    </div>
+                    
+                    <!-- Edit email field -->
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label" style="font-weight: bold;">Email</label>
+                        <input type="text" class="form-control" placeholder="Edit Email" id="editEmail" name="emailEditField">
+                    </div>
+                    
+                    <!-- Edit first name field -->
+                    <div class="mb-3">
+                        <label for="editFirstName" class="form-label" style="font-weight: bold;">First Name</label>
+                        <input type="text" class="form-control" placeholder="Edit First Name" id="editFirstName" name="firstNameEditField">
+                    </div>
+
+                    <!-- Edit last name field -->
+                    <div class="mb-3">
+                        <label for="editLastName" class="form-label" style="font-weight: bold;">Last Name</label>
+                        <input type="text" class="form-control" placeholder="Edit Last Name" id="editLastName" name="lastNameEditField">
+                    </div>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn button-style">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Display success or error messages when updates are made to the account -->
+{% if messages %}
+<div class="alert alert-danger" role="alert" style="text-align: center; max-width: 40%; margin: auto;">
+    {% for message in messages %}
+        <p style="margin: 0; font-weight: bold;">{{ message }}</p> <!-- Reduced vertical space between messages -->
+    {% endfor %}
+</div>
+{% endif %}
+
+<script>
+// Function that does stuff once page loads
+// It enables populating the edit fields in the edit modal whenever it opens and highlights any changed fields in the modal as well in real-time
+document.addEventListener('DOMContentLoaded', function() {
+    // Grab the edit button
+    const editButton = document.getElementById('editInfoBtn');
+
+    // Grab all the edit fields in the edit modal
+    const editUsernameField = document.getElementById('editUsername');
+    const editEmailField = document.getElementById('editEmail');
+    const editFirstNameField = document.getElementById('editFirstName');
+    const editLastNameField = document.getElementById('editLastName');
+    
+    // Grab all the displayed data on the page
+    const displayedUsername = document.getElementById('displayedUsername').innerText.trim();
+    const displayedEmail = document.getElementById('displayedEmail').innerText.trim();
+
+    // Split the full name into first and last name
+    const displayedFullName = document.getElementById('displayedFullName').innerText.trim();
+    const [firstName, lastName] = displayedFullName.split(' '); 
+
+    // Highlighting function for changed fields
+    // Function that changes the edit field color everytime there is an edit and it doesn't match the original value 
+    function highlightIfChanged(input, originalValue) {
+        input.addEventListener('input', function() {
+            if (input.value.trim() !== originalValue) {
+                input.style.backgroundColor = '#FFFAE6'; 
+            } else {
+                input.style.backgroundColor = ''; 
+            }
+        });
+    }
+
+    // Adds a listener to the edit button. When clicked, it will populate the fields in the modal with the displayed information
+    editButton.addEventListener('click', function() {
+        // Populate the fields with existing data
+        editUsernameField.value = displayedUsername;
+        editEmailField.value = displayedEmail;
+        editFirstNameField.value = firstName;
+        editLastNameField.value = lastName;
+
+        // Reset background colors back to normal
+        editUsernameField.style.backgroundColor = '';
+        editEmailField.style.backgroundColor = '';
+        editFirstNameField.style.backgroundColor = '';
+        editLastNameField.style.backgroundColor = '';
+
+        // Add event listeners to detect changes
+        highlightIfChanged(editUsernameField, displayedUsername);
+        highlightIfChanged(editEmailField, displayedEmail);
+        highlightIfChanged(editFirstNameField, firstName);
+        highlightIfChanged(editLastNameField, lastName);
+    });
+});
+</script>
+
+{% endblock %}
