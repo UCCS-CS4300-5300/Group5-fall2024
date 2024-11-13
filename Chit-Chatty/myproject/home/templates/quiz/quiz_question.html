@@ -53,6 +53,11 @@
             <!-- Submit Button -->
             <button type="submit" class="btn btn-warning align-self-end mt-auto">Submit</button>
         </form>
+
+        <form method="post" action="{% url 'exit_quiz' %}">
+            {% csrf_token %}
+            <button type="submit" class="exit-button">Exit</button>
+        </form>
     </div>
 </div>
 

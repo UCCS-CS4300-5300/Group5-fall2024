@@ -14,13 +14,14 @@ class Quiz(models.Model):
     # Flag to identify the next quiz
     is_next = models.BooleanField(default=False)  
     
-    # Link quiz to user
-    # user = models.ForeignKey('Member', on_delete=models.CASCADE, default=None)
-
-    # Holds all questions in model
+    # Link quiz to user (optional, uncomment to use)
+    user = models.ForeignKey('Member', on_delete=models.CASCADE, null=True, blank=True)
+    
+    # Holds all questions in the model
     questions = models.ManyToManyField('Question')
 
     # For quiz tracking
+    is_active = models.BooleanField(default=True)
     is_completed = models.BooleanField(default=False)
     score = models.IntegerField(null=True, blank=True)
 

@@ -119,82 +119,92 @@
 <!-- Quiz Section -->
 <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
     <div class="card shadow-lg"
-        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; background: #ffffff;">
 
 
         <!-- Create a Quiz header -->
-        <div class="card-body d-flex flex-column justify-content-between" style="margin-top: 100px;"></div>
-            <h1 class="card-title"
-                style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-                Create a Quiz
-            </h1>
-            
-            {% if user.is_authenticated %}
-            <div class="card-body d-flex justify-content-between">
-                <!-- Play Button -->
-                <form method="POST" action="{% url 'generate_quiz' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
-                    <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
-                    <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
-                    <button type="submit" class="btn play-btn rounded-circle d-flex justify-content-center align-items-center"
-                        style="background: #FDCA40; border: none; width: 120px; height: 120px;">
-                        <i class="bi bi-play-fill" style="font-size: 60px; color: white; margin-left: 5px;"></i>
-                    </button>
-                </form>
+        {% if active_quiz %}
+            <!-- Section for continuing an existing quiz -->
+            <div class="card-body d-flex flex-column justify-content-between" style="margin-top: 100px;">
+                <h1 class="card-title" style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+                    Continue Quiz
+                </h1>
+                {% if user.is_authenticated %}
+                    <div class="card-body d-flex justify-content-between">
+                        <!-- Form for creating a new quiz with play button -->
+                        <form method="POST" action="{% url 'continue_quiz' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
+                            <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
+                            <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
+                            <button type="submit" class="btn play-btn rounded-circle d-flex justify-content-center align-items-center" style="background: #FDCA40; border: none; width: 120px; height: 120px;">
+                                <i class="bi bi-play-fill" style="font-size: 60px; color: white; margin-left: 5px;"></i>
+                            </button>
+                        </form>
+                {% else %}
+                    <p>Please <a href="{% url 'login-page' %}">log in</a> to create a quiz.</p>
+                {% endif %}
+        {% else %}
+            <!-- "Create a Quiz" section if no saved quiz exists -->
+            <div class="card-body d-flex flex-column justify-content-between" style="margin-top: 100px;">
+                <h1 class="card-title" style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+                    Create a Quiz
+                </h1>
+                {% if user.is_authenticated %}
+                    <div class="card-body d-flex justify-content-between">
+                        <!-- Form for creating a new quiz with play button -->
+                        <form method="POST" action="{% url 'generate_quiz' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
+                            <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
+                            <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
+                            <button type="submit" class="btn play-btn rounded-circle d-flex justify-content-center align-items-center" style="background: #FDCA40; border: none; width: 120px; height: 120px;">
+                                <i class="bi bi-play-fill" style="font-size: 60px; color: white; margin-left: 5px;"></i>
+                            </button>
+                        </form>
 
-                <div class="d-flex flex-column align-items-end">
-                    <!-- Difficulty Dropdown -->
-                    <div class="dropdown ms-1">
-                        <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Difficulty of Questions
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                            <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Easy')">Easy</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Medium')">Medium</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Hard')">Hard</a></li>
-                        </ul>
+                        <!-- Dropdowns for quiz parameters -->
+                        <div class="d-flex flex-column align-items-end">
+                            <div class="dropdown ms-1">
+                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Difficulty of Questions
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Easy')">Easy</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Medium')">Medium</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Hard')">Hard</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown ms-1">
+                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink2" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Number of Questions
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
+                                    <li><a class="dropdown-item" href="#" onclick="selectLength(5)">5</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectLength(10)">10</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectLength(15)">15</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown ms-1">
+                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink3" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Learning Goal of the Quiz
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
+                                    <li><a class="dropdown-item" href="#" onclick="selectGoal('Travel')">Travel</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectGoal('Fluency')">Fluency</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectGoal('For Fun')">For Fun</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-
-                    <p></p>
-
-                    <!-- Number of Questions Dropdown -->
-                    <div class="dropdown ms-1">
-                        <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Number of Questions
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
-                            <li><a class="dropdown-item" href="#" onclick="selectLength(5)">5</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectLength(10)">10</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectLength(15)">15</a></li>
-                        </ul>
-                    </div>
-
-                    <p></p>
-
-                    <!-- Learning Goal Dropdown -->
-                    <div class="dropdown ms-1">
-                        <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink3"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Learning Goal of the Quiz
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
-                            <li><a class="dropdown-item" href="#" onclick="selectGoal('Travel')">Travel</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectGoal('Fluency')">Fluency</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectGoal('For Fun')">For Fun</a></li>
-                        </ul>
-                    </div>
-                </div>
+                {% else %}
+                    <p>Please <a href="{% url 'login-page' %}">log in</a> to create a quiz.</p>
+                {% endif %}
             </div>
-
-                    {% else %}
-        <div class="d-flex justify-content-center align-items-center" style="height: 120px;">
-            <p class="lead" style="color: #31393C;">Please log in to create a quiz.</p>
-        </div>
         {% endif %}
-        </div>
+
     </div>
 </div>
 
