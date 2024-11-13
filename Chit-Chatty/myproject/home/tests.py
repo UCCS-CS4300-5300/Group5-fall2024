@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.contrib.messages import get_messages
 from home.models import Quiz, Question, Member
 from home.tasks import resetStreak
 from unittest.mock import patch
@@ -84,6 +85,49 @@ class UserFailSafe(TestCase):
         self.assertEqual(response.status_code, 302) # Check if the response status is redirect which is a 302
         self.assertRedirects(response, reverse('index')) # Check if user was redirected back to the homepage
 
+'''
+Test for seeing if a logged in user can update their account settings
+'''
+class AccountDetailsTest(TestCase):
+    def setUp(self):
+        # Create a test user
+        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.member = Member.objects.create(
+            user=self.user, 
+            userName='testuser', 
+            email='testuser@example.com', 
+            firstName='Test', 
+            lastName='User',
+            streakCount=5,
+            longestStreak=10
+        )
+
+        self.client.login(username='testuser', password='password123')
+
+    def test_account_page_load(self):
+        """Test that the account details page loads correctly"""
+        response = self.client.get(reverse('account_details', args=[self.user.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Account Details')
+        self.assertContains(response, self.member.userName)
+        self.assertContains(response, self.member.email)
+
+        
+    def test_update_account_details(self):
+        """Test updating only some fields (e.g., email only)"""
+        # Update only email
+        response = self.client.post(reverse('update_account_details'), {
+            'emailEditField': 'partialupdate@example.com',
+        })
+
+        # Assert that the user is redirected to the account details page
+        self.assertRedirects(response, reverse('account_details', args=[self.user.id]))
+
+        # Retrieve the updated member object from the database
+        updated_member = Member.objects.get(user=self.user)
+        
+        # Assert that the email has been updated
+        self.assertEqual(updated_member.email, 'partialupdate@example.com')
 
 
 '''
@@ -105,7 +149,11 @@ class QuizTests(TestCase):
     def test_quiz_generation(self):
         # Set up data to send for quiz generation
         generate_url = reverse('generate_quiz')
-        data = {'difficulty': 'easy'}  # Example difficulty level
+        data = {
+            'difficulty': 'Easy',       
+            'num_questions': 5,    
+            'learning_goal': 'Travel'
+        }
         
         # Send POST request to generate quiz
         response = self.client.post(generate_url, data)
@@ -149,6 +197,51 @@ class QuizTests(TestCase):
         # Assertions to verify the quiz completion status
         self.assertTrue(self.member.hasCompletedQuiz, "Member should be marked as having completed the quiz.")
         self.assertEqual(self.member.streakCount, 1, "Member's streak count should increment by 1.")
+
+'''
+Tests for quiz continuation implementation
+'''
+class QuizExitAndContinueTests(TestCase):
+    def setUp(self):
+        # Create a test user and log them in
+        self.user = User.objects.create_user(username='TestUser', password='TestPass123')
+        self.client = Client()
+        self.client.login(username='TestUser', password='TestPass123')
+
+        # Create a quiz and assign it as an active session quiz
+        self.quiz = Quiz.objects.create(title="Test Quiz", description="A test quiz", is_completed=False)
+        self.question = Question.objects.create(
+            translation_question="Translate 'casa'",
+            correct_answer="house",
+            source_language="Spanish",
+            target_language="English"
+        )
+        self.quiz.questions.add(self.question)
+        self.quiz.save()
+
+        # Set session data for an active quiz
+        session = self.client.session
+        session['quiz_id'] = self.quiz.id
+        session['quiz_title'] = self.quiz.title
+        session['quiz_description'] = self.quiz.description
+        session['difficulty'] = 'Easy'
+        session['length'] = 1
+        session.save()
+
+    def test_exit_quiz(self):
+        # Step 1: Exit the quiz
+        exit_url = reverse('exit_quiz')
+        response = self.client.get(exit_url)
+
+        self.quiz.refresh_from_db()
+        self.assertRedirects(response, reverse('index'), msg_prefix="Exiting quiz should redirect to index.")
+        self.assertFalse(self.quiz.is_completed, "Quiz should remain incomplete after exit.")
+        
+        # Step 2: Return to the index page and check for "Continue Quiz" option
+        index_url = reverse('index')
+        response = self.client.get(index_url)
+
+        self.assertContains(response, "Continue Quiz", msg_prefix="Index page should show 'Continue Quiz' option.")
 
 '''
 Tests for resetting streak implementation
@@ -196,35 +289,54 @@ class ResetStreakTests(TestCase):
 '''
 Test for answering the word of the day
 '''
-class WordOfTheDayTests(TestCase):
-    # Set up the test client and define the URL for the word of the day view
+class WordOfTheDayTest(TestCase):
+
     def setUp(self):
-        self.client = Client()
-        self.url = reverse('word_of_the_day')
+        """
+        Setup initial data for Word of the Day feature testing.
+        Create a user and member.
+        """
+        user = User.objects.create_user(username='testuser', password='12345')
+        self.member = Member.objects.create(user=user, userName='testuser')
+        self.client.login(username='testuser', password='12345')  # Log the user in
 
-    @patch('requests.get')
-    def test_word_of_the_day_success(self, mock_get):
-        # Mocking the API response for a successfull call
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = [{'word': '你好', 'definition': 'Hello'}]
+    def test_word_of_the_day_view(self):
+        """
+        Test the word of the day functionality by checking if the page renders correctly,
+        and the word and translation are stored in the session.
+        """
+        response = self.client.get(reverse('word_of_the_day'))  # Access the Word of the Day view
 
-        response = self.client.get(self.url)
-
+        # Check that the page loads correctly
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '你好') 
-        self.assertEqual(self.client.session['word_of_the_day'], '你好')
-        self.assertEqual(self.client.session['english_translation'], 'Hello')
 
-    def test_word_of_the_day_incorrect(self):
-        # Simulate setting the word and translation in session
-        self.client.session['word_of_the_day'] = '你好'
-        self.client.session['english_translation'] = 'Hello'
+        # Check if the word and translation are set in the session
+        self.assertIn('word_of_the_day', self.client.session)
+        self.assertIn('english_translation', self.client.session)
 
-        response = self.client.post(self.url, {'user_guess': 'Hi'})
+        # Check if the page contains the word of the day
+        word_of_the_day = self.client.session.get('word_of_the_day')
+        self.assertContains(response, word_of_the_day)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Uh oh, better luck next time')
+    def test_user_guess_correct(self):
+        """
+        Test that the user can correctly guess the word of the day and get a 'Correct' response.
+        """
+        # First, make sure we have a word of the day in the session
+        self.client.get(reverse('word_of_the_day'))
+
+        # Define the correct translation
+        correct_translation = self.client.session.get('english_translation')
+
+        # Send a POST request with the correct guess
+        response = self.client.post(reverse('word_of_the_day'), {'user_guess': correct_translation})
+
+        # Check that the result is 'Correct! ᕦ(ò_óˇ)ᕤ'
+        self.assertContains(response, 'Correct! ᕦ(ò_óˇ)ᕤ')
+
+        # Check that the word and translation are cleared from the session for the next visit
         self.assertNotIn('word_of_the_day', self.client.session)
+        self.assertNotIn('english_translation', self.client.session)
 
 '''
 Test for selecting a language
