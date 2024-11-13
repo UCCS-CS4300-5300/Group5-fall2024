@@ -306,7 +306,7 @@ navbar/splash screen changes
 - **Added** `WordOfTheDay` to check if a user can access the word of the day
 - **Added** `SetLanguageTest` to see if user can select a language to learn
 
-### Feature Added: AI Integration (10/25/2025)
+### Feature Added: AI Integration (10/25/2024)
 **ADDED**
 - services.py (new file to handle open AI logic)
 - generate_translation_questions function (prompts open AI to generate ten questions based on a number of incoming parameters such as difficulty, source language, etc.)
@@ -316,3 +316,17 @@ navbar/splash screen changes
 **UPDATES**
 - updated quiz_recap template to include a home button (button takes you to index for better flow)
 - updated generate_quiz view in views.py (added logic to incorporate the new functions in services.py) (now generates questions using open AI) (uses a loop to translate each sentence, create a question object for each, and adds those objects to a quiz object)
+
+### Feature Added: Quiz Continuation (11/12/2024)
+**ADDED**
+- is_active boolean attribute (new attribute in Quiz model that seperates "saved for later" quizes)
+- quiz_exit function (saves user's currentl session's quiz and redirects them to the homepage)
+- quiz_continue function (prompts user to return to their previously specified quiz)
+
+**UPDATES**
+- updated quiz_recap view so each specific user's Quiz database is cleared
+- updated index.html & index view function to check whether the user has an active quiz ("Create Quiz" UI changes to "Continue Quiz" UI)
+- updated quiz_question.html to include an "Exit Quiz" button
+
+**LIMITS**
+- while a user can return to their specified quiz, they cannot return to the question they exited from [AS OF YET] 
