@@ -325,43 +325,35 @@ navbar/splash screen changes
 
 ---
 #### Testing Functions (15 in total)
-1. UserRegistrationLogin
-	Purpose: Tests user registration and login process.
+1. UserRegistrationLogin: Tests user registration and login process.
 	Steps:
 	Registers a user with provided credentials.
 	Logs the user in and verifies successful redirection to the homepage.
-2. UserLogoutTest
-	Purpose: Tests the logout functionality.
+2. UserLogoutTest: Tests the logout functionality.
 	Steps:
 	Logs in a user, then verifies they are logged out and redirected to the homepage.
-3. UserFailSafe
-	Purpose: Ensures a logged-in user is redirected to the homepage if they try to access the registration page.
+3. UserFailSafe: Ensures a logged-in user is redirected to the homepage if they try to access the registration page.
 	Steps:
 	Logs in a user and tries to access the registration page.
 	Verifies they are redirected back to the homepage.
-4. AccountDetailsTest
-	Purpose: Tests updating account details (e.g., email).
+4. AccountDetailsTest: Tests updating account details (e.g., email).
 	Steps:
 	Loads the account details page.
 	Updates the email field and verifies the changes are saved and reflected on the account page.
-5. QuizTests
-	Purpose: Tests the generation and completion of quizzes.
+5. QuizTests: Tests the generation and completion of quizzes.
 	Steps:
 	Generates a quiz with specific parameters (difficulty, number of questions).
 	Verifies the quiz is created and contains questions.
 	Completes the quiz and checks if streaks are updated and the quiz is marked as completed.
-6. QuizExitAndContinueTests
-	Purpose: Tests the quiz exit and continuation functionality.
+6. QuizExitAndContinueTests: Tests the quiz exit and continuation functionality.
 	Steps:
 	Exits an ongoing quiz and verifies the quiz status.
 	Verifies that the option to continue the quiz is available on the homepage.
-7. ResetStreakTests
-	Purpose: Tests resetting streaks for users who have or have not completed a quiz.
+7. ResetStreakTests: Tests resetting streaks for users who have or have not completed a quiz.
 	Steps:
 	Resets streaks for users who haven’t completed a quiz.
 	Verifies that streaks are reset and that users who have completed quizzes retain their streaks.
-8. WordOfTheDayTest
-	Purpose: Tests the functionality of the Word of the Day feature.
+8. WordOfTheDayTest: Tests the functionality of the Word of the Day feature.
 	Steps:
 	Verifies the correct display of the Word of the Day and its translation.
 	Tests the user's ability to correctly guess the word and receive feedback.
