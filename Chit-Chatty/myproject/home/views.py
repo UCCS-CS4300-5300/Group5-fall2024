@@ -28,12 +28,22 @@ def index(request):
         if selected_goal:
             request.session["selected_goal"] = selected_goal
 
+    # Check if there is an active quiz in the session
+    active_quiz = None
+    if "quiz_id" in request.session:
+        try:
+            active_quiz = Quiz.objects.get(id=request.session["quiz_id"], is_completed=False)
+        except Quiz.DoesNotExist:
+            active_quiz = None  # If no active quiz is found
+
     context = {
         "selected_language": request.session.get("selected_language", "chinese"),
         "selected_difficulty": request.session.get("selected_difficulty", "Easy"),
         "selected_length": request.session.get("selected_length", 5),
         "selected_goal": request.session.get("selected_goal", "Travel"),
+        "active_quiz": active_quiz,  # Include the active quiz if it exists
     }
+
     return render(request, "home/index.html", context)
 
 
@@ -217,6 +227,61 @@ def quiz_start(request):
     return render(request, 'quiz/quiz_start.html', context)
 
 
+# Views to prompt the user with quiz options
+@login_required
+def continue_quiz(request):
+    quiz_id = request.session.get("quiz_id")
+    quiz_title = request.session.get('quiz_title', 'Quiz Title')
+    quiz_description = request.session.get('quiz_description', 'Quiz Description')
+    difficulty = request.session.get('difficulty', 'Easy')
+    length = request.session.get('length', 5)
+    
+    if not quiz_id:
+        return redirect('index')
+
+    # Retrieve the active quiz and ensure it's incomplete
+    quiz = get_object_or_404(Quiz, id=quiz_id, is_completed=False)
+
+    quiz.questions.clear()
+
+    # Ensure length is an integer
+    try:
+        selected_length = int(length)
+    except ValueError:
+        selected_length = 5
+
+    # Band-Aid Solution
+    # Fetch new questions
+    new_questions = Question.objects.all()[:selected_length]
+    quiz.questions.set(new_questions)
+
+    quiz.is_active = True
+    quiz.save()
+
+    context = {
+        'quiz_title': quiz_title,
+        'quiz_description': quiz_description,
+        'difficulty': difficulty,
+        'length': length,
+    }
+    return render(request, 'quiz/quiz_start.html', context)
+
+
+@login_required
+def exit_quiz(request):
+    quiz_id = request.session.get("quiz_id")
+    if quiz_id:
+        quiz = get_object_or_404(Quiz, id=quiz_id)
+        user = quiz.user
+
+        # Mark quiz as incomplete instead of inactive
+        quiz.is_completed = False
+        quiz.save()
+        return redirect('index')  # Redirect to the index page
+
+    return JsonResponse({"error": "No active quiz to exit"}, status=400)
+
+
 # Quiz Check Answer View
 @login_required
 def quiz_check_answer(request):
@@ -351,6 +416,8 @@ def quiz_recap(request):
                 request.session.pop('quiz_id', None)
                 request.session['correct_count'] = 0
                 request.session['incorrect_count'] = 0
+                Quiz.objects.filter(user=request.user.member).delete()
+                Question.objects.filter(quiz__user=request.user.member).delete()
                 return redirect('index')
 
     # Prepare the context for the recap page

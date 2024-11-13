@@ -14,6 +14,8 @@ urlpatterns = [
     path('generate_quiz/', views.generate_quiz, name='generate_quiz'),
     path('next_question/', views.next_question, name = 'next_question'),
     path('quiz_start/', views.quiz_start, name = 'quiz_start'),
+    path('continue_quiz/', views.continue_quiz, name='continue_quiz'),
+    path('exit_quiz/', views.exit_quiz, name='exit_quiz'),
     
     # Path for word of the day
     path('word-of-the-day/', views.word_of_the_day, name="word_of_the_day"),
