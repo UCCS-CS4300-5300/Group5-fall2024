@@ -238,8 +238,8 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 - Add more languages by implementing an API to translate English sentences. Supports 34 languages.
 
 ---
-### Updated: Language Selection Extended
 
+### Updated: Language Selection Extended
 `settings.py`
 - **Modified**: Added Server Side Includes (SSI) to clear up javascript from `index.html`. 
 
@@ -260,7 +260,6 @@ sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
 ---
 
 ### Feature Added: Templates (10/14/2024)
-
 urls.py
 - **Added** quiz url (linked to play button)
 - **Added** quiz_correct url
@@ -293,18 +292,8 @@ navbar/splash screen changes
 
 - **Moved** splash screen functionality to splash screen block in index.html
 - **Changed** navbar in navbar block in index.html
-
+  
 ---
-
-#### Testing
-
-- **Added** `UserRegistrationLogin` to check if a user is able to have their information successfully stored in the system & then log in
-- **Added** `UserLogoutTest` to see is a user can log out
-- **Added** `UserFailSafe` to see if a logged in user will be redirected back to the home page if they try to access the register link
-- **Added** `QuizTests` to verify that the quiz is generated correctly with the expected attributes and completed by the logged-in user
-- **Added** `ResetStreakTests` to verify that daily streak implementation properly resets
-- **Added** `WordOfTheDay` to check if a user can access the word of the day
-- **Added** `SetLanguageTest` to see if user can select a language to learn
 
 ### Feature Added: AI Integration (10/25/2024)
 **ADDED**
@@ -316,6 +305,8 @@ navbar/splash screen changes
 **UPDATES**
 - updated quiz_recap template to include a home button (button takes you to index for better flow)
 - updated generate_quiz view in views.py (added logic to incorporate the new functions in services.py) (now generates questions using open AI) (uses a loop to translate each sentence, create a question object for each, and adds those objects to a quiz object)
+
+---
 
 ### Feature Added: Quiz Continuation (11/12/2024)
 **ADDED**
@@ -329,4 +320,49 @@ navbar/splash screen changes
 - updated quiz_question.html to include an "Exit Quiz" button
 
 **LIMITS**
-- while a user can return to their specified quiz, they cannot return to the question they exited from [AS OF YET] 
+- while a user can return to their specified quiz, they cannot return to the question they exited from [AS OF YET]
+
+
+---
+#### Testing Functions (15 in total)
+1. UserRegistrationLogin
+	Purpose: Tests user registration and login process.
+	Steps:
+	Registers a user with provided credentials.
+	Logs the user in and verifies successful redirection to the homepage.
+2. UserLogoutTest
+	Purpose: Tests the logout functionality.
+	Steps:
+	Logs in a user, then verifies they are logged out and redirected to the homepage.
+3. UserFailSafe
+	Purpose: Ensures a logged-in user is redirected to the homepage if they try to access the registration page.
+	Steps:
+	Logs in a user and tries to access the registration page.
+	Verifies they are redirected back to the homepage.
+4. AccountDetailsTest
+	Purpose: Tests updating account details (e.g., email).
+	Steps:
+	Loads the account details page.
+	Updates the email field and verifies the changes are saved and reflected on the account page.
+5. QuizTests
+	Purpose: Tests the generation and completion of quizzes.
+	Steps:
+	Generates a quiz with specific parameters (difficulty, number of questions).
+	Verifies the quiz is created and contains questions.
+	Completes the quiz and checks if streaks are updated and the quiz is marked as completed.
+6. QuizExitAndContinueTests
+	Purpose: Tests the quiz exit and continuation functionality.
+	Steps:
+	Exits an ongoing quiz and verifies the quiz status.
+	Verifies that the option to continue the quiz is available on the homepage.
+7. ResetStreakTests
+	Purpose: Tests resetting streaks for users who have or have not completed a quiz.
+	Steps:
+	Resets streaks for users who haven’t completed a quiz.
+	Verifies that streaks are reset and that users who have completed quizzes retain their streaks.
+8. WordOfTheDayTest
+	Purpose: Tests the functionality of the Word of the Day feature.
+	Steps:
+	Verifies the correct display of the Word of the Day and its translation.
+	Tests the user's ability to correctly guess the word and receive feedback.
+	Verifies the session is cleared after a correct guess.
