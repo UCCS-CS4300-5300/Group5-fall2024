@@ -134,6 +134,7 @@
                         <!-- Form for creating a new quiz with play button -->
                         <form method="POST" action="{% url 'continue_quiz' %}">
                             {% csrf_token %}
+                            <input type="hidden" name="proficiency" id="selectedProficiencyInput" value="">
                             <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
                             <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
                             <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
@@ -155,6 +156,7 @@
                         <!-- Form for creating a new quiz with play button -->
                         <form method="POST" action="{% url 'generate_quiz' %}">
                             {% csrf_token %}
+                            <input type="hidden" name="proficiency" id="selectedProficiencyInput" value="">
                             <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
                             <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
                             <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
@@ -167,6 +169,20 @@
                         <div class="d-flex flex-column align-items-end">
                             <div class="dropdown ms-1">
                                 <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Proficiency
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                    <li><a class="dropdown-item" href="#" onclick="selectProficiency('Beginner')">Beginner</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectProficiency('Elementary')">Elementary</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectProficiency('Intermediate')">Intermediate</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectProficiency('Upper Intermediate')">Upper Intermediate</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectProficiency('Advanced')">Advanced</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectProficiency('Master')">Master</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown ms-1">
+                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink2" data-bs-toggle="dropdown" aria-expanded="false">
                                     Difficulty of Questions
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
@@ -177,7 +193,7 @@
                             </div>
 
                             <div class="dropdown ms-1">
-                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink2" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink3" data-bs-toggle="dropdown" aria-expanded="false">
                                     Number of Questions
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
@@ -188,13 +204,14 @@
                             </div>
 
                             <div class="dropdown ms-1">
-                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink3" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink4" data-bs-toggle="dropdown" aria-expanded="false">
                                     Learning Goal of the Quiz
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
                                     <li><a class="dropdown-item" href="#" onclick="selectGoal('Travel')">Travel</a></li>
                                     <li><a class="dropdown-item" href="#" onclick="selectGoal('Fluency')">Fluency</a></li>
                                     <li><a class="dropdown-item" href="#" onclick="selectGoal('For Fun')">For Fun</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="selectGoal('Communication')">Communication</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -209,30 +226,37 @@
 </div>
 
 <script>
+    function selectProficiency(proficiency) {
+        document.getElementById('dropdownMenuLink1').textContent = proficiency;
+        document.getElementById('selectedProficiencyInput').value = proficiency;
+    }
+
     function selectDifficulty(difficulty) {
-        document.getElementById('dropdownMenuLink1').textContent = difficulty;
+        document.getElementById('dropdownMenuLink2').textContent = difficulty;
         document.getElementById('selectedDifficultyInput').value = difficulty;
     }
 
     function selectLength(length) {
-        document.getElementById('dropdownMenuLink2').textContent = length;
+        document.getElementById('dropdownMenuLink3').textContent = length;
         document.getElementById('selectedLengthInput').value = length;
     }
 
     function selectGoal(goal) {
-        document.getElementById('dropdownMenuLink3').textContent = goal;
+        document.getElementById('dropdownMenuLink4').textContent = goal;
         document.getElementById('selectedGoalInput').value = goal;
     }
 
     document.addEventListener("DOMContentLoaded", function () {
     // Set default dropdown values based on session
+    const proficiency = "{{ request.session.selected_proficiency|default:'' }}";
     const difficulty = "{{ request.session.selected_difficulty|default:'' }}";
     const length = "{{ request.session.selected_length|default:'' }}";
     const goal = "{{ request.session.selected_goal|default:'' }}";
 
-    if (difficulty) document.getElementById('dropdownMenuLink1').textContent = difficulty;
-    if (length) document.getElementById('dropdownMenuLink2').textContent = length;
-    if (goal) document.getElementById('dropdownMenuLink3').textContent = goal;
+    if (proficiency) document.getElementById('dropdownMenuLink1').textContent = proficiency;
+    if (difficulty) document.getElementById('dropdownMenuLink2').textContent = difficulty;
+    if (length) document.getElementById('dropdownMenuLink3').textContent = length;
+    if (goal) document.getElementById('dropdownMenuLink4').textContent = goal;
 
     // Ensure flag remains visible
     const selectedLanguage = "{{ request.session.selected_language|default:'chinese' }}";

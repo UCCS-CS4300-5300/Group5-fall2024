@@ -5,14 +5,28 @@ from django.conf import settings
 # Set the OpenAI API key
 openai.api_key = settings.OPENAI_API_KEY
 
-def generate_translation_questions(difficulty, source_lang, target_lang, num_questions, goal):
+def generate_translation_questions(proficiency, difficulty, source_lang, target_lang, num_questions, goal):
     prompt = (
-        f"Generate {num_questions} {source_lang} sentences, questions, phrases, or words at a(n) {difficulty} difficulty level."
-        f"The context for these questions is the learning goal: {goal}."
-        f"Provide a TITLE and DESCRIPTION for the set of questions. The TITLE should be witty and relevant to the goal, and the DESCRIPTION should briefly but accurately explain what the set covers."
-        f"Output the title within <TITLE></TITLE> tags and the description within <DESCRIPTION></DESCRIPTION> tags. "
-        f"Output each original sentence within <ORIGINAL></ORIGINAL> tags, and wrap the entire set within <ORIGINALS></ORIGINALS> tags. "
-        f"Translate these sentences to {target_lang} without pronunciation. Output each translation within <TRANSLATION></TRANSLATION> tags."
+        f"Generate {num_questions} {source_lang} words, sentences, questions, or phrases "
+        f"at a {difficulty} difficulty level for a user with a proficiency level of {proficiency}. "
+        f"These should align with the learning goal: {goal}. Ensure variety in structure, length, and complexity "
+        f"to cover vocabulary, grammar, and contextual understanding effectively. Include a mix of common idioms, cultural references, "
+        f"and practical usage scenarios relevant to the goal."
+        f"\n\n"
+        f"Provide the following outputs:"
+        f"\n1. **TITLE**: A witty and relevant title that reflects the goal of the set. Wrap this in <TITLE></TITLE> tags."
+        f"\n2. **DESCRIPTION**: A concise explanation of what the set covers, focusing on how it meets the goal. Wrap this in <DESCRIPTION></DESCRIPTION> tags."
+        f"\n3. **ORIGINALS**: Generate each {source_lang} word, sentence, question, or phrase and wrap each in <ORIGINAL></ORIGINAL> tags. Wrap the entire collection in <ORIGINALS></ORIGINALS> tags."
+        f"\n4. **TRANSLATIONS**: Translate each {source_lang} word, sentence, question, or phrase to {target_lang}. Wrap each translation in <TRANSLATION></TRANSLATION> tags, keeping them aligned with the corresponding <ORIGINAL> tag."
+        f"\n\n"
+        f"Examples of outputs to include (depending on the goal):"
+        f"\n- Questions about daily routines or cultural practices."
+        f"\n- Phrases for travel or social interactions."
+        f"\n- Sentences that demonstrate idiomatic expressions or complex grammar structures."
+        f"\n- Words that are thematically tied to the goal, including verbs, nouns, adjectives, or adverbs."
+        f"\n- Greetings, goodbyes, and other similar instances."
+        f"\n\n"
+        f"Ensure that the output is formatted cleanly and consistently for parsing."
     )
 
     messages = [{"role": "user", "content": prompt}]
@@ -39,7 +53,7 @@ def generate_translation_questions(difficulty, source_lang, target_lang, num_que
     # Use regex to extract all <ORIGINAL> and <TRANSLATION> tags
     questions = re.findall(r'<ORIGINAL>(.*?)</ORIGINAL>', content, re.DOTALL)
     print(f'Questions: {questions}')
-    translations = re.findall(r'<TRANSLATION>\s*(.*?)\s*</TRANSLATION>', content, re.DOTALL)
+    translations = re.findall(r'<TRANSLATION>(.*?)</TRANSLATION>', content, re.DOTALL)
     print(f'Translations: {translations}')
 
     # Clean questions and translations
