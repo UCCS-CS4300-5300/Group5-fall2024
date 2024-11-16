@@ -502,6 +502,8 @@ def quiz_recap(request):
                 request.session['incorrect_count'] = 0
                 Quiz.objects.filter(user=request.user.member).delete()
                 Question.objects.filter(quiz__user=request.user.member).delete()
+
+                quiz.delete()
                 return redirect('index')
 
     # Prepare the context for the recap page
