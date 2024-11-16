@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz, Member, Question
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
+from django.utils.safestring import mark_safe
 from .services import generate_translation_questions, get_word_of_the_day
 import random
 import requests
@@ -598,9 +599,9 @@ def word_of_the_day(request):
     if request.method == 'POST':
         user_guess = request.POST.get('user_guess')
         if user_guess.lower() == english_translation.lower():
-            result = 'Correct! ᕦ(ò_óˇ)ᕤ'
+            result = mark_safe('Correct! <br>&emsp;<strong>ᕦ(ò_óˇ)ᕤ</strong>')
         else:
-            result = f'Uh oh, the correct answer is: {english_translation}'
+            result = mark_safe(f'Uh oh, the correct answer is: <strong>{english_translation}</strong> <br>Try again tomorrow <br>&emsp;<strong>ʅ（◞‿◟）ʃ</strong>')
 
         # Clear session for a new word on the next visit
         for key in ['word_of_the_day', 'english_translation']:

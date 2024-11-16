@@ -2,26 +2,37 @@
 {% load static %}
 
 {% block content %}
-<div class="container text-center">
-    {% if error %}
-        <p class="alert alert-danger">{{ error }}</p>
-    {% else %}
-        <h1 class="text-center">({{ selected_language }}) Word of the Day: {{ word_of_the_day }}</h1>
-
-
-        {% if result %}
-            <p>{{ result }}</p>
-            <a href="{% url 'index' %}" class="btn btn-secondary mt-4">Back to Home</a>
-        {% else %}
-            <form method="post" class="d-inline-block">
-                {% csrf_token %}
-                <div class="mb-6">
-                    <label for="user_guess" class="form-label mt-5">Enter your guess:</label>
-                    <input type="text" id="user_guess" name="user_guess" class="form-control" style="display: inline-block; width: auto;">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header" style="background-color: #2176FF; color: white">
+                    <h3>{{ selected_language }} Word of the Day:&emsp; <strong>{{ word_of_the_day }}</strong></h3>
                 </div>
-                <button type="submit" class="btn btn-primary mt-4">Submit</button>
-            </form>
-        {% endif %}
-    {% endif %}
+                <div class="card-body">
+                    {% if error %}
+                        <p class="alert alert-danger">{{ error }}</p>
+                    {% else %}
+                        {% if result %}
+                            <p>{{ result }}</p>
+                            <a href="{% url 'index' %}" class="btn mt-3" style="background-color: #FFC600; color: black;" >Back to Home</a>
+                        {% else %}
+                            <form method="post" class="mt-3">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="user_guess" class="form-label">Enter your guess:</label>
+                                    <input type="text" id="user_guess" name="user_guess" class="form-control" placeholder="Your guess here">
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3" style="background-color: #FFC600; color: black;"> 
+                                    <i class="bi bi-send-fill"></i> Submit
+                                </button>                                
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
