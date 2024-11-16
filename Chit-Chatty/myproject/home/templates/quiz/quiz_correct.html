@@ -1,4 +1,5 @@
 {% extends "home/base_template.html" %}
+{% load static %}
 
 {% block content %}
 <!-- Card containing Chit -->
@@ -6,9 +7,10 @@
     <div class="card shadow-lg"
         style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
         <!-- Question Header -->
-        <h1 class="card-title"
-            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
-            You answered correctly!</h1>
+        <h1 class="quiz-header"
+            style="font-size: clamp(24px, 5vw, 48px); color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 100%; text-align: center; white-space: normal; margin: 20px 0;">
+            {{ feedback }}
+        </h1>
         <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 80px;">
             <p>Tested phrase: "{{ question }}"</p>
             <p>Your Answer: "{{ user_answer }}"</p>
@@ -17,7 +19,7 @@
         <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 20px;">
             <div class="container mt-0">
                 <div class="speech-bubble">
-                    "Great Job!"
+                    {{ feedback }}
                 </div>
             </div>
             <p></p>
