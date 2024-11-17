@@ -239,6 +239,7 @@ def generate_quiz(request):
         print(f"Received POST request with data: {request.POST}")
         
         # Retrieve quiz parameters from POST data
+        proficiency = request.POST.get('proficiency')
         difficulty = request.POST.get('difficulty')
         num_questions = request.POST.get('num_questions')
         goal = request.POST.get('learning_goal')
@@ -249,7 +250,7 @@ def generate_quiz(request):
             target_lang = 'English'
 
             # Generate structured output with title, description, and questions
-            structured_output = generate_translation_questions(difficulty, source_lang, target_lang, int(num_questions), goal)
+            structured_output = generate_translation_questions(proficiency, difficulty, source_lang, target_lang, int(num_questions), goal)
             print("Generated structured output:", structured_output)  # Debug statement
 
             # Create a new quiz with title and description
@@ -502,6 +503,8 @@ def quiz_recap(request):
                 request.session['incorrect_count'] = 0
                 Quiz.objects.filter(user=request.user.member).delete()
                 Question.objects.filter(quiz__user=request.user.member).delete()
+
+                quiz.delete()
                 return redirect('index')
 
     # Prepare the context for the recap page

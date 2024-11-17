@@ -138,7 +138,47 @@
     background: rgba(255, 255, 255, 0.3);  
 }
 
+/* Quiz Start */
+.card-title {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: clamp(10px, 5vw, 48px); /* Dynamically adjusts font size between 24px and 48px */
+    color: #2176FF;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word; /* Ensures long words break */
+    text-align: center; /* Centers the title */
+    width: 90%; /* Ensures the title fits within the card */
+}
 
+
+/* Quiz Question styles */
+
+/* Shared styling for all quiz headers */
+.quiz-header {
+    font-size: 5vw; /* Dynamic font size based on viewport width */
+    color: #2176FF; /* Consistent header color */
+    font-weight: bold; /* Bold font for prominence */
+    text-align: center; /* Center-align all headers */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for styling */
+    line-height: 1.2; /* Ensure readability */
+    margin: 20px 0; /* Consistent spacing */
+}
+
+/* Adjust font size for smaller screens */
+@media (max-width: 768px) {
+    .quiz-header {
+        font-size: 6vw; /* Slightly larger on small screens */
+    }
+}
+
+/* Adjust font size for larger screens */
+@media (min-width: 1200px) {
+    .quiz-header {
+        font-size: 3rem; /* Fixed size for very wide screens */
+    }
+}
 
 
 /* speech bubble for chit 
@@ -170,3 +210,4 @@ created using ChatGPT: https://chatgpt.com/share/670d9db3-aab8-8003-9f19-bf0783a
 .center-button {
     text-align: center;
 }
+

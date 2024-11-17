@@ -1,4 +1,5 @@
 {% extends "home/base_template.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -9,7 +10,7 @@
         
         <!-- Dynamic Question Header -->
         <h1 class="card-title"
-            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+            style="position: absolute; top: 20px; left: 30px; font-size: clamp(24px, 5vw, 48px); color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 90%; text-align: center; white-space: normal;">
             Question {{ question_number }} <!-- Display current question number -->
         </h1>
 
@@ -33,33 +34,34 @@
 <!-- Card for entering translation -->
 <div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
     <div class="card shadow-lg"
-        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        style="width: 90%; max-width: 600px; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
         
         <!-- Enter Translation Header -->
-        <h1 class="card-title"
-            style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+        <h1 class="card-title text-center"
+            style="font-size: 36px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
             Enter translation:
         </h1>
 
         <!-- Input Field for User's Answer -->
-        <form method="post" action="{% url 'quiz_check_answer' %}">
+        <form method="post" action="{% url 'quiz_check_answer' %}" class="d-flex flex-column align-items-center">
             {% csrf_token %}
             <input type="hidden" name="question_id" value="{{ question.id }}">  <!-- Pass the question ID -->
             
-            <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 100px;">
-                <input type="text" name="user_answer" size="75" placeholder="Enter your translation">
-            </div>
-
+            <input type="text" name="user_answer" class="form-control my-3"
+                style="width: 100%; max-width: 500px; padding: 10px; font-size: 16px; border: 2px solid #2176FF; border-radius: 5px;"
+                placeholder="Enter your translation">
+            
             <!-- Submit Button -->
-            <button type="submit" class="btn btn-warning align-self-end mt-auto">Submit</button>
+            <button type="submit" class="btn btn-warning px-4 py-2" style="font-size: 16px;">Submit</button>
         </form>
 
-        <form method="post" action="{% url 'exit_quiz' %}">
+        <form method="post" action="{% url 'exit_quiz' %}" class="d-flex justify-content-center mt-3">
             {% csrf_token %}
-            <button type="submit" class="exit-button">Exit</button>
+            <button type="submit" class="btn btn-secondary px-4 py-2" style="font-size: 16px;">Exit</button>
         </form>
     </div>
 </div>
+
 
 {% else %}
     <!-- If no question is available, display this message -->
