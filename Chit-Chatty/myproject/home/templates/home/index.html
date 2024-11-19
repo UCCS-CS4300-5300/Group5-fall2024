@@ -44,7 +44,7 @@
         <!-- Right Section -->
         <div class="d-flex align-items-center">
             <!-- Hamburger Menu -->
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="offcanvas"
+            <button class="navbar-toggler ms-auto custom-toggler" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -54,7 +54,7 @@
             <div class="offcanvas offcanvas-end custom-offcanvas" tabindex="-1" id="offcanvasMenu"
                 aria-labelledby="offcanvasMenuLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+                    <h5 class="offcanvas-title" id="offcanvasMenuLabel">ChitChatty Menu</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
@@ -86,6 +86,16 @@
         </div>
 
         <style>
+            /* Hamburger Icon Style */
+            .navbar-light .custom-toggler .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+            }
+
+            .navbar-light .custom-toggler {
+                border-color: white;
+            }
+
+            /* OffCanvas Style */
             .custom-offcanvas {
                 background-color: #2176FF;
                 color: #fff;
@@ -105,7 +115,6 @@
         </style>
     </div>
 </nav>
-
 {% endblock navbar %}
 
 {% block content %}
@@ -114,13 +123,9 @@
     <p class="lead" style="color: #31393C;">Your go-to platform for enhancing your language skills.</p>
 </div>
 
-<!-- Quiz Section -->
 <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
     <div class="card shadow-lg"
-        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; background: #ffffff;">
-
-
-        <!-- Create a Quiz header -->
+        style="width: 90%; padding: 10px; border: 3px solid #2176FF; border-radius: 15px; background: #ffffff;">
         {% if active_quiz %}
         <!-- Section for continuing an existing quiz -->
         <div class="card-body d-flex flex-column justify-content-between" style="margin-top: 100px;">
@@ -148,141 +153,153 @@
                 {% endif %}
                 {% else %}
                 <!-- "Create a Quiz" section if no saved quiz exists -->
-                <div class="card-body d-flex flex-column justify-content-between" style="margin-top: 100px;">
-                    <h1 class="card-title"
-                        style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h1 style="font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
                         Create a Quiz
                     </h1>
                     {% if user.is_authenticated %}
-                    <div class="card-body d-flex justify-content-between">
-                        <!-- Form for creating a new quiz with play button -->
-                        <form method="POST" action="{% url 'generate_quiz' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="proficiency" id="selectedProficiencyInput" value="">
-                            <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
-                            <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
-                            <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
-                            <button type="submit"
-                                class="btn play-btn rounded-circle d-flex justify-content-center align-items-center"
-                                style="background: #FDCA40; border: none; width: 120px; height: 120px;">
-                                <i class="bi bi-play-fill" style="font-size: 60px; color: white; margin-left: 5px;"></i>
-                            </button>
-                        </form>
-
-                        <!-- Dropdowns for quiz parameters -->
-                        <div class="d-flex flex-column align-items-end">
-                            <div class="dropdown ms-1">
-                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Proficiency
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                    <li><a class="dropdown-item" href="#"
-                                            onclick="selectProficiency('Beginner')">Beginner</a></li>
-                                    <li><a class="dropdown-item" href="#"
-                                            onclick="selectProficiency('Elementary')">Elementary</a></li>
-                                    <li><a class="dropdown-item" href="#"
-                                            onclick="selectProficiency('Intermediate')">Intermediate</a></li>
-                                    <li><a class="dropdown-item" href="#"
-                                            onclick="selectProficiency('Upper Intermediate')">Upper Intermediate</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"
-                                            onclick="selectProficiency('Advanced')">Advanced</a></li>
-                                    <li><a class="dropdown-item" href="#"
-                                            onclick="selectProficiency('Master')">Master</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="dropdown ms-1">
-                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Difficulty of Questions
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Easy')">Easy</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"
-                                            onclick="selectDifficulty('Medium')">Medium</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Hard')">Hard</a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="dropdown ms-1">
-                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink3"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Number of Questions
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
-                                    <li><a class="dropdown-item" href="#" onclick="selectLength(5)">5</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="selectLength(10)">10</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="selectLength(15)">15</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="dropdown ms-1">
-                                <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink4"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Learning Goal of the Quiz
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
-                                    <li><a class="dropdown-item" href="#" onclick="selectGoal('Travel')">Travel</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="selectGoal('Fluency')">Fluency</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#" onclick="selectGoal('For Fun')">For Fun</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"
-                                            onclick="selectGoal('Communication')">Communication</a></li>
-                                </ul>
-                            </div>
+                    <!-- Dropdowns for quiz parameters -->
+                    <p></p>
+                    <div class="d-flex flex-column">
+                        <div class="dropdown ms-1">
+                            <label for="dropdown1" class="form-label">Proficiency:</label>
+                            <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="selectProficiency('Beginner')">Beginner</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="selectProficiency('Elementary')">Elementary</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="selectProficiency('Intermediate')">Intermediate</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="selectProficiency('Upper Intermediate')">Upper
+                                        Intermediate</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="selectProficiency('Advanced')">Advanced</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="selectProficiency('Master')">Master</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <p></p>
+                        <div class="dropdown ms-1">
+                            <label for="dropdown1" class="form-label">Difficulty:</label>
+                            <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Easy')">Easy</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Medium')">Medium</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="selectDifficulty('Hard')">Hard</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <p></p>
+                        <div class="dropdown ms-1">
+                            <label for="dropdown1" class="form-label">Length:</label>
+                            <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink3"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
+                                <li><a class="dropdown-item" href="#" onclick="selectLength(5)">5</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="selectLength(10)">10</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="selectLength(15)">15</a></li>
+                            </ul>
+                        </div>
+                        <p></p>
+                        <div class="dropdown ms-1">
+                            <label for="dropdown1" class="form-label">Goal:</label>
+                            <a class="btn btn-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink4"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
+                                <li><a class="dropdown-item" href="#" onclick="selectGoal('Travel')">Travel</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="selectGoal('Fluency')">Fluency</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="selectGoal('For Fun')">For
+                                        Fun</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="selectGoal('Communication')">Communication</a></li>
+                            </ul>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <!-- Form for creating a new quiz with play button -->
+                            <form method="POST" action="{% url 'generate_quiz' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="proficiency" id="selectedProficiencyInput" value="">
+                                <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
+                                <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
+                                <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
+                                <button type="submit"
+                                    class="btn play-btn rounded-circle d-flex justify-content-center align-items-center"
+                                    style="background: #FDCA40; border: none; width: 120px; height: 120px;">
+                                    <i class="bi bi-play-fill"
+                                        style="font-size: 60px; color: white; margin-left: 5px;"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
-                    {% else %}
-                    <p>Please <a href="{% url 'login-page' %}">log in</a> to create a quiz.</p>
-                    {% endif %}
                 </div>
+                {% else %}
+                <p>Please <a href="{% url 'login-page' %}">log in</a> to create a quiz.</p>
                 {% endif %}
-
             </div>
+            {% endif %}
+
         </div>
+    </div>
 
-        <script>
-            function selectProficiency(proficiency) {
-                document.getElementById('dropdownMenuLink1').textContent = proficiency;
-                document.getElementById('selectedProficiencyInput').value = proficiency;
-            }
+    <script>
+        function selectProficiency(proficiency) {
+            document.getElementById('dropdownMenuLink1').textContent = proficiency;
+            document.getElementById('selectedProficiencyInput').value = proficiency;
+        }
 
-            function selectDifficulty(difficulty) {
-                document.getElementById('dropdownMenuLink2').textContent = difficulty;
-                document.getElementById('selectedDifficultyInput').value = difficulty;
-            }
+        function selectDifficulty(difficulty) {
+            document.getElementById('dropdownMenuLink2').textContent = difficulty;
+            document.getElementById('selectedDifficultyInput').value = difficulty;
+        }
 
-            function selectLength(length) {
-                document.getElementById('dropdownMenuLink3').textContent = length;
-                document.getElementById('selectedLengthInput').value = length;
-            }
+        function selectLength(length) {
+            document.getElementById('dropdownMenuLink3').textContent = length;
+            document.getElementById('selectedLengthInput').value = length;
+        }
 
-            function selectGoal(goal) {
-                document.getElementById('dropdownMenuLink4').textContent = goal;
-                document.getElementById('selectedGoalInput').value = goal;
-            }
+        function selectGoal(goal) {
+            document.getElementById('dropdownMenuLink4').textContent = goal;
+            document.getElementById('selectedGoalInput').value = goal;
+        }
 
-            document.addEventListener("DOMContentLoaded", function () {
-                // Set default dropdown values based on session
-                const proficiency = "{{ request.session.selected_proficiency|default:'' }}";
-                const difficulty = "{{ request.session.selected_difficulty|default:'' }}";
-                const length = "{{ request.session.selected_length|default:'' }}";
-                const goal = "{{ request.session.selected_goal|default:'' }}";
+        document.addEventListener("DOMContentLoaded", function () {
+            // Set default dropdown values based on session
+            const proficiency = "{{ request.session.selected_proficiency|default:'' }}";
+            const difficulty = "{{ request.session.selected_difficulty|default:'' }}";
+            const length = "{{ request.session.selected_length|default:'' }}";
+            const goal = "{{ request.session.selected_goal|default:'' }}";
 
-                if (proficiency) document.getElementById('dropdownMenuLink1').textContent = proficiency;
-                if (difficulty) document.getElementById('dropdownMenuLink2').textContent = difficulty;
-                if (length) document.getElementById('dropdownMenuLink3').textContent = length;
-                if (goal) document.getElementById('dropdownMenuLink4').textContent = goal;
+            if (proficiency) document.getElementById('dropdownMenuLink1').textContent = proficiency;
+            if (difficulty) document.getElementById('dropdownMenuLink2').textContent = difficulty;
+            if (length) document.getElementById('dropdownMenuLink3').textContent = length;
+            if (goal) document.getElementById('dropdownMenuLink4').textContent = goal;
 
-                // Ensure flag remains visible
-                const selectedLanguage = "{{ request.session.selected_language|default:'chinese' }}";
-                document.getElementById('currentFlag').src = "{% static 'home/images/' %}" + selectedLanguage + ".png";
-            });
+            // Ensure flag remains visible
+            const selectedLanguage = "{{ request.session.selected_language|default:'chinese' }}";
+            document.getElementById('currentFlag').src = "{% static 'home/images/' %}" + selectedLanguage + ".png";
+        });
+    </script>
 
-        </script>
-        {% endblock content %}
+</div>
+</div>
+
+{% endblock content %}
