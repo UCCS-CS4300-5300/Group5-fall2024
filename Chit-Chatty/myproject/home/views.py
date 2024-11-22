@@ -13,6 +13,7 @@ from .services import generate_translation_questions, get_word_of_the_day
 import random
 import requests
 import json
+import datetime
 
 # Home Page View
 def index(request):
@@ -630,4 +631,18 @@ def set_language(request):
     
     return JsonResponse({"success": False}, status=400)
 
+
+# daily lesson
+def daily_lesson(request):
+    # gives the current day of year (each day 1-7)
+    day_of_year = datetime.datetime.now().timetuple().tm_yday
+    # cycle through lessons
+    total_lessons = 7
+    lesson_number = (day_of_year % total_lessons) + 1
+
+    # dynamically select the corresponding lesson template
+    template_name = f"daily_lesson/lesson4.html"
+    
+
+    return render(request, template_name)
 
