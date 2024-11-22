@@ -107,3 +107,33 @@ def get_word_of_the_day(selected_language):
 
     print(f'Structured Output: {structured_output}')
     return structured_output
+
+
+# daily lessons using openai API
+def daily_lesson_translation(word, selected_language):
+
+    prompt = (
+        f"Translate the following words into {selected_language}: {word}."
+        f"Translate *all* words, even if they are proper nouns or appear ambiguous."
+        f"Translate each word fully without breaking it up into individual characters."
+        f"Provide the output as the word : translation"
+    )
+
+    messages = [{"role": "user", "content": prompt}]
+
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        max_tokens=len(word) * 10,
+        temperature=0.7
+    )
+
+    # content is in (word) : (translation) form
+    content = response.choices[0].message.content.strip()
+
+    # split the content and return just the translation
+    get_translation = content.split(":")
+    translations = get_translation[1]
+
+    return translations
+

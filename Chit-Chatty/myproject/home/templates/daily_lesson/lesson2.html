@@ -1,79 +1,80 @@
 {% extends "home/base_template.html" %}
 {% load static %}
+{% load custom_tags %}
 
 
 {% block content %}
 <div class="container">
-    <h1 class="text-center mb-4">Today's Daily Lesson: Animals</h1>
+    <h1 class="text-center mb-4">Today's {{ selected_language|capfirst }} Lesson: Colors</h1>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
         <div class="col">
-            <div class="card" style="background-color: #2176FF;">
-                <img src="{% static 'home/images/daily_lesson/animals/cat.png' %}" class="card-img-top" alt="Cat">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/colors/black.png' %}" class="card-img-top" alt="Black">
                 <div class="card-body text-center">
-                    <p class="card-text fs-3 text-white"><strong>Cat</strong></p>
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Black" selected_language %}</strong></p>
                 </div>
             </div>
         </div>
         <div class="col">
-            <div class="card" style="background-color: #2176FF;">
-                <img src="{% static 'home/images/daily_lesson/animals/chicken.png' %}" class="card-img-top" alt="Chicken">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/colors/blue.png' %}" class="card-img-top" alt="Blue">
                 <div class="card-body text-center">
-                    <p class="card-text fs-3 text-white"><strong>Chicken</strong></p>
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Blue" selected_language %}</strong></p>
                 </div>
             </div>
         </div>
         <div class="col">
-            <div class="card" style="background-color: #2176FF;">
-                <img src="{% static 'home/images/daily_lesson/animals/cow.png' %}" class="card-img-top" alt="Cow">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/colors/grass.png' %}" class="card-img-top" alt="Green">
                 <div class="card-body text-center">
-                    <p class="card-text fs-3 text-white"><strong>Cow</strong></p>
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Green" selected_language %}</strong></p>
                 </div>
             </div>
         </div>
         <div class="col">
-            <div class="card" style="background-color: #2176FF;">
-                <img src="{% static 'home/images/daily_lesson/animals/duck.png' %}" class="card-img-top" alt="Duck">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/colors/orange.png' %}" class="card-img-top" alt="Orange">
                 <div class="card-body text-center">
-                    <p class="card-text fs-3 text-white"><strong>Duck</strong></p>
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Orange" selected_language %}</strong></p>
                 </div>
             </div>
         </div>
         <div class="col">
-            <div class="card" style="background-color: #2176FF;">
-                <img src="{% static 'home/images/daily_lesson/animals/goat.png' %}" class="card-img-top" alt="Goat">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/colors/pink.png' %}" class="card-img-top" alt="Pink">
                 <div class="card-body text-center">
-                    <p class="card-text fs-3 text-white"><strong>Goat</strong></p>
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Pink" selected_language %}</strong></p>
                 </div>
             </div>
         </div>
         <div class="col">
-            <div class="card" style="background-color: #2176FF;">
-                <img src="{% static 'home/images/daily_lesson/animals/horse.png' %}" class="card-img-top" alt="Horse">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/colors/purple.png' %}" class="card-img-top" alt="Purple">
                 <div class="card-body text-center">
-                    <p class="card-text fs-3 text-white"><strong>Horse</strong></p>
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Purple" selected_language %}</strong></p>
                 </div>
             </div>
         </div>
         <div class="col">
-            <div class="card" style="background-color: #2176FF;">
-                <img src="{% static 'home/images/daily_lesson/animals/pig.png' %}" class="card-img-top" alt="Pig">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/colors/red.png' %}" class="card-img-top" alt="Red">
                 <div class="card-body text-center">
-                    <p class="card-text fs-3 text-white"><strong>Pig</strong></p>
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Red" selected_language %}</strong></p>
                 </div>
             </div>
         </div>
         <div class="col">
-            <div class="card" style="background-color: #2176FF;">
-                <img src="{% static 'home/images/daily_lesson/animals/sheep.png' %}" class="card-img-top" alt="Sheep">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/colors/yellow.png' %}" class="card-img-top" alt="Yellow">
                 <div class="card-body text-center">
-                    <p class="card-text fs-3 text-white"><strong>Sheep</strong></p>
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Yellow" selected_language %}</strong></p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Centered Button -->
-    <div class="text-center mt-4">
+    <div class="text-center mt-4 mb-5">
         <a href="{% url 'index' %}" class="btn btn-lg mt-3" style="background-color: #FFC600; color: black;">
             Back to Home
         </a>

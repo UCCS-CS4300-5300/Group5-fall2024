@@ -1,2 +1,99 @@
 {% extends "home/base_template.html" %}
 {% load static %}
+{% load custom_tags %}
+
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Today's {{ selected_language|capfirst }} Lesson: Numbers</h1>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/zero.png' %}" class="card-img-top" alt="Zero">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Zero" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/one.png' %}" class="card-img-top" alt="One">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "One" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/two.png' %}" class="card-img-top" alt="Two">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Two" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/three.png' %}" class="card-img-top" alt="Three">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Three" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/four.png' %}" class="card-img-top" alt="Four">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Four" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/five.png' %}" class="card-img-top" alt="Five">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Five" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/six.png' %}" class="card-img-top" alt="Six">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Six" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/seven.png' %}" class="card-img-top" alt="Seven">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Seven" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/eight.png' %}" class="card-img-top" alt="Eight">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Eight" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/numbers/nine.png' %}" class="card-img-top" alt="Nine">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Nine" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Centered Button -->
+    <div class="text-center mt-4 mb-5">
+        <a href="{% url 'index' %}" class="btn btn-lg mt-3" style="background-color: #FFC600; color: black;">
+            Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}

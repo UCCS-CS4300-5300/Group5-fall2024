@@ -574,7 +574,7 @@ def next_question(request):
 
 # word of the day using openai
 def word_of_the_day(request):
-    selected_language = request.session.get('selected_language', 'chinese').lower()
+    selected_language = request.session.get('selected_language', 'arabic').lower()
 
     # Fetch word and translation if necessary
     if 'word_of_the_day' not in request.session or request.session.get('language_for_word') != selected_language:
@@ -634,6 +634,14 @@ def set_language(request):
 
 # daily lesson
 def daily_lesson(request):
+    # set a default language if not already set
+    selected_language = request.session.get('selected_language', 'arabic').lower()
+    print(f"View selected_language: {selected_language}")
+
+    context = {
+    'selected_language': selected_language
+    }
+
     # gives the current day of year (each day 1-7)
     day_of_year = datetime.datetime.now().timetuple().tm_yday
     # cycle through lessons
@@ -641,8 +649,10 @@ def daily_lesson(request):
     lesson_number = (day_of_year % total_lessons) + 1
 
     # dynamically select the corresponding lesson template
-    template_name = f"daily_lesson/lesson4.html"
-    
+    template_name = f"daily_lesson/lesson{lesson_number}.html"
 
-    return render(request, template_name)
+    # to test individual templates
+    # template_name = f"daily_lesson/lesson7.html"
+    
+    return render(request, template_name, context)
 

@@ -1,2 +1,83 @@
 {% extends "home/base_template.html" %}
 {% load static %}
+{% load custom_tags %}
+
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Today's {{ selected_language|capfirst }} Lesson: Vegetables</h1>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/veggies/avacado.png' %}" class="card-img-top" alt="Avacado">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Avacado" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/veggies/broccoli.png' %}" class="card-img-top" alt="broccoli">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Broccoli" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/veggies/carrot.png' %}" class="card-img-top" alt="Carrot">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Carrot" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/veggies/cauliflower.png' %}" class="card-img-top" alt="cauliflower">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Cauliflower" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/veggies/corn.png' %}" class="card-img-top" alt="corn">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Corn" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/veggies/peas.png' %}" class="card-img-top" alt="peas">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Peas" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/veggies/pepper.png' %}" class="card-img-top" alt="pepper">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Pepper" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card bg-primary border-0" style="background-color: #2176FF;">
+                <img src="{% static 'home/images/daily_lesson/veggies/potato.png' %}" class="card-img-top" alt="potato">
+                <div class="card-body text-center">
+                    <p class="card-text fs-3 text-white"><strong>{% translate "Potato" selected_language %}</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Centered Button -->
+    <div class="text-center mt-4 mb-5">
+        <a href="{% url 'index' %}" class="btn btn-lg mt-3" style="background-color: #FFC600; color: black;">
+            Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}
