@@ -1,6 +1,8 @@
 import openai
 import re
+import os
 from django.conf import settings
+from gtts import gTTS
 
 # Set the OpenAI API key
 openai.api_key = settings.OPENAI_API_KEY
@@ -136,4 +138,3 @@ def daily_lesson_translation(word, selected_language):
     translations = get_translation[1]
 
     return translations
-
