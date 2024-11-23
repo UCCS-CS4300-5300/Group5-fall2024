@@ -649,9 +649,9 @@ def daily_lesson(request):
     lesson_number = (day_of_year % total_lessons) + 1
 
     # dynamically select the corresponding lesson template
-    #template_name = f"daily_lesson/lesson{lesson_number}.html"
+    template_name = f"daily_lesson/lesson{lesson_number}.html"
 
     # to test individual templates
-    template_name = f"daily_lesson/lesson1.html"
+    # template_name = f"daily_lesson/lesson1.html"
     
     return render(request, template_name, context)
