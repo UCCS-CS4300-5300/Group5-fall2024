@@ -1,4 +1,6 @@
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -18,7 +20,10 @@ urlpatterns = [
     path('exit_quiz/', views.exit_quiz, name='exit_quiz'),
     
     # Path for word of the day
-    path('word-of-the-day/', views.word_of_the_day, name="word_of_the_day"),
+    path('word-of-the-day/', views.word_of_the_day, name='word_of_the_day'),
+
+    # Path for daily lesson
+    path('daily-lesson/', views.daily_lesson, name='daily_lesson'),
     
     # Path for registering
     path('register/', views.registerPage, name = 'registration-page'),
