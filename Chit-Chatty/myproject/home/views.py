@@ -10,6 +10,8 @@ from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
 from django.utils.safestring import mark_safe
 from .services import generate_translation_questions, get_word_of_the_day
+from rest_framework.viewsets import ModelViewSet
+from .serializers import *
 import random
 import requests
 import json
@@ -631,3 +633,20 @@ def set_language(request):
     return JsonResponse({"success": False}, status=400)
 
 
+'''
+REST Viewsets
+'''
+# Viewset for the Member model
+class MemberViewSet(ModelViewSet):
+    queryset = Member.objects.all()
+    serializer_class = MemberSerializer
+
+# Viewset for the Quiz Model
+class QuizViewSet(ModelViewSet):
+    queryset = Quiz.objects.all()
+    serializer_class = QuizSerializer
+
+# Viewset for the Question Model
+class QuestionViewSet(ModelViewSet):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer

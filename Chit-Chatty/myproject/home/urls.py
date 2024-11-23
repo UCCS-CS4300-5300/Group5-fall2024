@@ -1,10 +1,23 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
+from .views import MemberViewSet, QuizViewSet, QuestionViewSet
+
+# Used to manage the API routes
+router = DefaultRouter()
+
+# Register all the viewsets to manage API endpoints
+router.register(r'members', MemberViewSet, basename = 'members')
+router.register(r'quizzes', QuizViewSet, basename = 'quizzes')
+router.register(r'questions', QuestionViewSet, basename = 'questions')
 
 urlpatterns = [
     # Default path (Home)
     path('', views.index, name='index'),
 
+    #Used to handle all API related stuff
+    path('api/', include(router.urls)),
+    
     # Paths for the quiz
     path('quiz/', views.quiz, name='quiz'),
     path('quiz/quiz_correct/', views.quiz_correct, name='quiz_correct'),
