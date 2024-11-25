@@ -1,37 +1,39 @@
 {% extends "home/base_template.html" %}
 
 {% block content %}
-<!-- Card containing Chit -->
-<div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
-    <div class="card shadow-lg"
-        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
-        <!-- Question Header -->
-        <h1 class="card-title"
-            style="position: absolute; top: 20px; left: 30px; font-size: clamp(24px, 5vw, 48px); color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 90%; text-align: center; white-space: normal;">
-            Quiz Results
-        </h1>
-        <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 80px;">
-            <p>You answered {{ correct_count }} questions correctly.</p>
-            <p>You answered {{ incorrect_count }} questions incorrectly.</p>
-            <p>Total Questions: {{ total_questions }}</p>
-            <p>Your Score: {{ score_percentage }}%</p>
+<div class="container pt-5">
+    <!-- Card containing Chit -->
+    <div class="d-flex justify-content-center align-items-center mb-5" style="height: 60vh;">
+        <div class="card shadow-lg"
+            style="width: 80%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+            <!-- Question Header -->
+            <h1 
+                style="font-size: 30; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 100%; text-align: center; white-space: normal; margin: 20px 0;">
+                Quiz Results
+            </h1>
+            <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 20px;">
+                <p>You answered {{ correct_count }} questions correctly.</p>
+                <p>You answered {{ incorrect_count }} questions incorrectly.</p>
+                <p>Total Questions: {{ total_questions }}</p>
+                <p>Your Score: {{ score_percentage }}%</p>
+            </div>
+            <!-- Chit -->
+            <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">(ﾉ´ヮ`)ﾉ*: ･ﾟ
+            </p>
         </div>
-        <!-- Chit -->
-        <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">(ﾉ´ヮ`)ﾉ*: ･ﾟ</p>
     </div>
-</div>
-
-<div class="center-button">
-    <form method="POST" action="{% url 'quiz_recap' %}">
-        {% csrf_token %}
-        <button type="submit" name="action" value="try_again" class="btn btn-warning">Try Again</button>
-    </form>
-</div>
-<p></p>
-<div class="center-button">
-    <form method="POST" action="{% url 'index' %}">
-        {% csrf_token %}
-        <button type="submit" name="action" value="finish" class="btn btn-warning">Finish</button>
-    </form>
+    <div class="d-flex justify-content-center">
+        <form method="POST" action="{% url 'quiz_recap' %}">
+            {% csrf_token %}
+            <button type="submit" name="action" value="try_again" class="btn btn-warning">Try Again</button>
+        </form>
+    </div>
+    <p></p>
+    <div class="d-flex justify-content-center">
+        <form method="POST" action="{% url 'index' %}">
+            {% csrf_token %}
+            <button type="submit" name="action" value="finish" class="btn btn-warning">Finish</button>
+        </form>
+    </div>
 </div>
 {% endblock content %}

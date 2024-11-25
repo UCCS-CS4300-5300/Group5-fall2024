@@ -3,28 +3,30 @@
 
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
-    <div class="card shadow-lg"
-        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
-        <!-- Question Header -->
-        <h1 class="card-title dynamic-font"
-            style="position: absolute; top: 20px; left: 30px; font-size: clamp(24px, 5vw, 48px); color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 90%; text-align: center; white-space: normal;">
-            {{ quiz_title }}
-        </h1>
-        <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 120px;">
-            <p style="margin-top: 20px;">{{ quiz_description }}</p>
-            <p>Difficulty of Questions: {{ difficulty }}</p>
-            <p>Number of Questions: {{ length }}</p>
+<div class="container pt-5">
+    <div class="d-flex justify-content-center align-items-center mb-5" style="height: 60vh;">
+        <div class="card shadow-lg"
+            style="width: 80%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+            <!-- Question Header -->
+            <h1 
+                style="font-size: 30; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 100%; text-align: center; white-space: normal; margin: 20px 0;">
+                {{ quiz_title }}
+            </h1>
+            <div class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 20px;">
+                <p>{{ quiz_description }}</p>
+                <p>Difficulty of Questions: {{ difficulty }}</p>
+                <p>Number of Questions: {{ length }}</p>
+            </div>
+            <!-- Chit -->
+            <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">(◕‿◕)</p>
         </div>
-        <!-- Chit -->
-        <p class="card-text mb-4" style="color: #31393C; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">(◕‿◕)</p>
     </div>
-</div>
 
-<div class="center-button">
-    <form method="POST" action="{% url 'quiz' %}">
-        {% csrf_token %}
-        <button type="submit" name="action" value="start_quiz" class="btn btn-warning">Start Quiz</button>
-    </form>
+    <div class="d-flex justify-content-center">
+        <form method="POST" action="{% url 'quiz' %}">
+            {% csrf_token %}
+            <button type="submit" name="action" value="start_quiz" class="btn btn-warning">Start Quiz</button>
+        </form>
+    </div>
 </div>
 {% endblock content %}

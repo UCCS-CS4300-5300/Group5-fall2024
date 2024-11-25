@@ -4,20 +4,20 @@
 {% block content %}
 
 <!-- Card containing Chit -->
-<div class="d-flex justify-content-center align-items-center">
+<div class="d-flex justify-content-center align-items-center mb-4 pt-5">
     <div class="card shadow-lg"
-        style="width: 60%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        style="width: 80%; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
         
         <!-- Dynamic Question Header -->
-        <h1 class="card-title"
-            style="position: absolute; top: 20px; left: 30px; font-size: clamp(24px, 5vw, 48px); color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 90%; text-align: center; white-space: normal;">
+        <h1 
+            style="font-size: 30; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 100%; text-align: center; white-space: normal;">
             Question {{ question_number }} <!-- Display current question number -->
         </h1>
 
         {% if question %}
         <!-- If question exists, display the form -->
         <!-- Speech Bubble -->
-        <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 100px;">
+        <div class="d-flex flex-column justify-content-center align-items-left" style="margin-top: 20px;">
             <div class="container mt-0">
                 <div class="speech-bubble">
                     "{{ question.translation_question }}"
@@ -34,16 +34,16 @@
 <!-- Card for entering translation -->
 <div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
     <div class="card shadow-lg"
-        style="width: 90%; max-width: 600px; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
+        style="width: 80%; max-width: 600px; padding: 30px; border: 3px solid #2176FF; border-radius: 15px; position: relative; background: #ffffff;">
         
         <!-- Enter Translation Header -->
-        <h1 class="text-center"
-            style="font-size: 36px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+        <h1 
+            style="font-size: 30px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); width: 100%; text-align: center; white-space: normal;">
             Enter translation:
         </h1>
 
         <!-- Input Field for User's Answer -->
-        <form method="post" action="{% url 'quiz_check_answer' %}" class="d-flex flex-column align-items-center">
+        <form method="post" action="{% url 'quiz_check_answer' %}" class="d-flex flex-column align-items-center mb-1">
             {% csrf_token %}
             <input type="hidden" name="question_id" value="{{ question.id }}">  <!-- Pass the question ID -->
             
@@ -54,11 +54,12 @@
             <!-- Submit Button -->
             <button type="submit" class="btn btn-warning px-4 py-2" style="font-size: 16px;">Submit</button>
         </form>
-
+        
         <form method="post" action="{% url 'exit_quiz' %}" class="d-flex justify-content-center mt-3">
             {% csrf_token %}
             <button type="submit" class="btn btn-secondary px-4 py-2" style="font-size: 16px;">Exit</button>
         </form>
+        <p></p>
     </div>
 </div>
 
