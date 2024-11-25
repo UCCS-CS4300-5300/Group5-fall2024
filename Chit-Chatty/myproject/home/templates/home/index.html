@@ -129,27 +129,29 @@
         style="width: 90%; padding: 10px; border: 3px solid #2176FF; border-radius: 15px; background: #ffffff;">
         {% if active_quiz %}
         <!-- Section for continuing an existing quiz -->
-        <div class="card-body d-flex flex-column justify-content-between" style="margin-top: 100px;">
-            <h1 class="card-title"
-                style="position: absolute; top: 20px; left: 30px; font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+        <div class="card-body d-flex flex-column justify-content-between">
+            <h1
+                style="font-size: 48px; color: #2176FF; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
                 Continue Quiz
             </h1>
             {% if user.is_authenticated %}
-            <div class="card-body d-flex justify-content-between">
+            <div class="d-flex flex-column">
                 <!-- Form for creating a new quiz with play button -->
-                <form method="POST" action="{% url 'continue_quiz' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="proficiency" id="selectedProficiencyInput" value="">
-                    <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
-                    <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
-                    <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
-                    <button type="submit"
-                        class="btn play-btn rounded-circle d-flex justify-content-center align-items-center"
-                        style="background: #FDCA40; border: none; width: 120px; height: 120px;">
-                        <i class="bi bi-play-fill"
-                            style="font-size: 60px; color: white; margin-left: 5px; z-index: 1000;"></i>
-                    </button>
-                </form>
+                <div class="d-flex justify-content-end align-items-center">
+                    <form method="POST" action="{% url 'continue_quiz' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="proficiency" id="selectedProficiencyInput" value="">
+                        <input type="hidden" name="difficulty" id="selectedDifficultyInput" value="">
+                        <input type="hidden" name="num_questions" id="selectedLengthInput" value="">
+                        <input type="hidden" name="learning_goal" id="selectedGoalInput" value="">
+                        <button type="submit"
+                            class="btn play-btn rounded-circle d-flex justify-content-center align-items-center"
+                            style="background: #FDCA40; border: none; width: 120px; height: 120px;">
+                            <i class="bi bi-play-fill"
+                                style="font-size: 60px; color: white; margin-left: 5px; z-index: 0;"></i>
+                        </button>
+                    </form>
+                </div>
                 {% else %}
                 <p>Please <a href="{% url 'login-page' %}">log in</a> to create a quiz.</p>
                 {% endif %}
@@ -265,7 +267,6 @@
                 {% endif %}
             </div>
             {% endif %}
-
         </div>
     </div>
 
