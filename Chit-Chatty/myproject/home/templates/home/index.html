@@ -119,9 +119,13 @@
 {% endblock navbar %}
 
 {% block content %}
-<div class="container text-center mt-5">
-    <h1 class="display-4" style="color: #31393C;">Welcome to ChitChatty!</h1>
-    <p class="lead" style="color: #31393C;">Your go-to platform for enhancing your language skills.</p>
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <img src="{% static 'home/images/animations/header.png' %}" class="img-fluid" alt="header">
+        <p class="lead text-center" style="color: #2176FF; margin-bottom: 40px;"><b>Enhance your language skills</b></p>
+      </div>
+    </div>
 </div>
 
 <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">

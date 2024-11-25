@@ -31,7 +31,7 @@
     /* Animation for logo */
 }
 
-/* For smaller screens */
+/* For smaller screens (splash screen) */
 @media (max-width: 600px) {
     .splash-logo {
         height: 20vh;
