@@ -202,7 +202,7 @@ def quiz(request):
     request.session['question_id'] = 1
 
     # Fetch the next quiz and the first question
-    next_quiz = Quiz.objects.filter(is_next=True, is_completed=False).first()
+    next_quiz = Quiz.objects.filter(is_active=True, is_completed=False).first()
     print("Fetched quiz:", next_quiz)
 
     if next_quiz:
@@ -258,7 +258,9 @@ def generate_quiz(request):
             quiz = Quiz.objects.create(
                 title=structured_output.get('title', 'Default Title'),
                 description=structured_output.get('description', 'Default Description'),
-                is_next=True
+                difficulty = difficulty,
+                length = num_questions,
+                is_active=True
             )
 
             # Loop through questions and save each to the database
@@ -277,7 +279,6 @@ def generate_quiz(request):
                 quiz.questions.add(question)  # Link question to quiz
 
             # Mark the quiz as "Next" and save it
-            quiz.is_next = True
             quiz.save()
 
             # Save quiz details to session and redirect
@@ -317,38 +318,19 @@ def quiz_start(request):
 @login_required
 def continue_quiz(request):
     quiz_id = request.session.get("quiz_id")
-    quiz_title = request.session.get('quiz_title', 'Quiz Title')
-    quiz_description = request.session.get('quiz_description', 'Quiz Description')
-    difficulty = request.session.get('difficulty', 'Easy')
-    length = request.session.get('length', 5)
     
     if not quiz_id:
+        messages.error(request, "No active quiz to continue")
         return redirect('index')
 
     # Retrieve the active quiz and ensure it's incomplete
     quiz = get_object_or_404(Quiz, id=quiz_id, is_completed=False)
 
-    quiz.questions.clear()
-
-    # Ensure length is an integer
-    try:
-        selected_length = int(length)
-    except ValueError:
-        selected_length = 5
-
-    # Band-Aid Solution
-    # Fetch new questions
-    new_questions = Question.objects.all()[:selected_length]
-    quiz.questions.set(new_questions)
-
-    quiz.is_active = True
-    quiz.save()
-
     context = {
-        'quiz_title': quiz_title,
-        'quiz_description': quiz_description,
-        'difficulty': difficulty,
-        'length': length,
+        'quiz_title': quiz.title,
+        'quiz_description': quiz.description,
+        'difficulty': quiz.difficulty,
+        'length': quiz.length,
     }
     return render(request, 'quiz/quiz_start.html', context)
 
@@ -356,12 +338,17 @@ def continue_quiz(request):
 @login_required
 def exit_quiz(request):
     quiz_id = request.session.get("quiz_id")
+    correct_count = request.session.get('correct_count', 0)
+    incorrect_count = request.session.get('incorrect_count', 0)
     if quiz_id:
         quiz = get_object_or_404(Quiz, id=quiz_id)
         user = quiz.user
 
         # Mark quiz as incomplete instead of inactive
         quiz.is_completed = False
+        quiz.correct_count = correct_count
+        quiz.incorrect_count = incorrect_count 
+
         quiz.save()
         return redirect('index')  # Redirect to the index page
 
@@ -478,7 +465,6 @@ def quiz_recap(request):
     if quiz_id:
         quiz = get_object_or_404(Quiz, id=quiz_id)
         quiz.is_completed = True
-        quiz.is_next = False  # Always mark as not the next quiz
         quiz.score = score_percentage
         quiz.save()
 
@@ -487,7 +473,6 @@ def quiz_recap(request):
             action = request.POST.get('action')
             if action == 'try_again':
                 # Reset the quiz for retry
-                quiz.is_next = True
                 quiz.is_completed = False
                 quiz.save()
                 
@@ -498,14 +483,12 @@ def quiz_recap(request):
                 
                 return redirect('quiz')
             elif action == 'finish':
-                # Clear quiz session ID and progress as quiz is complete
+                # Clear quiz data and delete the completed quiz
                 request.session.pop('quiz_id', None)
-                request.session['correct_count'] = 0
-                request.session['incorrect_count'] = 0
-                Quiz.objects.filter(user=request.user.member).delete()
-                Question.objects.filter(quiz__user=request.user.member).delete()
 
                 quiz.delete()
+                messages.success(request, "Quiz completed and deleted successfully!")
+
                 return redirect('index')
 
     # Prepare the context for the recap page
