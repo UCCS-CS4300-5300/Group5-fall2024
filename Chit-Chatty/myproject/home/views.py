@@ -14,6 +14,9 @@ import random
 import requests
 import json
 import datetime
+import Levenshtein
+import string 
+from contractions import fix 
 
 # Home Page View
 def index(request):
@@ -365,18 +368,37 @@ def quiz_check_answer(request):
         # Get the question object
         question = get_object_or_404(Question, id=question_id)
         correct_answer = question.correct_answer.strip().lower()
+        print(f"Preprocessed User: {user_answer}")
+        print(f"\nPreprocessed Correct: {correct_answer}")
+        
+        # Preprocess both answers to remove punctuation and handle contractions
+        def preprocess_answer(answer):
+            # Expand contractions (e.g., "don't" -> "do not")
+            fixed = fix(answer)
+            # Remove punctuation
+            return fixed.translate(str.maketrans('', '', string.punctuation))
+
+        processed_user_answer = preprocess_answer(user_answer)
+        processed_correct_answer = preprocess_answer(correct_answer)
+
+        print(f"\nProcessed User: {processed_user_answer}")
+        print(f"\nProcessed Correct: {processed_correct_answer}")
 
         # Store question, user's answer, and correct answer in the session
         request.session['question'] = question.translation_question
         request.session['user_answer'] = user_answer
         request.session['correct_answer'] = correct_answer
 
+        # Calculate similarity using Levenshtein
+        similarity = Levenshtein.ratio(processed_user_answer, processed_correct_answer) * 100
+        print(f"Levenshtein Similarity Score: {similarity}")
+
         # Increment correct/incorrect counts in session
         correct_count = request.session.get('correct_count', 0)
         incorrect_count = request.session.get('incorrect_count', 0)
 
         # Determine if the answer is correct or incorrect
-        if user_answer == correct_answer:
+        if similarity >= 90:
             request.session['correct_count'] = correct_count + 1
             return redirect('quiz_correct')
         else:
@@ -491,6 +513,13 @@ def quiz_recap(request):
 
                 return redirect('index')
 
+    # Check if the user has a Member instance
+    try:
+        member = request.user.member
+    except Member.DoesNotExist:
+        # Handle the case where the user has no Member instance
+        member = None
+    
     # Prepare the context for the recap page
     context = {
         'correct_count': correct_count,
