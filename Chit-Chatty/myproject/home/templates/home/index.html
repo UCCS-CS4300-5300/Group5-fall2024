@@ -140,7 +140,7 @@
             </h1>
             {% if user.is_authenticated %}
             <div class="d-flex flex-column">
-                <!-- Form for creating a new quiz with play button -->
+                <!-- Form for continuing a quiz with play button -->
                 <div class="d-flex justify-content-end align-items-center">
                     <form method="POST" action="{% url 'continue_quiz' %}">
                         {% csrf_token %}
