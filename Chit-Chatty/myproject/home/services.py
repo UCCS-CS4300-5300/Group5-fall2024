@@ -18,6 +18,7 @@ def generate_translation_questions(proficiency, difficulty, source_lang, target_
         f"\n2. **DESCRIPTION**: A concise explanation of what the set covers, focusing on how it meets the goal. Wrap this in <DESCRIPTION></DESCRIPTION> tags."  # noqa: E501
         f"\n3. **ORIGINALS**: Generate each {source_lang} word, sentence, question, or phrase and wrap each in <ORIGINAL></ORIGINAL> tags. Wrap the entire collection in <ORIGINALS></ORIGINALS> tags."  # noqa: E501
         f"\n4. **TRANSLATIONS**: Translate each {source_lang} word, sentence, question, or phrase to {target_lang}. Wrap each translation in <TRANSLATION></TRANSLATION> tags, keeping them aligned with the corresponding <ORIGINAL> tag."  # noqa: E501
+        f"Do NOT number the originals and the translations. It will mess with parsing."
         f"\n\n"
         f"Examples of outputs to include (depending on the goal):"
         f"\n- Questions about daily routines or cultural practices."
