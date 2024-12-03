@@ -10,6 +10,7 @@ distro==1.9.0
 Django==5.1.1
 django-apscheduler==0.7.0
 django-bootstrap5==24.3
+flake8==7.1.1
 gyp==0.1
 djangorestframework==3.15.2
 h11==0.14.0
@@ -19,13 +20,16 @@ idna==3.10
 iniconfig==2.0.0
 jiter==0.6.1
 Levenshtein==0.26.1
+mccabe==0.7.0
 numpy==2.1.1
 openai==1.52.2
 packaging==24.1
 pluggy==1.5.0
 pyahocorasick==2.1.0
+pycodestyle==2.12.1
 pydantic==2.9.2
 pydantic_core==2.23.4
+pyflakes==3.2.0
 pytest==8.3.3
 python-decouple==3.8
 pytz==2024.2

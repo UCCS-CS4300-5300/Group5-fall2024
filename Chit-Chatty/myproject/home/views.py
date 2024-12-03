@@ -17,8 +17,9 @@ import requests
 import json
 import datetime
 import Levenshtein
-import string 
-from contractions import fix 
+import string
+from contractions import fix
+
 
 # Home Page View
 def index(request):
@@ -39,13 +40,13 @@ def index(request):
     active_quiz = None
     if "quiz_id" in request.session:
         try:
-            active_quiz = Quiz.objects.get(id=request.session["quiz_id"], is_completed=False)
+            active_quiz = Quiz.objects.get(id=request.session["quiz_id"], is_completed=False)  # noqa: E501
         except Quiz.DoesNotExist:
             active_quiz = None  # If no active quiz is found
 
     context = {
-        "selected_language": request.session.get("selected_language", "chinese"),
-        "selected_difficulty": request.session.get("selected_difficulty", "Easy"),
+        "selected_language": request.session.get("selected_language", "chinese"),  # noqa: E501
+        "selected_difficulty": request.session.get("selected_difficulty", "Easy"),  # noqa: E501
         "selected_length": request.session.get("selected_length", 5),
         "selected_goal": request.session.get("selected_goal", "Travel"),
         "active_quiz": active_quiz,  # Include the active quiz if it exists
@@ -54,16 +55,14 @@ def index(request):
     return render(request, "home/index.html", context)
 
 
-'''
-View for user registration
-Takes the information from the form to make a 'Member'
-'''
+# View for user registration
+# Takes the information from the form to make a 'Member'
 @unauthenticatedUser
 def registerPage(request):
     # Create registration fields
     form = CreateUserForm()
-    
-    if request.method =='POST':
+
+    if request.method == 'POST':
         # Fill form with submission information
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -80,62 +79,60 @@ def registerPage(request):
             # Create the member object and associate with user
             Member.objects.create(
                 user=user,
-                userName = username,
-                firstName = first_name,
-                lastName = last_name,
-                email = email,
+                userName=username,
+                firstName=first_name,
+                lastName=last_name,
+                email=email,
             )
 
-            # Create success message 
+            # Create success message
             messages.success(request, 'Account was created for ' + username)
             return redirect('login-page')
 
     context = {'form': form}
     return render(request, 'authentication/register.html', context)
 
-'''
-View for logging in
-'''
+
+# View for logging in
 @unauthenticatedUser
 def loginPage(request):
-    # If request is post, then try to log in user. Otherwise, send form type
+    # If request is post, then try to log in user. Otherwise, send form type  # noqa: E501
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect('index')  
+            return redirect('index')
     else:
         form = AuthenticationForm()
-    
-    return render(request, 'authentication/login.html', {'form': form})
 
-'''
-View for the account details page of a user
-'''
+    return render(request, 'authentication/login.html', {'form': form})  # noqa: E501
+
+
+# View for the account details page of a user
 @login_required(login_url='login-page')
 def accountPage(request, userID):
-    
-    # Ensures that only the user can view their own account details page and not view others
+
+    # Ensures that only the user can view their own account details page and not view others  # noqa: E501
     # Returns user back to homepage
     if (request.user.id != userID):
-          return redirect('index')
+        return redirect('index')
 
     # Otherwise, grab the Member object associated with the user
     member = get_object_or_404(Member, user=request.user)
 
-    # Go to the account page 
-    return render(request, 'authentication/account_details.html', {'member': member})
+    # Go to the account page
+    return render(request, 'authentication/account_details.html', {'member': member})  # noqa: E501
 
-'''
-View for updating account details
-The reason it's so long is because the 'User' object in the 'Member' object also has a username, first_name, last_name, and email field so it has to be update there too.
-'''
+
+# View for updating account details
+# The reason it's so long is because the 'User' object in the 'Member' object also has a username,  # noqa: E501
+# first_name, last_name, and email field so it has to be update there too.  # noqa: E501
 @login_required(login_url='login-page')
 def update_account_details(request):
     if request.method == 'POST':
         # Grab the member from the database
-        member = Member.objects.filter(user = request.user).first()
-        
+        member = Member.objects.filter(user=request.user).first()
+
         # Get data from the POST request
         username = request.POST.get('usernameEditField')
         email = request.POST.get('emailEditField')
@@ -144,43 +141,44 @@ def update_account_details(request):
 
         # Update the username field
         if username and username != member.userName:
-            # Checks if username already exists in the database. If it does, return an error.
+            # Checks if username already exists in the database. If it does, return an error.  # noqa: E501
             if Member.objects.filter(userName=username).exists():
-                messages.error(request, "Username already taken. Please choose another.")
+                messages.error(request, "Username already taken. Please choose another.")  # noqa: E501
                 return redirect('account_details', request.user.id)
 
             # Update the username in the database
             member.userName = username
-            member.user.username = username  
+            member.user.username = username
             messages.success(request, "Updated username")
 
         # Update the email field
-        if email and email != member.email: 
+        if email and email != member.email:
             member.email = email
-            member.user.email = email 
+            member.user.email = email
             messages.success(request, "Updated email")
 
         # Update the first name field
         if firstName and firstName != member.firstName:
             member.firstName = firstName
-            member.user.first_Name = firstName 
+            member.user.first_Name = firstName
             messages.success(request, "Updated first name")
-        
+
         # Update the last name field
         if lastName and lastName != member.lastName:
             member.lastName = lastName
-            member.user.last_Name = lastName  
+            member.user.last_Name = lastName
             messages.success(request, "Updated last name")
 
         # Save both the User and Member updates
-        member.save() 
-        member.user.save()  
+        member.save()
+        member.user.save()
 
         # Redirect to the account page
-        return redirect('account_details', request.user.id )
+        return redirect('account_details', request.user.id)
 
     # If the request method is not POST, redirect to homepage
     return redirect('index')
+
 
 def update_account(request):
     if request.method == 'POST':
@@ -189,14 +187,14 @@ def update_account(request):
         email = request.POST.get('email')
         full_name = request.POST.get('full_name')
 
-'''
-View for logging out
-Redirects user back to the login-page no matter what (because returning render after logging out isn't executing for some reason)
-'''
+
+# View for logging out
+# Redirects user back to the login-page no matter what (because returning render after logging out isn't executing for some reason)   # noqa: E501
 @login_required(login_url='login-page')
 def logout(request):
-    auth_logout(request) 
+    auth_logout(request)
     return render(request, 'home/index.html')
+
 
 # Quiz Views
 @login_required
@@ -207,7 +205,7 @@ def quiz(request):
     request.session['question_id'] = 1
 
     # Fetch the next quiz and the first question
-    next_quiz = Quiz.objects.filter(is_active=True, is_completed=False).first()
+    next_quiz = Quiz.objects.filter(is_active=True, is_completed=False).first()  # noqa: E501
     print("Fetched quiz:", next_quiz)
 
     if next_quiz:
@@ -220,17 +218,17 @@ def quiz(request):
                 'quiz': next_quiz,
                 'error': "No questions available for this quiz."
             }
-            
+
         else:
             request.session['question_id'] = first_question.id
 
-            # Set the question number for the first question (it will always be 1)
+            # Set the question number for the first question (it will always be 1)   # noqa: E501
             question_number = 1
 
             context = {
                 'quiz': next_quiz,
                 'question': first_question,
-                'question_number': question_number  # Include question number in context
+                'question_number': question_number  # Include question number in context   # noqa: E501
             }
     else:
         context = {'error': "No quiz available."}
@@ -243,7 +241,7 @@ def generate_quiz(request):
     # Check for POST request with selected parameters
     if request.method == 'POST':
         print(f"Received POST request with data: {request.POST}")
-        
+
         # Retrieve quiz parameters from POST data
         proficiency = request.POST.get('proficiency')
         difficulty = request.POST.get('difficulty')
@@ -252,19 +250,19 @@ def generate_quiz(request):
 
         if difficulty and num_questions and goal:
             # Retrieve selected languages from session
-            source_lang = request.session.get('selected_language', 'Arabic')  # default to 'Chinese'
+            source_lang = request.session.get('selected_language', 'Arabic')  # default to 'Chinese'  # noqa: E501
             target_lang = 'English'
 
             # Generate structured output with title, description, and questions
-            structured_output = generate_translation_questions(proficiency, difficulty, source_lang, target_lang, int(num_questions), goal)
-            print("Generated structured output:", structured_output)  # Debug statement
+            structured_output = generate_translation_questions(proficiency, difficulty, source_lang, target_lang, int(num_questions), goal)  # noqa: E501
+            print("Generated structured output:", structured_output)  # Debug statement  # noqa: E501
 
             # Create a new quiz with title and description
             quiz = Quiz.objects.create(
                 title=structured_output.get('title', 'Default Title'),
-                description=structured_output.get('description', 'Default Description'),
-                difficulty = difficulty,
-                length = num_questions,
+                description=structured_output.get('description', 'Default Description'),  # noqa: E501
+                difficulty=difficulty,
+                length=num_questions,
                 is_active=True
             )
 
@@ -288,15 +286,15 @@ def generate_quiz(request):
 
             # Save quiz details to session and redirect
             request.session['quiz_id'] = quiz.id
-            request.session['quiz_title'] = structured_output.get('title', 'Default Title')
-            request.session['quiz_description'] = structured_output.get('description', 'Default Description')
+            request.session['quiz_title'] = structured_output.get('title', 'Default Title')  # noqa: E501
+            request.session['quiz_description'] = structured_output.get('description', 'Default Description')  # noqa: E501
             request.session['difficulty'] = difficulty
             request.session['length'] = num_questions
-            
-            return redirect('quiz_start')  
+
+            return redirect('quiz_start')
         else:
             print("Error: missing one or more parameters in POST request.")
-            return redirect('index')  
+            return redirect('index')
 
     return redirect('index')
 
@@ -306,8 +304,8 @@ def generate_quiz(request):
 def quiz_start(request):
     # Retrieve quiz details from session
     quiz_title = request.session.get('quiz_title', 'Quiz Title')
-    quiz_description = request.session.get('quiz_description', 'Quiz Description')
-    difficulty = request.session.get('difficulty', 'Easy')
+    quiz_description = request.session.get('quiz_description', 'Quiz Description')  # noqa: E501
+    difficulty = request.session.get('difficulty', 'Easy')  # noqa: E501
     length = request.session.get('length', 5)
 
     context = {
@@ -323,7 +321,7 @@ def quiz_start(request):
 @login_required
 def continue_quiz(request):
     quiz_id = request.session.get("quiz_id")
-    
+
     if not quiz_id:
         messages.error(request, "No active quiz to continue")
         return redirect('index')
@@ -352,12 +350,12 @@ def exit_quiz(request):
         # Mark quiz as incomplete instead of inactive
         quiz.is_completed = False
         quiz.correct_count = correct_count
-        quiz.incorrect_count = incorrect_count 
+        quiz.incorrect_count = incorrect_count
 
         quiz.save()
         return redirect('index')  # Redirect to the index page
 
-    return JsonResponse({"error": "No active quiz to exit"}, status=400)
+    return JsonResponse({"error": "No active quiz to exit"}, status=400)  # noqa: E501
 
 
 # Quiz Check Answer View
@@ -372,8 +370,8 @@ def quiz_check_answer(request):
         correct_answer = question.correct_answer.strip().lower()
         print(f"Preprocessed User: {user_answer}")
         print(f"\nPreprocessed Correct: {correct_answer}")
-        
-        # Preprocess both answers to remove punctuation and handle contractions
+
+        # Preprocess both answers to remove punctuation and handle contractions  # noqa: E501
         def preprocess_answer(answer):
             # Expand contractions (e.g., "don't" -> "do not")
             fixed = fix(answer)
@@ -392,7 +390,7 @@ def quiz_check_answer(request):
         request.session['correct_answer'] = correct_answer
 
         # Calculate similarity using Levenshtein
-        similarity = Levenshtein.ratio(processed_user_answer, processed_correct_answer) * 100
+        similarity = Levenshtein.ratio(processed_user_answer, processed_correct_answer) * 100  # noqa: E501
         print(f"Levenshtein Similarity Score: {similarity}")
 
         # Increment correct/incorrect counts in session
@@ -410,7 +408,8 @@ def quiz_check_answer(request):
     # Redirect to the quiz page if the request method is not POST
     return redirect('quiz')
 
-# Quiz Correct View 
+
+# Quiz Correct View
 @login_required
 def quiz_correct(request):
     # Retrieve data from the session
@@ -445,7 +444,8 @@ def quiz_correct(request):
 
     return render(request, 'quiz/quiz_correct.html', context)
 
-# Quiz Incorrect View 
+
+# Quiz Incorrect View
 @login_required
 def quiz_incorrect(request):
     # Retrieve data from the session
@@ -475,6 +475,7 @@ def quiz_incorrect(request):
 
     return render(request, 'quiz/quiz_incorrect.html', context)
 
+
 # Quiz Recap View
 @login_required
 def quiz_recap(request):
@@ -482,7 +483,7 @@ def quiz_recap(request):
     correct_count = request.session.get('correct_count', 0)
     incorrect_count = request.session.get('incorrect_count', 0)
     total_questions = correct_count + incorrect_count
-    score_percentage = (correct_count / total_questions) * 100 if total_questions > 0 else 0
+    score_percentage = (correct_count / total_questions) * 100 if total_questions > 0 else 0  # noqa: E501
 
     # Retrieve the quiz from the session and mark it as completed
     quiz_id = request.session.get('quiz_id')
@@ -499,19 +500,19 @@ def quiz_recap(request):
                 # Reset the quiz for retry
                 quiz.is_completed = False
                 quiz.save()
-                
+
                 # Reset session progress
                 request.session['correct_count'] = 0
                 request.session['incorrect_count'] = 0
                 request.session['quiz_id'] = quiz.id
-                
+
                 return redirect('quiz')
             elif action == 'finish':
                 # Clear quiz data and delete the completed quiz
                 request.session.pop('quiz_id', None)
 
                 quiz.delete()
-                messages.success(request, "Quiz completed and deleted successfully!")
+                messages.success(request, "Quiz completed and deleted successfully!")  # noqa: E501
 
                 return redirect('index')
 
@@ -521,7 +522,7 @@ def quiz_recap(request):
     except Member.DoesNotExist:
         # Handle the case where the user has no Member instance
         member = None
-    
+
     # Prepare the context for the recap page
     context = {
         'correct_count': correct_count,
@@ -543,7 +544,7 @@ def quiz_recap(request):
     return render(request, 'quiz/quiz_recap.html', context)
 
 
-# Next/Try again should send POST or SOME kind of request after question feedback to update and load next question
+# Next/Try again should send POST or SOME kind of request after question feedback to update and load next question  # noqa: E501
 def next_question(request):
     # Get the current question ID from the POST request
     question_id = request.session.get('question_id')
@@ -571,12 +572,12 @@ def next_question(request):
         request.session['question_id'] = next_question.id
 
         # Pass the question number to the context
-        question_number = current_index + 2  # Since we are 0-based, we add 2 to get the next question number
+        question_number = current_index + 2  # Since we are 0-based, we add 2 to get the next question number   # noqa: E501
 
         context = {
             'quiz': quiz,
             'question': next_question,
-            'question_number': question_number  # Add question number to the context
+            'question_number': question_number  # Add question number to the context    # noqa: E501
         }
 
         # Redirect to the quiz question page to display the next question
@@ -588,38 +589,38 @@ def next_question(request):
 
 # word of the day using openai
 def word_of_the_day(request):
-    selected_language = request.session.get('selected_language', 'arabic').lower()
+    selected_language = request.session.get('selected_language', 'arabic').lower()  # noqa: E501
 
     # Fetch word and translation if necessary
-    if 'word_of_the_day' not in request.session or request.session.get('language_for_word') != selected_language:
-        word_data = get_word_of_the_day(selected_language)
-        word_of_the_day = word_data.get('word_of_the_day')
-        english_translation = word_data.get('english_translation')
-        print("Returned from get_word_of_the_day:", word_of_the_day, english_translation)
+    if 'word_of_the_day' not in request.session or request.session.get('language_for_word') != selected_language:  # noqa: E501
+        word_data = get_word_of_the_day(selected_language)  # noqa: E501
+        word_of_the_day = word_data.get('word_of_the_day')  # noqa: E501
+        english_translation = word_data.get('english_translation')  # noqa: E501
+        print("Returned from get_word_of_the_day:", word_of_the_day, english_translation)  # noqa: E501
 
         if word_of_the_day:
-            request.session['word_of_the_day'] = word_of_the_day
-            request.session['english_translation'] = english_translation
-            request.session['language_for_word'] = selected_language
-            print("Fetched word of the day:", word_of_the_day)
+            request.session['word_of_the_day'] = word_of_the_day  # noqa: E501
+            request.session['english_translation'] = english_translation  # noqa: E501
+            request.session['language_for_word'] = selected_language  # noqa: E501
+            print("Fetched word of the day:", word_of_the_day)  # noqa: E501
         else:
-            return render(request, 'home/word_of_the_day.html', {
+            return render(request, 'home/word_of_the_day.html', {  # noqa: E501
                 'error': "Could not find a word of the day."
             })
 
     # Retrieve values from session
     word_of_the_day = request.session.get('word_of_the_day')
     print("Word of the Day in session:", word_of_the_day)
-    english_translation = request.session.get('english_translation')
+    english_translation = request.session.get('english_translation')  # noqa: E501
     result = None
 
     # Handle user guess
     if request.method == 'POST':
         user_guess = request.POST.get('user_guess')
         if user_guess.lower() == english_translation.lower():
-            result = mark_safe('Correct! <br>&emsp;<strong>ᕦ(ò_óˇ)ᕤ</strong>')
+            result = mark_safe('Correct! <br>&emsp;<strong>ᕦ(ò_óˇ)ᕤ</strong>')  # noqa: E501
         else:
-            result = mark_safe(f'Uh oh, the correct answer is: <strong>{english_translation}</strong> <br>Try again tomorrow <br>&emsp;<strong>ʅ（◞‿◟）ʃ</strong>')
+            result = mark_safe(f'Uh oh, the correct answer is: <strong>{english_translation}</strong> <br>Try again tomorrow <br>&emsp;<strong>ʅ（◞‿◟）ʃ</strong>')  # noqa: E501
 
         # Clear session for a new word on the next visit
         for key in ['word_of_the_day', 'english_translation']:
@@ -634,26 +635,26 @@ def word_of_the_day(request):
 
 @csrf_exempt
 def set_language(request):
-    
+
     if request.method == "POST":
         data = json.loads(request.body)
         language = data.get('language')
-        
+
         # Save to session
         request.session['selected_language'] = language
         return JsonResponse({"success": True})
-    
+
     return JsonResponse({"success": False}, status=400)
 
 
 # daily lesson
 def daily_lesson(request):
     # set a default language if not already set
-    selected_language = request.session.get('selected_language', 'arabic').lower()
+    selected_language = request.session.get('selected_language', 'arabic').lower()  # noqa: E501
     print(f"View selected_language: {selected_language}")
 
     context = {
-    'selected_language': selected_language
+        'selected_language': selected_language
     }
 
     # gives the current day of year (each day 1-7)

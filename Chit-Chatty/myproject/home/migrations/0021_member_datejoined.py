@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='member',
             name='dateJoined',
-            field=models.DateField(auto_now_add=True, default=django.utils.timezone.now),
+            field=models.DateField(auto_now_add=True, default=django.utils.timezone.now),  # noqa: E501
             preserve_default=False,
         ),
     ]
