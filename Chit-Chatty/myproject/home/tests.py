@@ -8,8 +8,6 @@ from unittest.mock import patch
 import json
 
 
-# Create your tests here.
-
 '''
 Test for user registration
 Checks if user is able to have their information successfully stored in the system

@@ -5,6 +5,7 @@ from .tasks import resetStreak
 from .models import LastStreakReset
 from django.utils import timezone
 
+
 def startScheduler():
 
     # Initialize the background scheduler

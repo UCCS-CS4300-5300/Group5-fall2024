@@ -7,7 +7,7 @@ class HomeConfig(AppConfig):
     name = 'home'
 
     def ready(self):
-        # Checks if the current process is the main one. 
+        # Checks if the current process is the main one.
         # If so, run the scheduler
         if os.environ.get('RUN_MAIN', None) == 'true':
             from .scheduler import startScheduler

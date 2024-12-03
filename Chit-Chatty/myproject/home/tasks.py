@@ -1,6 +1,7 @@
 from .models import Member
 import logging
 
+
 '''
 Task that will execute everyday at midnight to reset the streak counter for users who haven't done anything for a day
 '''

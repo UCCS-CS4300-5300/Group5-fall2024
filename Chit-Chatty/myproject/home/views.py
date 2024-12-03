@@ -18,6 +18,7 @@ import Levenshtein
 import string 
 from contractions import fix 
 
+
 # Home Page View
 def index(request):
     if request.method == "POST":
