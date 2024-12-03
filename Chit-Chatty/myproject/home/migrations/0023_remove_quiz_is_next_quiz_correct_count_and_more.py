@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='quiz',
             name='curr_question',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.question'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.question'),  # noqa: E501
         ),
         migrations.AddField(
             model_name='quiz',
@@ -33,6 +33,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='quiz',
             name='questions',
-            field=models.ManyToManyField(related_name='quiz_questions', to='home.question'),
+            field=models.ManyToManyField(related_name='quiz_questions', to='home.question'),  # noqa: E501
         ),
     ]

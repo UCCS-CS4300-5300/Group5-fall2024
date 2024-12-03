@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0016_merge_0013_streakresetlog_0015_remove_quiz_user'),
+        ('home', '0016_merge_0013_streakresetlog_0015_remove_quiz_user'),  # noqa: E501
     ]
 
     operations = [

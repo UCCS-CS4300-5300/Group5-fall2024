@@ -5,6 +5,7 @@ from home.services import daily_lesson_translation
 
 register = template.Library()
 
+
 @register.simple_tag
 def translate(word, selected_language):
     translations = daily_lesson_translation(word, selected_language)

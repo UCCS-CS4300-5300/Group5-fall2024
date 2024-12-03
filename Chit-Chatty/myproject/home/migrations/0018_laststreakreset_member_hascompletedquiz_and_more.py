@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0017_delete_streakresetlog_remove_member_hascompletedquiz_and_more'),
+        ('home', '0017_delete_streakresetlog_remove_member_hascompletedquiz_and_more'),  # noqa: E501
     ]
 
     operations = [
         migrations.CreateModel(
             name='LastStreakReset',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),  # noqa: E501
                 ('lastReset', models.DateTimeField(auto_now=True)),
             ],
         ),

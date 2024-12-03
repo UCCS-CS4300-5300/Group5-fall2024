@@ -7,47 +7,26 @@ from django.conf import settings
 openai.api_key = settings.OPENAI_API_KEY
 
 
-def generate_translation_questions(proficiency, difficulty, source_lang, target_lang, num_questions, goal):
+def generate_translation_questions(proficiency, difficulty, source_lang, target_lang, num_questions, goal):  # noqa: E501
     prompt = (
-        f"Generate {num_questions} {source_lang} words, sentences, "
-        f"questions, or phrases "
-        f"at a {difficulty} difficulty level for a user with a"
-        f" proficiency level of {proficiency}. "
-        f"These should align with the learning goal: {goal}. "
-        f"Ensure variety in structure, length, and complexity "
-        f"to cover vocabulary, grammar, and contextual understanding "
-        f"effectively. "
-        f"Include a mix of common idioms, cultural references, "
-        f"and practical usage scenarios relevant to the goal."
+        f"Generate {num_questions} {source_lang} words, sentences, questions, or phrases at a {difficulty} difficulty level for a user with a proficiency level of {proficiency}. "  # noqa: E501
+        f"These should align with the learning goal: {goal}. Ensure variety in structure, length, and complexity to cover vocabulary, grammar, and contextual understanding effectively. "  # noqa: E501
+        f"Include a mix of common idioms, cultural references, and practical usage scenarios relevant to the goal."  # noqa: E501
         f"\n\n"
         f"Provide the following outputs:"
-        f"\n1. **TITLE**: A witty and relevant title that reflects "
-        f"the goal of the set. "
-        f"Wrap this in <TITLE></TITLE> tags."
-        f"\n2. **DESCRIPTION**: A concise explanation of what the "
-        f"set covers, focusing on "
-        f"how it meets the goal. Wrap this in "
-        f"<DESCRIPTION></DESCRIPTION> tags."
-        f"\n3. **ORIGINALS**: Generate each {source_lang} word, "
-        f"sentence, question, or phrase and "
-        f"wrap each in <ORIGINAL></ORIGINAL> tags. Wrap the "
-        f"entire collection in <ORIGINALS></ORIGINALS> tags."
-        f"\n4. **TRANSLATIONS**: Translate each {source_lang} "
-        f"word, sentence, question, or "
-        f"phrase to {target_lang}. Wrap each translation in "
-        f"<TRANSLATION></TRANSLATION> tags, "
-        f"keeping them aligned with the corresponding <ORIGINAL> tag."
+        f"\n1. **TITLE**: A witty and relevant title that reflects the goal of the set. Wrap this in <TITLE></TITLE> tags."  # noqa: E501
+        f"\n2. **DESCRIPTION**: A concise explanation of what the set covers, focusing on how it meets the goal. Wrap this in <DESCRIPTION></DESCRIPTION> tags."  # noqa: E501
+        f"\n3. **ORIGINALS**: Generate each {source_lang} word, sentence, question, or phrase and wrap each in <ORIGINAL></ORIGINAL> tags. Wrap the entire collection in <ORIGINALS></ORIGINALS> tags."  # noqa: E501
+        f"\n4. **TRANSLATIONS**: Translate each {source_lang} word, sentence, question, or phrase to {target_lang}. Wrap each translation in <TRANSLATION></TRANSLATION> tags, keeping them aligned with the corresponding <ORIGINAL> tag."  # noqa: E501
         f"\n\n"
         f"Examples of outputs to include (depending on the goal):"
         f"\n- Questions about daily routines or cultural practices."
         f"\n- Phrases for travel or social interactions."
-        f"\n- Sentences that demonstrate idiomatic expressions or "
-        f"complex grammar structures."
-        f"\n- Words that are thematically tied to the goal, "
-        f"including verbs, nouns, adjectives, or adverbs."
+        f"\n- Sentences that demonstrate idiomatic expressions or complex grammar structures."  # noqa: E501
+        f"\n- Words that are thematically tied to the goal, including verbs, nouns, adjectives, or adverbs."  # noqa: E501
         f"\n- Greetings, goodbyes, and other similar instances."
         f"\n\n"
-        f"Ensure that the output is formatted cleanly & consistently for parsing."
+        f"Ensure that the output is formatted cleanly & consistently for parsing."  # noqa: E501
     )
 
     messages = [{"role": "user", "content": prompt}]
@@ -88,7 +67,7 @@ def generate_translation_questions(proficiency, difficulty, source_lang, target_
     structured_output = {
         "title": title.group(1).strip() if title else "",
         "description": description.group(1).strip() if description else "",
-        "questions": [{"question": q, "translation": t} for q, t in zip(clean_questions, clean_translations)]
+        "questions": [{"question": q, "translation": t} for q, t in zip(clean_questions, clean_translations)]  # noqa: E501
     }
     print(f'Structured: {structured_output}')
     return structured_output
@@ -119,11 +98,11 @@ def get_word_of_the_day(selected_language):
 
     # Extract word and translation using regex
     word_match = re.search(r'<WORD>(.*?)</WORD>', content, re.DOTALL)
-    translation_match = re.search(r'<TRANSLATION>(.*?)</TRANSLATION>', content, re.DOTALL)
+    translation_match = re.search(r'<TRANSLATION>(.*?)</TRANSLATION>', content, re.DOTALL)  # noqa: E501
 
     # Check if matches were found and handle accordingly
-    word_of_the_day = word_match.group(1).strip() if word_match else "No word found"
-    english_translation = translation_match.group(1).strip() if translation_match else "No translation found"
+    word_of_the_day = word_match.group(1).strip() if word_match else "No word found"  # noqa: E501
+    english_translation = translation_match.group(1).strip() if translation_match else "No translation found"  # noqa: E501
 
     # Output structured format
     structured_output = {
@@ -140,8 +119,8 @@ def daily_lesson_translation(word, selected_language):
 
     prompt = (
         f"Translate the following words into {selected_language}: {word}."
-        f"Translate *all* words, even if they are proper nouns or appear ambiguous."
-        f"Translate each word fully without breaking it up into individual characters."
+        f"Translate *all* words, even if they are proper nouns or appear ambiguous."  # noqa: E501
+        f"Translate each word fully without breaking it up into individual characters."  # noqa: E501
         f"Provide the output as the word : translation"
     )
 
