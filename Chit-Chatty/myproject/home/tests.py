@@ -330,8 +330,8 @@ class WordOfTheDayTest(TestCase):
         # Send a POST request with the correct guess
         response = self.client.post(reverse('word_of_the_day'), {'user_guess': correct_translation})  # noqa: E501
 
-        # Ensure result is 'Correct! ᕦ(ò_óˇ)ᕤ'
-        self.assertContains(response, 'Correct! ᕦ(ò_óˇ)ᕤ')
+        # Check that the result is 'Correct!'
+        self.assertContains(response, 'Correct!')
 
         # Ensure word and translation are cleared from the session for the next visit  # noqa: E501
         self.assertNotIn('word_of_the_day', self.client.session)

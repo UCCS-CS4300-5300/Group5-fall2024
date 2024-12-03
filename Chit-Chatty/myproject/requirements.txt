@@ -12,6 +12,7 @@ django-apscheduler==0.7.0
 django-bootstrap5==24.3
 flake8==7.1.1
 gyp==0.1
+djangorestframework==3.15.2
 h11==0.14.0
 httpcore==1.0.6
 httpx==0.27.2

@@ -322,6 +322,21 @@ navbar/splash screen changes
 **LIMITS**
 - while a user can return to their specified quiz, they cannot return to the question they exited from [AS OF YET]
 
+---
+
+### Feature Added: Django REST Framework Integration (11/22/2024)
+**ADDED**
+- Installed `djangorestframework` package and updated `requirements.txt` to include it.
+- Created `serializers.py` to serialize all fields of the `Member`, `Question`, and `Quiz` models.
+- Added viewsets for the `Member`, `Question`, and `Quiz` models in `views.py` to enable CRUD operations through REST APIs.
+- Registered API endpoints for `members`, `quizzes`, and `questions` in `urls.py` using `DefaultRouter`.
+
+**UPDATES**
+- Updated `settings.py` to include `'rest_framework'` in the `INSTALLED_APPS` section to enable Django REST Framework.
+- Modified `WordOfTheDayTest` to reflect the current structure and modifications in the codebase.
+
+**LIMITS**
+- While the API supports CRUD operations, it currently doesn't include authentication or permissions for managing access control to these endpoints.
 
 ---
 #### Testing Functions (15 in total)
