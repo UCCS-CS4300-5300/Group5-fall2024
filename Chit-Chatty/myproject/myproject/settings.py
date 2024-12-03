@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -144,8 +145,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://app-dbadillo-5.devedu.io',
     'https://app-cromo-5.devedu.io',
 ]
-
-from decouple import config
 
 OPENAI_API_KEY = config('OPENAI_API_KEY')
 
