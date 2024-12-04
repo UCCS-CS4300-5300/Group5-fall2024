@@ -72,13 +72,182 @@
 6. Access the app at `http://127.0.0.1:8000`.
 
 ---
-# Changelog
+## App Architecture
+
+TODO
+
+---
+## App Testing
+
+### How to Test
+1. Implement steps to test
+
+### List of Tests
+1. **UserRegistrationLogin**: Tests user registration and login process.
+	Steps:
+	Registers a user with provided credentials.
+	Logs the user in and verifies successful redirection to the homepage.
+2. **UserLogoutTest**: Tests the logout functionality.
+	Steps:
+	Logs in a user, then verifies they are logged out and redirected to the homepage.
+3. **UserFailSafe**: Ensures a logged-in user is redirected to the homepage if they try to access the registration page.
+	Steps:
+	Logs in a user and tries to access the registration page.
+	Verifies they are redirected back to the homepage.
+4. **AccountDetailsTest**: Tests updating account details (e.g., email).
+	Steps:
+	Loads the account details page.
+	Updates the email field and verifies the changes are saved and reflected on the account page.
+5. **QuizTests**: Tests the generation and completion of quizzes.
+	Steps:
+	Generates a quiz with specific parameters (difficulty, number of questions).
+	Verifies the quiz is created and contains questions.
+	Completes the quiz and checks if streaks are updated and the quiz is marked as completed.
+6. **QuizExitAndContinueTests**: Tests the quiz exit and continuation functionality.
+	Steps:
+	Exits an ongoing quiz and verifies the quiz status.
+	Verifies that the option to continue the quiz is available on the homepage.
+7. **ResetStreakTests**: Tests resetting streaks for users who have or have not completed a quiz.
+	Steps:
+	Resets streaks for users who haven’t completed a quiz.
+	Verifies that streaks are reset and that users who have completed quizzes retain their streaks.
+8. **WordOfTheDayTest**: Tests the functionality of the Word of the Day feature.
+	Steps:
+	Verifies the correct display of the Word of the Day and its translation.
+	Tests the user's ability to correctly guess the word and receive feedback.
+	Verifies the session is cleared after a correct guess.
+
+---
+## Changelog
 
 Listed below are all changes made to the app based on sprint.
 
 ---
-## Sprint 1
+## Sprint 1 (10/17/2024)
 
+### Quiz Logic - Darion Badillo
+### Account Features - Andrew Douangprachanh
+
+**ADDED**
+   - the ability for the user to create an account and log in to the website
+   - two new templates in the "authentication" folder called login.html and register.html
+   - forms.py, which allows for defining a form with information that must be filled by the user to register
+   - decorators.py. So far, it only has one decorator that prevents logged-in users from accessing the registration and login links
+   - pytests to ensure that logging in, logging out, and failsafes work correctly
+
+**UPDATED**
+   - models.py to include a new model called "Member," which represents a single user and contains fields such as first and last name
+   - urls.py to include links for registration, logging in, and logging out
+   - views.py to handle registration, logging in, and logging out processes
+   - the base template to display the username of the logged-in member. If the user is logged in, the human icon, when clicked, logs the user out
+   - the base template to make the human icon redirect the user to the login page (if they are not logged in already)
+
+### Testing & Project Management - Irving Reyes Bravo
+### Word of the Day - Naomi Rodriguez
+
+**ADDED**
+   - installed requests and updates requirements.txt
+   - Random Words API in order to fetch a random word in Spanish as well as its English translation. Also supports Dutch, French, Chinese, Japanese, and Turkish
+   - word_of_the_day.html and the ability to redirect to this page from the navbar
+
+**UPDATED**
+   - views.py to handle user input for word of the day as well as word generation & translation
+   - urls.py to include paths for word of the day
+   - the base template to display the word of the day icon. Currently appears at all times for testing
+
+### Quiz Templates - Christopher Romo
+
+**ADDED** 
+   - quiz url (linked to play button), quiz_correct url, quiz_incorrect url, quiz_recap url
+   - quiz view (linked to play button), quiz_correct view, quiz_incorrect view, quiz_recap view
+   - quiz_question.html (linked to play button), quiz_correct.html, quiz_incorrect.html, quiz_recap.html 
+   - splash screen block in base.html
+   - navbar block in base.html
+   - new general navbar in base.html
+
+**UPDATED**
+   - "static/images/", "static/styles.css" to: "static/home/images/", "static/home/css/styles.css"
+   - all {% static %} tags to match new file heirarchy
+   - all <style></style> tags hav been moved to styles.css
+   - splash screen functionality is now in splash screen block in index.html
+   - navbar in navbar block in index.html
+
+---
+## Sprint 2 (10/29/2024)
+
+### Quiz Logic Bug Fixing - Darion Badillo
+### Account Streaks - Andrew Douangprachanh
+### Testing & Project Management - Irving Reyes Bravo
+### Language Implementation - Naomi Rodriguez
+
+**ADDED**
+   - Javascript to update the flag image to selected language
+   - Javascript to store language selection
+   - set_language to store the selected language in the user's session and returns a JSON response
+
+**UPDATED**
+   - static Spanish flag image to dropdown selection
+   - generate_quiz to use selected language rather than a hardcoded language. Also now uses a selected difficulty rather than a hardcoded one
+   - word_of_the_day to use selected language rather than a hard coded one
+   - added set_language path
+   - updated word_of_the_day.html to verify language selection has been successful
+
+### AI Integration - Christopher Romo
+
+**ADDED**
+   - services.py (new file to handle open AI logic)
+   - generate_translation_questions function (prompts open AI to generate ten questions based on a number of incoming parameters such as difficulty, source language, etc.)
+   - translate_sentence function (prompts open AI to translate the incoming phrase to the base language)
+   - open AI organization (invited all teammates to join the organization so they can all have API keys and added $15 worth of credits so that we can all test the AI)
+
+**UPDATED**
+   - updated quiz_recap template to include a home button (button takes you to index for better flow)
+   - updated generate_quiz view in views.py (added logic to incorporate the new functions in services.py) (now generates questions using open AI) (uses a loop to translate each sentence, create a question object for each, and adds those objects to a quiz object)
+
+---
+## Sprint 3 (11/12/2024)
+
+### Index Overhaul - Darion Badillo & Christopher Romo
+### Account Pages - Andrew Douangprachanh
+### Quiz Logic Bug Fixing - Irving Reyes Bravo
+
+**ADDED**
+   - is_active boolean attribute (new attribute in Quiz model that seperates "saved for later" quizes)
+   - quiz_exit function (saves user's currentl session's quiz and redirects them to the homepage)
+   - quiz_continue function (prompts user to return to their previously specified quiz)
+
+**UPDATED**
+   - updated quiz_recap view so each specific user's Quiz database is cleared
+   - updated index.html & index view function to check whether the user has an active quiz ("Create Quiz" UI changes to "Continue Quiz" UI)
+   - updated quiz_question.html to include an "Exit Quiz" button
+
+### Expanded Language Selection - Naomi Rodriguez
+
+**ADDED**
+   - Cleaned up index.html. Language selection is now it's own section
+   - Moved the flag dropdown from index.html into it's own html file to clean up code. Updated dropdown menu to be scrollable
+   - Ten new flags users can select from
+   - get_word_of_the_day function using openai rather than using random words API
+
+**UPDATED**
+   - Added Server Side Includes (SSI) to clear up javascript from index.html
+   - When clicking any of the drop-downs, the flag would disappear. Flag is now fixed once selected
+   - word_of_the_day to work with openai logic
+
+---
+# Sprint 4 (12/10/2024)
+
+To be continued...
+
+---
+
+# ٩( ᐛ)و
+
+
+
+
+
+# OLD CONTENT STARTS HERE
 ### Quiz Streaks and AI Integration (10/28/2024)
 
 We've upgraded ChitChatty with AI-powered quiz generation and a streak tracking system, enhancing both personalization and motivation.
@@ -179,145 +348,6 @@ In this update, we addressed key bugs to improve ChitChatty’s functionality:
    - Fixed the hover behavior of the Play button to lift up instead of enlarging.
    - Made the Play button dynamically scale when active and ensured it remains aligned with the card element.
    - Disabled the Play button if no quiz is available.
----
-sprint0-3 completed 9/30/2024 (Tag name - sprint0-3)
-
-### Feature Added: User Registration (10/14/2024)
-
-- **Added** the ability for the user to create an account and log in to the website.
-- **Added** two new templates in the "authentication" folder called `login.html` and `register.html`.
-- **Added** `forms.py`, which allows for defining a form with information that must be filled by the user to register.
-- **Added** `decorators.py`. So far, it only has one decorator that prevents logged-in users from accessing the registration and login links.
-- **Added** pytests to ensure that logging in, logging out, and failsafes work correctly.
-- **Updated** `models.py` to include a new model called "Member," which represents a single user and contains fields such as first and last name.
-- **Updated** `urls.py` to include links for registration, logging in, and logging out.
-- **Updated** `views.py` to handle registration, logging in, and logging out processes.
-- **Modified** the base template to display the username of the logged-in member. If the user is logged in, the human icon, when clicked, logs the user out (for now).
-- **Modified** the base template to make the human icon redirect the user to the login page (if they are not logged in already).
-- **BUG**: The logout view doesn't redirect users back to the homepage but instead to the login page, even though there is logic that states otherwise...
-
----
-### Feature Added: Word of the Day
-- **Added** installed requests and updates requirements.txt
-- **Added** `Random Words API` in order to fetch a random word in `Spanish` as well as its `English` translation. Also supports `Dutch, French, Chinese, Japanese, and Turkish`.
-- **Added** `word_of_the_day.html` and the ability to redirect to this page from the navbar.
-- **Updated** `views.py` to handle user input for word of the day as well as word generation & translation
-- **Updated** `urls.py` to include paths for word of the day
-- **Modified** the base template to display the word of the day icon. Currently appears at all times for testing. Eventually will only be clickable once a day.
-
-***
-### Feature Added: Language Selection
-***
-
-`index.html`
-- *Flag image on top left corner now dynamic. Click to open a dropdown menu to select language to learn. When a language is selected, the flag will update and display the language the user has selected.*
-
-**Modified**: static Spanish flag image to dropdown selection
-**Added**: Javascript to update the flag image to selected language
-**Added**: Javascript to store language selection
-
-`views.py`
-**Modified**: `generate_quiz` to use selected language rather than a hardcoded language. Also now uses a selected difficulty rather than a hardcoded one.
-**Modified**: `word_of_the_day` to use selected language rather than a hard coded one.
-**Added**: `set_language` to store the selected language in the user's session and returns a JSON response.
-
-`urls.py`
-**Modified**: added `set_language` path
-
-`word_of_the_day.html`
-**Modified**: updated to verify language selection has been successful
-
-**Error fixed**: `UnicodeEncodeError` fixed in `services.py`
-***
-### Future Features
-***
-**LibreTranslate API**
-- Add more languages by implementing an API to translate English sentences. Supports 34 languages.
-
----
-
-### Updated: Language Selection Extended
-`settings.py`
-- **Modified**: Added Server Side Includes (SSI) to clear up javascript from `index.html`. 
-
-`language_selection.html`
-- **Added**: Cleaned up `index.html`. Language selection is now it's own section.
-
-`templates`
-- **Added**: `language_selection.html`. Moved the flag dropdown from `index.html` into it's own html file to clean up code. Updated dropdown menu to be scrollable.
-- **Added**: Ten new flags users can select from.
-- **Fixed**: When clicking any of the drop-downs, the flag would disappear. Flag is now fixed once selected.
-
-`services.py`
-- **Added**: `get_word_of_the_day` function using openai rather than using random words API.
-
-`views.py`
-- **Modified**: `word_of_the_day` to work with openai logic
-
----
-
-### Feature Added: Templates (10/14/2024)
-urls.py
-- **Added** quiz url (linked to play button)
-- **Added** quiz_correct url
-- **Added** quiz_incorrect url
-- **Added** quiz_recap url
-
-views.py
-- **Added** quiz view (linked to play button)
-- **Added** quiz_correct view
-- **Added** quiz_incorrect view
-- **Added** quiz_recap view
-
-templates
-- **Added** quiz_question.html (linked to play button) (complete)
-- **Added** quiz_correct.html (complete)
-- **Added** quiz_incorrect.html (complete)
-- **Added** quiz_recap.html (complete)
-
-- **Changed:** "static/images/", "static/styles.css"
-	to: "static/home/images/", "static/home/css/styles.css"
-
-- **Changed:** all {% static %} tags to match new file heirarchy
-
-- **Moved** all <style></style> to styles.css
-
-navbar/splash screen changes
-- **Added** splash screen block in base.html
-- **Added** navbar block in base.html
-- **Added** new general navbar in base.html
-
-- **Moved** splash screen functionality to splash screen block in index.html
-- **Changed** navbar in navbar block in index.html
-  
----
-
-### Feature Added: AI Integration (10/25/2024)
-**ADDED**
-- services.py (new file to handle open AI logic)
-- generate_translation_questions function (prompts open AI to generate ten questions based on a number of incoming parameters such as difficulty, source language, etc.)
-- translate_sentence function (prompts open AI to translate the incoming phrase to the base language)
-- open AI organization (invited all teammates to join the organization so they can all have API keys and added $15 worth of credits so that we can all test the AI)
-
-**UPDATES**
-- updated quiz_recap template to include a home button (button takes you to index for better flow)
-- updated generate_quiz view in views.py (added logic to incorporate the new functions in services.py) (now generates questions using open AI) (uses a loop to translate each sentence, create a question object for each, and adds those objects to a quiz object)
-
----
-
-### Feature Added: Quiz Continuation (11/12/2024)
-**ADDED**
-- is_active boolean attribute (new attribute in Quiz model that seperates "saved for later" quizes)
-- quiz_exit function (saves user's currentl session's quiz and redirects them to the homepage)
-- quiz_continue function (prompts user to return to their previously specified quiz)
-
-**UPDATES**
-- updated quiz_recap view so each specific user's Quiz database is cleared
-- updated index.html & index view function to check whether the user has an active quiz ("Create Quiz" UI changes to "Continue Quiz" UI)
-- updated quiz_question.html to include an "Exit Quiz" button
-
-**LIMITS**
-- while a user can return to their specified quiz, they cannot return to the question they exited from [AS OF YET]
 
 ---
 
@@ -331,42 +361,3 @@ navbar/splash screen changes
 **UPDATES**
 - Updated `settings.py` to include `'rest_framework'` in the `INSTALLED_APPS` section to enable Django REST Framework.
 - Modified `WordOfTheDayTest` to reflect the current structure and modifications in the codebase.
-
-**LIMITS**
-- While the API supports CRUD operations, it currently doesn't include authentication or permissions for managing access control to these endpoints.
-
----
-#### Testing Functions (15 in total)
-1. UserRegistrationLogin: Tests user registration and login process.
-	Steps:
-	Registers a user with provided credentials.
-	Logs the user in and verifies successful redirection to the homepage.
-2. UserLogoutTest: Tests the logout functionality.
-	Steps:
-	Logs in a user, then verifies they are logged out and redirected to the homepage.
-3. UserFailSafe: Ensures a logged-in user is redirected to the homepage if they try to access the registration page.
-	Steps:
-	Logs in a user and tries to access the registration page.
-	Verifies they are redirected back to the homepage.
-4. AccountDetailsTest: Tests updating account details (e.g., email).
-	Steps:
-	Loads the account details page.
-	Updates the email field and verifies the changes are saved and reflected on the account page.
-5. QuizTests: Tests the generation and completion of quizzes.
-	Steps:
-	Generates a quiz with specific parameters (difficulty, number of questions).
-	Verifies the quiz is created and contains questions.
-	Completes the quiz and checks if streaks are updated and the quiz is marked as completed.
-6. QuizExitAndContinueTests: Tests the quiz exit and continuation functionality.
-	Steps:
-	Exits an ongoing quiz and verifies the quiz status.
-	Verifies that the option to continue the quiz is available on the homepage.
-7. ResetStreakTests: Tests resetting streaks for users who have or have not completed a quiz.
-	Steps:
-	Resets streaks for users who haven’t completed a quiz.
-	Verifies that streaks are reset and that users who have completed quizzes retain their streaks.
-8. WordOfTheDayTest: Tests the functionality of the Word of the Day feature.
-	Steps:
-	Verifies the correct display of the Word of the Day and its translation.
-	Tests the user's ability to correctly guess the word and receive feedback.
-	Verifies the session is cleared after a correct guess.
