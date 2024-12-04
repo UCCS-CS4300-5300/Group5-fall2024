@@ -1,42 +1,48 @@
-# Group5-fall2024
 # ChitChatty Language Learning Application
 
+#### Created by Darion Badillo, Andrew Douangprachanh, Irving Reyes Bravo, Naomi Rodriguez, and Christopher Romo
+#### CS 4300 Advanced Software Engineering : Group 5 : Fall 2024
+
+---
 ## Overview
 
-**ChitChatty** is a language learning platform designed to help users improve their language skills through quizzes and dynamic content generation. The app integrates AI tools to generate translation questions and leverages the Googletrans library for handling multiple languages. The app aims to provide an engaging and personalized learning experience by adapting quiz difficulty and user progress.
+**ChitChatty** is a language learning platform designed to help users improve their language skills through custom quizzes and pre-made lessons. The app integrates AI tools and user input to generate custom quizzes. Word of the day and the daily lesson encourages continuous learning. Multiple languages are supported. The app aims to provide an engaging and personalized learning experience by adapting the learning material to your preferences.
 
+---
 ## Features
 
-### 1. **Dynamic AI Quiz Generation**
-   - Store generated and translated questions in a database.
-   - FUTURE Support for multiple languages, with the ability to set source and target languages.
-
-### 2. **User Authentication**
+### 1. User Authentication
    - User registration, login, and session management.
-   - Users can generate personalized quizzes based on selected difficulty.
+   - Users have their own account page with saved data like streaks.
 
-### 3. **Customizable Difficulty**
-   - Three difficulty levels: Easy, Medium, and Hard.
-   - Users can choose difficulty levels from a dropdown menu in the navbar.
-   - Each quiz adapts its content based on the selected difficulty.
+### 2. Dynamic AI Quiz Generation
+   - Translation questions are created based on the options the user selects.
+   - User can select their preferred Language, Proficiency, Difficulty, Length of Quiz, and Goal of Quiz.
 
-### 4. **Quiz Management**
-   - Track user progress during quizzes.
-   - Maintain session data for correct and incorrect answers.
-   - Display feedback based on user performance.
+### 3. Quiz Management
+   - User progress is tracked during quizzes.
+   - Session data is maintained for correct and incorrect answers.
+   - Quiz can be stopped and restarted.
 
-### 5. **Quiz Recap**
+### 5. Quiz Recap
    - Display the user’s score at the end of each quiz.
    - Recap page provides a summary of the quiz, including correct and incorrect answers and overall performance.
 
-### 6. **Frontend UI**
+### 6. Word of the Day
+   - Single word daily quiz based on selected language.
+   - Immediate feedback provided based on answer.
+
+### 7. Daily Lesson
+   - Lesson based on a theme to encourage learning.
+   - 8 cards with images appear with translations, allowing for visual learning.
+   - Lessons change out daily.
+
+### 8. Friendly UI
    - Clean and user-friendly interface with Bootstrap-based styling.
-   - Dynamic scaling Play button that provides a smooth, interactive experience.
-   - Play button lifts upon hover to create a sense of depth.
-   - Active quiz indicator that enables or disables the Play button based on quiz availability.
+   - Responsive pages to adapt to user's browser.
+   - Styled to foster a fun learning atmosphere.
 
-
-
+---
 ## Installation
 
 1. Clone the repository:
@@ -57,13 +63,7 @@
    python manage.py migrate
    ```
 
-4. Load the sample data:
-
-   ```bash
-   python manage.py add_questions
-   ```
-
-5. Run the server:
+4. Run the server:
 
    ```bash
    python manage.py runserver
@@ -72,15 +72,12 @@
 6. Access the app at `http://127.0.0.1:8000`.
 
 ---
+# Changelog
 
-## Future Features
-
-- **Goal-based Learning**: A dropdown to select specific learning goals (e.g., travel, fluency) and generate quizzes based on these goals.
-- **Expanded Language Support**: Adding more languages and improving translation accuracy.
+Listed below are all changes made to the app based on sprint.
 
 ---
-
-## Updates
+## Sprint 1
 
 ### Quiz Streaks and AI Integration (10/28/2024)
 
