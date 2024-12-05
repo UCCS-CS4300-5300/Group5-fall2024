@@ -244,7 +244,7 @@ Listed below are all changes made to the app based on sprint.
 
 **UPDATED**
    - the Member model to hold streak information such as if they have completed a quiz for the day and the current streak count
-   - Updated the home page view to display user streak data when logged in
+   - the home page view to display user streak data when logged in
    - `index.html` to display the streak count when it is greater than 0
    - `apps.py`: Added code to start scheduler.py to run whenever the app starts
    - `tests.py`: Added new tests to ensure that the streak reset function works properly and adjusts the database as needed
@@ -286,8 +286,8 @@ Listed below are all changes made to the app based on sprint.
    - open AI organization (invited all teammates to join the organization so they can all have API keys and added $15 worth of credits so that we can all test the AI)
 
 **UPDATED**
-   - updated `quiz_recap.html` to include a home button (button takes you to index for better flow)
-   - updated generate_quiz view in `views.py` (added logic to incorporate the new functions in services.py) (now generates questions using open AI) (uses a loop to translate each sentence, create a question object for each, and adds those objects to a quiz object)
+   - `quiz_recap.html` to include a home button (button takes you to index for better flow)
+   - generate_quiz view in `views.py` (added logic to incorporate the new functions in services.py) (now generates questions using open AI) (uses a loop to translate each sentence, create a question object for each, and adds those objects to a quiz object)
 
 ---
 ## Sprint 3 (11/12/2024)
@@ -333,9 +333,9 @@ Listed below are all changes made to the app based on sprint.
    - quiz_continue function (prompts user to return to their previously specified quiz)
 
 **UPDATED**
-   - updated quiz_recap view so each specific user's Quiz database is cleared
-   - updated `index.html` & index view function to check whether the user has an active quiz ("Create Quiz" UI changes to "Continue Quiz" UI)
-   - updated `quiz_question.html` to include an "Exit Quiz" button
+   - quiz_recap view so each specific user's Quiz database is cleared
+   - `index.html` & index view function to check whether the user has an active quiz ("Create Quiz" UI changes to "Continue Quiz" UI)
+   - `quiz_question.html` to include an "Exit Quiz" button
 
 ### Expanded Language Selection - Naomi Rodriguez
 
@@ -353,7 +353,7 @@ Listed below are all changes made to the app based on sprint.
 ---
 # Sprint 4 (12/10/2024)
 
-## Quiz Logic Bug Fixing / flake8 - Darion Badillo
+### Quiz Logic Bug Fixing / flake8 - Darion Badillo
 
 **ADDED**
    - Implemented Quiz Accuracy Feature: Added a feature that awards points for answers that are 90% accurate to the correct answer. The new accuracy check ignores punctuation and handles contractions (e.g., "don't" vs. "do not") to make the evaluation more user-friendly
@@ -365,19 +365,19 @@ Listed below are all changes made to the app based on sprint.
    - Resolved Spanish Flag Persistence Issue: Fixed a persistent bug where the Spanish flag failed to display correctly by renaming `Spanish.png` to `spanish.png` for consistency and proper referencing
    - Fixed 96.11% of code smells defined by flake9
 
-## Django REST Framework - Andrew Douangprachanh
+### Django REST Framework - Andrew Douangprachanh
 
 **ADDED**
-- Installed djangorestframework package and updated `requirements.txt` to include it
-- Created `serializers.py` to serialize all fields of the Member, Question, and Quiz models
-- Added viewsets for the Member, Question, and Quiz models in `views.py` to enable CRUD operations through REST APIs
-- Registered API endpoints for members, quizzes, and questions in `urls.py` using DefaultRouter
+   - Installed djangorestframework package and updated `requirements.txt` to include it
+   - Created `serializers.py` to serialize all fields of the Member, Question, and Quiz models
+   - Added viewsets for the Member, Question, and Quiz models in `views.py` to enable CRUD operations through REST APIs
+   - Registered API endpoints for members, quizzes, and questions in `urls.py` using DefaultRouter
 
 **UPDATES**
-- Updated `settings.py` to include rest_framework in the INSTALLED_APPS section to enable Django REST Framework
-- Modified **WordOfTheDayTest** to reflect the current structure and modifications in the codebase
+   - Updated `settings.py` to include rest_framework in the INSTALLED_APPS section to enable Django REST Framework
+   - Modified **WordOfTheDayTest** to reflect the current structure and modifications in the codebase
 
-## Daily Lesson / UI Bug Fixing - Naomi Rodriguez
+### Daily Lesson / UI Bug Fixing - Naomi Rodriguez
 
 **ADDED**
    - Seven new lesson templates with images of basic language learning topics
@@ -395,7 +395,7 @@ Listed below are all changes made to the app based on sprint.
       - Responsive to all screen sizes
       - Stripe along the top of the screen now the same color as the splash screen
 
-## UI Updates / Responsiveness / README Overhaul - Christopher Romo
+### UI Updates / Responsiveness / README Overhaul - Christopher Romo
 
 **UPDATED**
    - Navbar to be an OffCanvas Navbar
