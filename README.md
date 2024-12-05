@@ -4,12 +4,12 @@
 #### CS 4300 Advanced Software Engineering : Group 5 : Fall 2024
 
 ---
-## Overview
+## App Overview
 
 **ChitChatty** is a language learning platform designed to help users improve their language skills through custom quizzes and pre-made lessons. The app integrates AI tools and user input to generate custom quizzes. Word of the day and the daily lesson encourages continuous learning. Multiple languages are supported. The app aims to provide an engaging and personalized learning experience by adapting the learning material to your preferences.
 
 ---
-## Features
+## App Features
 
 ### 1. User Authentication
    - User registration, login, and session management.
@@ -43,7 +43,7 @@
    - Styled to foster a fun learning atmosphere.
 
 ---
-## Installation
+## App Installation
 
 1. Clone the repository:
 
@@ -72,15 +72,10 @@
 6. Access the app at `http://127.0.0.1:8000`.
 
 ---
-## App Architecture
-
-TODO
-
----
 ## App Testing
 
 ### How to Test
-1. Implement steps to test
+1. Implement steps to test here
 
 ### List of Tests
 1. **UserRegistrationLogin**: Tests user registration and login process.
@@ -118,7 +113,7 @@ TODO
 	Verifies the session is cleared after a correct guess.
 
 ---
-## Changelog
+## App Changelog
 
 Listed below are all changes made to the app based on sprint.
 
@@ -351,7 +346,7 @@ Listed below are all changes made to the app based on sprint.
    - word_of_the_day view to work with openai logic
 
 ---
-# Sprint 4 (12/10/2024)
+## Sprint 4 (12/10/2024)
 
 ### Quiz Logic Bug Fixing / flake8 - Darion Badillo
 
