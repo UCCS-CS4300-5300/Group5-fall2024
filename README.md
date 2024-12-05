@@ -126,6 +126,36 @@ Listed below are all changes made to the app based on sprint.
 ## Sprint 1 (10/17/2024)
 
 ### Quiz Logic - Darion Badillo
+
+**ADDED**
+   - The Question model with the following fields:
+      - Foreign key to Quiz
+      - translation_question to hold the source language phrase
+      - correct_answer to store the correct translation
+      - source_language and target_language fields
+      - difficulty to categorize questions into Easy, Medium, or Hard
+   - A M:N relationship between quizzes and generated questions
+   - Management/Commands directory to manage dynamic question loading
+   - Implemented a command that adds 30 translation questions (10 for each difficulty) into the database
+   - Implemented the next_question view to handle question progression
+   - A quiz_recap template and view that provides a recap of quiz performance
+   - Handled session variables for quiz progress (correct_count, incorrect_count, question_id) to ensure smooth tracking of user performance
+   - Pools of positive and negative feedback in the quiz_correct and quiz_incorrect views to display random feedback after each question
+
+**UPDATED**
+   - Adjusted the Quiz model to include a boolean is_next flag to indicate the next quiz
+   - Moved all quiz templates into a newly created quiz folder under templates
+   - Filled out views for quiz operations including quiz, quiz_recap, quiz_correct, quiz_incorrect, and next_question 
+   - Adjusted the generate_quiz view to handle dynamic quiz generation based on difficulty
+   - Fixed how question IDs are linked to quizzes to prevent the same question from being displayed repeatedly
+   - Ensured the Play button has a consistent 3D appearance with enhanced depth and shadows for better visual feedback
+   - The dropdown menus in the navbar no longer hover or float unintentionally
+   - Dropdown selections are now properly displayed, reflecting the chosen difficulty level
+   - Separated the Play button styling from other items in the `styles.css` file
+   - Fixed the hover behavior of the Play button to lift up instead of enlarging
+   - Made the Play button dynamically scale when active and ensured it remains aligned with the card element
+   - Disabled the Play button if no quiz is available
+
 ### Account Features - Andrew Douangprachanh
 
 **ADDED**
@@ -143,10 +173,21 @@ Listed below are all changes made to the app based on sprint.
    - `base_template` to make the human icon redirect the user to the login page (if they are not logged in already)
 
 ### Testing & Project Management - Irving Reyes Bravo
+
+**ADDED**
+   - **UserRegistrationLogin** to check if a user is able to have their information successfully stored in the system & then log in
+   - **UserLogoutTest** to see is a user can log out
+   - **UserFailSafe** to see if a logged in user will be redirected back to the home page if they try to access the register link
+   - **QuizSessionTrackingTest** to track session data
+   - **QuestionPoolTest** for question pool consistency
+
+**UPDATED**
+   - Zenhub for this sprint
+
 ### Word of the Day - Naomi Rodriguez
 
 **ADDED**
-   - installed requests and updates requirements.txt
+   - installed requests and updates `requirements.txt`
    - Random Words API in order to fetch a random word in Spanish as well as its English translation. Also supports Dutch, French, Chinese, Japanese, and Turkish
    - `word_of_the_day.html` and the ability to redirect to this page from the navbar
 
@@ -166,9 +207,9 @@ Listed below are all changes made to the app based on sprint.
    - new general navbar in `base_template.html`
 
 **UPDATED**
-   - "static/images/", "static/styles.css" to: "static/home/images/", "static/home/css/styles.css"
-   - all {% static %} tags to match new file heirarchy
-   - all <style></style> tags hav been moved to `styles.css`
+   - "static/images/", "static/`styles.css`" to: "static/home/images/", "static/home/css/`styles.css`"
+   - all {% static %} tags to match new file hierarchy
+   - all <style></style> tags have been moved to `styles.css`
    - splash screen functionality is now in splash screen block in `index.html`
    - navbar in navbar block in `index.html`
 
@@ -211,13 +252,13 @@ Listed below are all changes made to the app based on sprint.
 ### Testing & Project Management - Irving Reyes Bravo
 
 **ADDED**
-   - UserRegistrationLogin to check if a user is able to have their information successfully stored in the system & then log in
-   - UserLogoutTest to see is a user can log out
-   - UserFailSafe to see if a logged in user will be redirected back to the home page if they try to access the register link
-   - QuizTests to verify that the quiz is generated correctly with the expected attributes and completed by the logged-in user
-   -ResetStreakTests to verify that daily streak implementation properly resets
-   - WordOfTheDay to check if a user can access the word of the day
-   - SetLanguageTest to see if user can select a language to learn
+   - **UserRegistrationLogin** to check if a user is able to have their information successfully stored in the system & then log in
+   - **UserLogoutTest** to see is a user can log out
+   - **UserFailSafe** to see if a logged in user will be redirected back to the home page if they try to access the register link
+   - **QuizTests** to verify that the quiz is generated correctly with the expected attributes and completed by the logged-in user
+   - **ResetStreakTests** to verify that daily streak implementation properly resets
+   - **WordOfTheDay** to check if a user can access the word of the day
+   - **SetLanguageTest** to see if user can select a language to learn
 
 **UPDATED**
    - Zenhub for this sprint
@@ -312,83 +353,17 @@ Listed below are all changes made to the app based on sprint.
 ---
 # Sprint 4 (12/10/2024)
 
-To be continued...
+## Django REST Framework - Andrew Douangprachanh
 
----
-
-# ٩( ᐛ)و
-
-
-
-
-
-# OLD CONTENT STARTS HERE
-
-#### Bug Fixes 
-
-In this update, we addressed key bugs to improve ChitChatty’s functionality:
-
-- **Login Check for Quiz Generation**: The difficulty selection now verifies if a user is logged in. If not, it redirects to the login page.
-- **Next Quiz Logic**: Ensured that the “Next Quiz” button only activates for uncompleted quizzes and restricted multiple quiz generation until the current quiz is complete.
-- **Quiz Model Enhancements**: Added `is_completed` and `score` attributes for more precise quiz tracking.
-- **Quiz Recap Logic**: Adjusted the recap view to reset or finalize the quiz based on user selection.
----
-
-
-### **October 17, 2024**
-
-#### Implemented Features and Fixes
-- **Quiz and Question Models**
-   - Adjusted the `Quiz` model to include a boolean `is_next` flag to indicate the next quiz.
-   - Created the `Question` model with the following fields:
-     - Foreign key to `Quiz`.
-     - `translation_question` to hold the source language phrase.
-     - `correct_answer` to store the correct translation.
-     - `source_language` and `target_language` fields.
-     - `difficulty` to categorize questions into Easy, Medium, or Hard.
-   - Created a M:N relationship between quizzes and generated questions.
-
-- **Management/Commands**
-   - Created the `Management/Commands` directory to manage dynamic question loading.
-   - Implemented a command that adds 30 translation questions (10 for each difficulty) into the database.
-
-- **View Adjustments**
-   - Moved all quiz templates into a newly created `quiz` folder under `templates`.
-   - Filled out views for quiz operations including `quiz`, `quiz_recap`, `quiz_correct`, `quiz_incorrect`, and `next_question`.
-   - Implemented the `next_question` view to handle question progression.
-   - Adjusted the `generate_quiz` view to handle dynamic quiz generation based on difficulty.
-   - Fixed how question IDs are linked to quizzes to prevent the same question from being displayed repeatedly.
-
-- **Quiz Recap and Progress**
-   - Created a `quiz_recap` template and view that provides a recap of quiz performance.
-   - Handled session variables for quiz progress (`correct_count`, `incorrect_count`, `question_id`) to ensure smooth tracking of user performance.
-
-- **Random Feedback**
-   - Added pools of positive and negative feedback in the `quiz_correct` and `quiz_incorrect` views to display random feedback after each question.
-
-- **Styling Improvements**
-   - Hid the "Goal" dropdown in the navbar for now, as that feature is pending future development.
-   - Ensured the Play button has a consistent 3D appearance with enhanced depth and shadows for better visual feedback.
-
-- **Navbar Dropdown Menus**
-   - The dropdown menus in the navbar no longer hover or float unintentionally.
-   - Dropdown selections are now properly displayed, reflecting the chosen difficulty level.
-   
-- **Play Button**
-   - Separated the Play button styling from other items in the `styles.css` file.
-   - Fixed the hover behavior of the Play button to lift up instead of enlarging.
-   - Made the Play button dynamically scale when active and ensured it remains aligned with the card element.
-   - Disabled the Play button if no quiz is available.
-
----
-
-### Feature Added: Django REST Framework Integration (11/22/2024)
 **ADDED**
-- Installed `djangorestframework` package and updated `requirements.txt` to include it.
-- Created `serializers.py` to serialize all fields of the `Member`, `Question`, and `Quiz` models.
-- Added viewsets for the `Member`, `Question`, and `Quiz` models in `views.py` to enable CRUD operations through REST APIs.
-- Registered API endpoints for `members`, `quizzes`, and `questions` in `urls.py` using `DefaultRouter`.
+- Installed djangorestframework package and updated `requirements.txt` to include it
+- Created `serializers.py` to serialize all fields of the Member, Question, and Quiz models
+- Added viewsets for the Member, Question, and Quiz models in `views.py` to enable CRUD operations through REST APIs
+- Registered API endpoints for members, quizzes, and questions in `urls.py` using DefaultRouter
 
 **UPDATES**
-- Updated `settings.py` to include `'rest_framework'` in the `INSTALLED_APPS` section to enable Django REST Framework.
-- Modified `WordOfTheDayTest` to reflect the current structure and modifications in the codebase.
+- Updated `settings.py` to include rest_framework in the INSTALLED_APPS section to enable Django REST Framework
+- Modified **WordOfTheDayTest** to reflect the current structure and modifications in the codebase
+
+---
+# ٩( ᐛ)و
