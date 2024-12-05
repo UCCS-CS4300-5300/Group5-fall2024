@@ -353,6 +353,18 @@ Listed below are all changes made to the app based on sprint.
 ---
 # Sprint 4 (12/10/2024)
 
+## Quiz Logic Bug Fixing / flake8 - Darion Badillo
+
+**ADDED**
+   - Implemented Quiz Accuracy Feature: Added a feature that awards points for answers that are 90% accurate to the correct answer. The new accuracy check ignores punctuation and handles contractions (e.g., "don't" vs. "do not") to make the evaluation more user-friendly
+      - Installed [Levenshtein](https://pypi.org/project/python-Levenshtein/) library to check for answer accuracy in comparisons
+      - Installed [Contractions](https://pypi.org/project/contractions/) library to automatically fix contractions such as you're -> you are
+
+**UPDATED**
+   - Fixed Continue Quiz Bug: Addressed the logic issues in the continue_quiz view, where the app would pull information from from past, already completed quiz that was exited once
+   - Resolved Spanish Flag Persistence Issue: Fixed a persistent bug where the Spanish flag failed to display correctly by renaming `Spanish.png` to `spanish.png` for consistency and proper referencing
+   - Fixed 96.11% of code smells defined by flake9
+
 ## Django REST Framework - Andrew Douangprachanh
 
 **ADDED**
@@ -364,6 +376,46 @@ Listed below are all changes made to the app based on sprint.
 **UPDATES**
 - Updated `settings.py` to include rest_framework in the INSTALLED_APPS section to enable Django REST Framework
 - Modified **WordOfTheDayTest** to reflect the current structure and modifications in the codebase
+
+## Daily Lesson / UI Bug Fixing - Naomi Rodriguez
+
+**ADDED**
+   - Seven new lesson templates with images of basic language learning topics
+   - templatetags folder to hold translation logic for html
+   - Lesson templates responsive to all screen sizes
+   - function_name in `services.py` using openai API to translate given words
+   - daily_lesson function in `view.py` to select language and translate given words. Templates cycle daily
+
+**UPDATED**
+   - Daily Lesson now clickable in the dropdown panel on `index.html`
+   - Word of the Day
+      - UI modified to match the rest of the application
+      - Words cycle daily
+   - Splash Screen
+      - Responsive to all screen sizes
+      - Stripe along the top of the screen now the same color as the splash screen
+
+## UI Updates / Responsiveness / README Overhaul - Christopher Romo
+
+**UPDATED**
+   - Navbar to be an OffCanvas Navbar
+      - Replacing the word of the day button and account dropdown is a new hamburger menu
+      - Account dropdown options have been moved to this offcanvas panel
+      - Word of the Day is now accessible from this offcanvas panel
+      - Daily Lesson is now accessible from this offcanvas panel
+      - Updates when a user is not logged in
+      - Only appears on `index.html`
+   - Quiz creation card on `index.html`
+      - Labels appear next to dropdowns instead of inside
+      - Dropdowns and buttons are now rearranged
+      - Cards have been updated for users who aren't signed in / users who can continue a quiz
+   - App Responsiveness
+      - `quiz_start.html`, `quiz_question.html`, `quiz_correct.html`, `quiz_incorrect.html`, and `quiz_recap.html` have been updated to be more responsive with different browsers
+      - Cards on these pages have been wrapped in containers
+      - Margins are in place so that even if a card grows large, it shouldn't cover the button
+   - Minor changes like card size, text alignment
+   - "Next Question" text on buttons in `quiz_question.html` has been changed to "Next"
+   - README Documentation for our app, making it more readable and informative
 
 ---
 # ٩( ᐛ)و
