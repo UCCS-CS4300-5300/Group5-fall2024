@@ -170,7 +170,7 @@ Listed below are all changes made to the app based on sprint.
    - `urls.py` to include links for registration, logging in, and logging out
    - `views.py` to handle registration, logging in, and logging out processes
    - `base_template.html` to display the username of the logged-in member. If the user is logged in, the human icon, when clicked, logs the user out
-   - `base_template` to make the human icon redirect the user to the login page (if they are not logged in already)
+   - `base_template.html` to make the human icon redirect the user to the login page (if they are not logged in already)
 
 ### Testing & Project Management - Irving Reyes Bravo
 
@@ -320,7 +320,7 @@ Listed below are all changes made to the app based on sprint.
 
 **UPDATED**
    - `models.py`: Added two new fields to the Member model: dateJoined and longestStreak
-   - `views.py`: Added a new view called `update_account_details` that updates the fields modified by the user on their account details page
+   - `views.py`: Added a new view called update_account_details that updates the fields modified by the user on their account details page
    - quiz recap view: Added logic for calculating the longest streak
    - `urls.py`: Added a URL for updating account details
    - `index.html`: For logged-in users, a dropdown that allows them to view their profile information or log out
@@ -340,7 +340,7 @@ Listed below are all changes made to the app based on sprint.
 ### Expanded Language Selection - Naomi Rodriguez
 
 **ADDED**
-   - Cleaned up `index.html.` Language selection is now it's own section
+   - Cleaned up `index.html`. Language selection is now it's own section
    - Moved the flag dropdown from `index.html` into it's own html file to clean up code. Updated dropdown menu to be scrollable
    - Ten new flags users can select from
    - get_word_of_the_day function using openai rather than using random words API
