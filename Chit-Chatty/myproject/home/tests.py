@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
 from home.models import Quiz, Question, Member
@@ -66,7 +67,6 @@ class UserLogoutTest(TestCase):
 
 # Test for seeing if a logged in user will be redirected back
 # to the home page if they try to access the register link
-
 class UserFailSafe(TestCase):
 
     def test_goodCatch(self):
@@ -158,7 +158,7 @@ class QuizTests(TestCase):
         response = self.client.post(generate_url, data)
 
         # Retrieve the created quiz
-        quiz = Quiz.objects.filter(is_next=True).first()
+        quiz = Quiz.objects.filter(is_active=True).first()
 
         # Assertions
         self.assertEqual(response.status_code, 302)  # Should redirect after creation  # noqa: E501
@@ -167,7 +167,7 @@ class QuizTests(TestCase):
 
     def test_quiz_completion(self):
         # Set up a quiz for the user
-        quiz = Quiz.objects.create(title="Test Quiz", description="A test quiz", is_next=True)  # noqa: E501
+        quiz = Quiz.objects.create(title="Test Quiz", description="A test quiz", is_active=True)  # noqa: E501
 
         # Create and link questions to the quiz
         questions = [
@@ -354,3 +354,33 @@ class SetLanguageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {"success": True})
         self.assertEqual(self.client.session['selected_language'], 'chinese')
+
+
+# Tests for answering the lesson of the day
+class DailyLessonViewTests(TestCase):
+
+    def setUp(self):
+        # Set up the client
+        self.client = Client()
+    
+    @patch('datetime.datetime')
+    def test_daily_lesson_with_default_language(self, mock_datetime):
+        # Mock current day of year (let's assume day 10 for this test)
+        mock_datetime.now.return_value = timezone.datetime(2024, 12, 10)
+
+        # Calculate the day of the year (this should be 345 for Dec 10)
+        day_of_year = mock_datetime.now.return_value.timetuple().tm_yday
+        print(f"Mocked Day of Year: {day_of_year}")
+
+        # Make the request without setting a session language
+        response = self.client.get(reverse('daily_lesson'))
+
+        # Calculate expected lesson based on the mocked day of the year (10th day of the year)
+        lesson_number = (day_of_year % 7) + 1  # This should be lesson 4
+        expected_template = f'daily_lesson/lesson{lesson_number}.html'
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, expected_template)
+        self.assertIn('selected_language', response.context)
+        self.assertEqual(response.context['selected_language'], 'arabic')
