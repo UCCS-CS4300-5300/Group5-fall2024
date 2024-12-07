@@ -45,7 +45,7 @@ def index(request):
             active_quiz = None  # If no active quiz is found
 
     context = {
-        "selected_language": request.session.get("selected_language", "chinese"),  # noqa: E501
+        "selected_language": request.session.get("selected_language", "arabic"),  # noqa: E501
         "selected_difficulty": request.session.get("selected_difficulty", "Easy"),  # noqa: E501
         "selected_length": request.session.get("selected_length", 5),
         "selected_goal": request.session.get("selected_goal", "Travel"),
@@ -250,7 +250,7 @@ def generate_quiz(request):
 
         if difficulty and num_questions and goal:
             # Retrieve selected languages from session
-            source_lang = request.session.get('selected_language', 'Arabic')  # default to 'Chinese'  # noqa: E501
+            source_lang = request.session.get('selected_language', 'Arabic')  # default to 'Arabic'  # noqa: E501
             target_lang = 'English'
 
             # Generate structured output with title, description, and questions

@@ -6,8 +6,11 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header" style="background-color: #2176FF; color: white">
+                <div class="card-header" style="background-color: #2176FF; color: white; display: flex; justify-content: space-between; align-items: center;">
                     <h3>{{ selected_language }} Word of the Day:&emsp; <strong>{{ word_of_the_day }}</strong></h3>
+                    <!-- <button id="ttsButton" class="btn btn-light">
+                        <i class="bi bi-volume-up-fill" style="color: #2176FF;"></i>
+                    </button> -->
                 </div>
                 <div class="card-body">
                     {% if error %}
@@ -34,5 +37,24 @@
         </div>
     </div>
 </div>
+
+<!-- <script>
+    // Text-to-Speech
+    document.getElementById("ttsButton").addEventListener("click", function() {
+        const word = "{{ word_of_the_day }}"; // Get the word from the template context
+
+        // Check if the Web Speech API is available on browser
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(word);
+            speechSynthesis.speak(utterance);
+
+            utterance.pitch = 2;
+            utterance.rate = 1;
+        } else {
+            alert("Your browser does not support text-to-speech.");
+        }
+    });
+</script> -->
+
 
 {% endblock %}

@@ -120,6 +120,11 @@
         const languageOptions = document.querySelectorAll('.flagDropdownMenu .flagDropdownItem');
         const currentFlag = document.getElementById('currentFlag');
 
+        // check if the flag image failed to load
+        currentFlag.onerror = function() {
+            currentFlag.src = "{% static 'home/images/arabic.png' %}";
+        };
+
         // Add click event to each language option
         languageOptions.forEach(option => {
             option.addEventListener('click', function (event) {
