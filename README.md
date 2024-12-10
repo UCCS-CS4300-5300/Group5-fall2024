@@ -393,13 +393,13 @@ Listed below are all changes made to the app based on sprint.
    - Updated `settings.py` to include rest_framework in the INSTALLED_APPS section to enable Django REST Framework
    - Modified **WordOfTheDayTest** to reflect the current structure and modifications in the codebase
 
-### Word of The Day Functionality Update - Andrew Douangprachanh
+### Word of the Day Functionality Update - Andrew Douangprachanh
 
 **ADDED**
    - The word of the day is now resets daily at midnight
 
 **UPDATES**
-   - `models.py`: Created a new model called "WordOfTheDayTracker". It tracks the languages that have been generated for the word of the day for a member as well as whether they have completed the word of the day for the generated language
+   - `models.py`: Created a new model called "WordOfTheDayTracker". It tracks the languages that have been generated for the word of the day for a member as well as whether they have completed the word of the day for a language
    - `views.py`: Modified the "word_of_the_day" view to work with the new model and do tracking
    - `scheduler.py`: Added a new job that calls a function to reset the word of the day trackers everyday at midnight
    - `tasks.py`: Added a new function that goes through all the 'member' objects and resets the trackers
