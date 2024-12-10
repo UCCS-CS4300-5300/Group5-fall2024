@@ -9,14 +9,16 @@ openai.api_key = settings.OPENAI_API_KEY
 
 def generate_translation_questions(proficiency, difficulty, source_lang, target_lang, num_questions, goal):  # noqa: E501
     prompt = (
-        f"Generate {num_questions} {source_lang} words, sentences, questions, or phrases at a {difficulty} difficulty level for a user with a proficiency level of {proficiency}. "  # noqa: E501
+        f"Generate NEW {num_questions} {source_lang} words, sentences, questions, or phrases at a {difficulty} difficulty level for a user with a proficiency level of {proficiency}. "  # noqa: E501
+        f"IMPORTANT: DO NOT NUMBER THE ITEMS. THEY SHOULD APPEAR WITHOUT ANY FORM OF LEADING NUMERALS, BULLETS, OR LETTERS."  # noqa: E501
         f"These should align with the learning goal: {goal}. Ensure variety in structure, length, and complexity to cover vocabulary, grammar, and contextual understanding effectively. "  # noqa: E501
         f"Include a mix of common idioms, cultural references, and practical usage scenarios relevant to the goal."  # noqa: E501
         f"\n\n"
         f"Provide the following outputs:"
         f"\n1. **TITLE**: A witty and relevant title that reflects the goal of the set. Wrap this in <TITLE></TITLE> tags."  # noqa: E501
         f"\n2. **DESCRIPTION**: A concise explanation of what the set covers, focusing on how it meets the goal. Wrap this in <DESCRIPTION></DESCRIPTION> tags."  # noqa: E501
-        f"\n3. **ORIGINALS**: Generate each {source_lang} word, sentence, question, or phrase and wrap each in <ORIGINAL></ORIGINAL> tags. Wrap the entire collection in <ORIGINALS></ORIGINALS> tags."  # noqa: E501
+        f"\n3. **ORIGINALS**: Generate each {source_lang} word, sentence, question, or phrase and wrap each in <ORIGINAL></ORIGINAL> tags. Wrap the entire collection in <ORIGINALS></ORIGINALS> tags. DO NOT NUMBER THEM."  # noqa: E501
+        f"IMPORTANT: DO NOT NUMBER THE ITEMS. THEY SHOULD APPEAR WITHOUT ANY FORM OF LEADING NUMERALS, BULLETS, OR LETTERS."  # noqa: E501
         f"\n4. **TRANSLATIONS**: Translate each {source_lang} word, sentence, question, or phrase to {target_lang}. Wrap each translation in <TRANSLATION></TRANSLATION> tags, keeping them aligned with the corresponding <ORIGINAL> tag."  # noqa: E501
         f"\n\n"
         f"Examples of outputs to include (depending on the goal):"
@@ -26,10 +28,16 @@ def generate_translation_questions(proficiency, difficulty, source_lang, target_
         f"\n- Words that are thematically tied to the goal, including verbs, nouns, adjectives, or adverbs."  # noqa: E501
         f"\n- Greetings, goodbyes, and other similar instances."
         f"\n\n"
-        f"Ensure that the output is formatted cleanly & consistently for parsing."  # noqa: E501
+        f"Ensure that the output is formatted cleanly & consistently for parsing. QUESTIONS SHOULD NOT BE NUMBERED."  # noqa: E501
+        f"IMPORTANT: DO NOT NUMBER THE ITEMS. THEY SHOULD APPEAR WITHOUT ANY FORM OF LEADING NUMERALS, BULLETS, OR LETTERS."  # noqa: E501
     )
 
-    messages = [{"role": "user", "content": prompt}]
+    system_message = {
+        "role": "system",
+        "content": "You are a language assistant that strictly follows the user instructions, except where it conflicts with this message. Under no circumstances should you number items in any lists or output."  # noqa: E501
+    }
+
+    messages = [system_message, {"role": "user", "content": prompt}]
 
     # Get the response
     response = openai.chat.completions.create(

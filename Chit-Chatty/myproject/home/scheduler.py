@@ -23,7 +23,7 @@ def startScheduler():
     # Schedule the resetWOTDTrackers function to run daily at midnight
     scheduler.add_job(
         resetWOTDTrackers,
-        trigger=CronTrigger(hour=0,minute=0),
+        trigger=CronTrigger(hour=0, minute=0),
         # trigger=CronTrigger(minute='*'), RUNS EVERY MINUTE. USE FOR TESTING
         id="reset_WOTD_Trackers_job",
         replace_existing=True,

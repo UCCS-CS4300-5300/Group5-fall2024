@@ -78,13 +78,13 @@ class LastStreakReset(models.Model):
 
 
 # Word of the day checker (unique for each user)
-# Ensures that every language can only be generated once a day. Resets at midnight.
+# Ensures that every language can only be generated once a day. Resets at midnight.  # noqa: E501
 class WordOfTheDayTracker(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     languagesGenerated = models.TextField(blank=True, default="")
     languagesCompleted = models.TextField(blank=True, default="")
 
-    # Ensures that the languagesGenerated list values are all unique (no duplicates)
+    # Ensures that the languagesGenerated list values are all unique (no duplicates)  # noqa: E501
     def add_generated_language(self, selected_language):
 
         # Split the current languages into a list
@@ -96,12 +96,12 @@ class WordOfTheDayTracker(models.Model):
         # Append the selected language and ensure uniqueness
         generated_languages.append(selected_language)
         # Remove duplicates and sort in alphabetical order
-        unique_languages = list(set(generated_languages))  
-        unique_languages.sort() 
+        unique_languages = list(set(generated_languages))
+        unique_languages.sort()
 
         # Save the updated list back to the model
         self.languagesGenerated = ','.join(unique_languages)
         self.save()
 
     def __str__(self):
-        return f"List of words generated for member {self.member.userName}: {self.languagesGenerated}"
+        return f"List of words generated for member {self.member.userName}: {self.languagesGenerated}"  # noqa: E501

@@ -9,6 +9,7 @@ Daily midnight execution to reset the streak counter if condtns met
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def resetStreak():
     logger.info("resetStreak function triggered.")
     # Get all the members registered on the application
@@ -24,6 +25,7 @@ def resetStreak():
         member.hasCompletedQuiz = False
         member.save()
 
+
 def resetWOTDTrackers():
     logger.info("resetWOTDTrackers function triggered.")
     # Get all the members registered on the application
@@ -36,5 +38,3 @@ def resetWOTDTrackers():
         wotd_tracker.languagesGenerated = ""
         wotd_tracker.languagesCompleted = ""
         wotd_tracker.save()
-
-
