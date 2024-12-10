@@ -35,8 +35,6 @@ def index(request):
             request.session["selected_length"] = selected_length
         if selected_goal:
             request.session["selected_goal"] = selected_goal
-
-    member = get_object_or_404(Member, user=request.user)
     
     # Check if there is an active quiz in the session
     active_quiz = None
@@ -52,7 +50,7 @@ def index(request):
         "selected_length": request.session.get("selected_length", 5),
         "selected_goal": request.session.get("selected_goal", "Travel"),
         "active_quiz": active_quiz,  # Include the active quiz if it exists
-        "streakCount": member.streakCount,
+        "streakCount": get_object_or_404(Member, user=request.user).streakCount if request.user.is_authenticated else 0,
     }
 
     return render(request, "home/index.html", context)
