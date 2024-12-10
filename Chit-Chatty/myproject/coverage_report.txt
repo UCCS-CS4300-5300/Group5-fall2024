@@ -1,0 +1,58 @@
+### This is the test coverage (12/10/2024) report for ChitChatty ###
+Name                                                                                 Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------------------------------------------------
+home/__init__.py                                                                         0      0   100%   
+home/admin.py                                                                            5      0   100%   
+home/apps.py                                                                             9      2    78%   13-14
+home/decorators.py                                                                       7      0   100%   
+home/forms.py                                                                            6      0   100%   
+home/management/__init__.py                                                              0      0   100%   
+home/management/commands/__init__.py                                                     0      0   100%   
+home/migrations/0001_initial.py                                                          5      0   100%   
+home/migrations/0002_member.py                                                           6      0   100%   
+home/migrations/0003_rename_member_user.py                                               5      0   100%   
+home/migrations/0004_rename_user_member.py                                               5      0   100%   
+home/migrations/0005_member_email.py                                                     4      0   100%   
+home/migrations/0006_question.py                                                         5      0   100%   
+home/migrations/0007_remove_question_feedback_question_difficulty_and_more.py            4      0   100%   
+home/migrations/0008_remove_question_quiz.py                                             4      0   100%   
+home/migrations/0009_quiz_user.py                                                        5      0   100%   
+home/migrations/0010_quiz_questions.py                                                   4      0   100%   
+home/migrations/0011_member_currentstreakcount_member_hascompletedquiz.py                4      0   100%   
+home/migrations/0011_remove_question_difficulty.py                                       4      0   100%   
+home/migrations/0012_remove_quiz_user.py                                                 4      0   100%   
+home/migrations/0012_rename_currentstreakcount_member_streakcount.py                     4      0   100%   
+home/migrations/0013_quiz_user.py                                                        5      0   100%   
+home/migrations/0013_streakresetlog.py                                                   4      0   100%   
+home/migrations/0014_alter_quiz_user.py                                                  5      0   100%   
+home/migrations/0015_remove_quiz_user.py                                                 4      0   100%   
+home/migrations/0016_merge_0013_streakresetlog_0015_remove_quiz_user.py                  4      0   100%   
+home/migrations/0017_delete_streakresetlog_remove_member_hascompletedquiz_and_more.py    4      0   100%   
+home/migrations/0018_laststreakreset_member_hascompletedquiz_and_more.py                 4      0   100%   
+home/migrations/0019_quiz_is_completed_quiz_score.py                                     4      0   100%   
+home/migrations/0020_member_longeststreak.py                                             4      0   100%   
+home/migrations/0020_quiz_is_active_quiz_user.py                                         5      0   100%   
+home/migrations/0021_member_datejoined.py                                                5      0   100%   
+home/migrations/0022_merge_20241113_0127.py                                              4      0   100%   
+home/migrations/0023_remove_quiz_is_next_quiz_correct_count_and_more.py                  5      0   100%   
+home/migrations/0024_remove_quiz_url_quiz_difficulty_quiz_length.py                      4      0   100%   
+home/migrations/0025_wordoftheday.py                                                     5      0   100%   
+home/migrations/0026_rename_wordoftheday_wordofthedaychecker.py                          4      0   100%   
+home/migrations/0027_rename_wordofthedaychecker_wordofthedaytracker.py                   4      0   100%   
+home/migrations/0028_wordofthedaytracker_languagescompleted.py                           4      0   100%   
+home/migrations/__init__.py                                                              0      0   100%   
+home/models.py                                                                          55      6    89%   36, 48, 69, 77, 92, 107
+home/serializers.py                                                                     14      0   100%   
+home/services.py                                                                        45      0   100%   
+home/tasks.py                                                                           21      7    67%   30-40
+home/templatetags/__init__.py                                                            0      0   100%   
+home/templatetags/custom_tags.py                                                         7      0   100%   
+home/tests.py                                                                          173      0   100%   
+home/urls.py                                                                            11      0   100%   
+home/views.py                                                                          353    119    66%   27-37, 44-45, 93-94, 119, 146-153, 163-165, 169-171, 181, 185-189, 204-237, 297-300, 307-318, 324-339, 359, 406-410, 417-446, 453-477, 492-518, 523-525, 551-588, 623, 629, 645, 648, 675
+manage.py                                                                               11      2    82%   12-13
+myproject/__init__.py                                                                    0      0   100%   
+myproject/settings.py                                                                   25      1    96%   154
+myproject/urls.py                                                                        3      0   100%   
+------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                  886    137    85%
