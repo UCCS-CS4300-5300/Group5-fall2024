@@ -90,47 +90,47 @@
 
 ### List of Tests
 1. **User Registration and Login**: Tests user registration and login process.
-	Steps:
-	Registers a user with provided credentials.
-	Logs the user in and verifies successful redirection to the homepage.
+	- Steps:
+	- Registers a user with provided credentials.
+	- Logs the user in and verifies successful redirection to the homepage.
 2. **User Logout**: Tests the logout functionality.
-	Steps:
-	Logs in a user, then verifies they are logged out and redirected to the homepage.
+	- Steps:
+	- Logs in a user, then verifies they are logged out and redirected to the homepage.
 3. **User Fail-Safe**: Ensures a logged-in user is redirected to the homepage if they try to access the registration page.
-	Steps:
-	Logs in a user and tries to access the registration page.
-	Verifies they are redirected back to the homepage.
+	- Steps:
+	- Logs in a user and tries to access the registration page.
+	- Verifies they are redirected back to the homepage.
 4. **Account Details Update**: Tests updating account details (e.g., email).
-	Steps:
-	Loads the account details page.
-	Updates the email field and verifies the changes are saved and reflected on the account page.
+	- Steps:
+	- Loads the account details page.
+	- Updates the email field and verifies the changes are saved and reflected on the account page.
 5. **Quiz Generation and Completion**: Tests the generation and completion of quizzes.
-	Steps:
-	Generates a quiz with specific parameters (difficulty, number of questions).
-	Verifies the quiz is created and contains questions.
-	Completes the quiz and checks if streaks are updated and the quiz is marked as completed.
+	- Steps:
+	- Generates a quiz with specific parameters (difficulty, number of questions).
+	- Verifies the quiz is created and contains questions.
+	- Completes the quiz and checks if streaks are updated and the quiz is marked as completed.
 6. **Quiz Exit and Continuation**: Tests the quiz exit and continuation functionality.
-	Steps:
-	Exits an ongoing quiz and verifies the quiz status.
-	Verifies that the option to continue the quiz is available on the homepage.
+	- Steps:
+ 	- Exits an ongoing quiz and verifies the quiz status.
+	- Verifies that the option to continue the quiz is available on the homepage.
 7. **Streak Reset**: Tests resetting streaks for users who have or have not completed a quiz.
-	Steps:
-	Resets streaks for users who haven’t completed a quiz.
-	Verifies that streaks are reset and that users who have completed quizzes retain their streaks.
+	- Steps:
+	- Resets streaks for users who haven’t completed a quiz.
+	- Verifies that streaks are reset and that users who have completed quizzes retain their streaks.
 8. **Word of the Day**: Tests the functionality of the Word of the Day feature.
-	Steps:
-	Verifies the correct display of the Word of the Day and its translation.
-	Tests the user's ability to correctly guess the word and receive feedback.
+	- Steps:
+	- Verifies the correct display of the Word of the Day and its translation.
+	- Tests the user's ability to correctly guess the word and receive feedback.
 	Verifies the session is cleared after a correct guess.
 9. **Set Language**: Tests that the user an succesfully change the selected language in the session.
-	Steps:
-	Defines the url for the set language view after setting up a test client.
-	Simulates a successful language change with a POST request.  
+	- Steps:
+	- Defines the url for the set language view after setting up a test client.
+	- Simulates a successful language change with a POST request.  
 11. **Daily Lesson**: Tests the functionality of the Daily Lesson feature.
-	Steps:
-	Verifies the mocked day of the year (should be 345 for Dec 10).
-	Make the request without setting a session language (default to Arabic).
-	Verifies the expected lesson based on the mocked day of the year.
+	- Steps:
+	- Verifies the mocked day of the year (should be 345 for Dec 10).
+	- Make the request without setting a session language (default to Arabic).
+	- Verifies the expected lesson based on the mocked day of the year.
 	
 
 ---
