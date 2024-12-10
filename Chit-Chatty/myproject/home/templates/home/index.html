@@ -131,6 +131,14 @@
 <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
     <div class="card shadow-lg"
         style="width: 90%; padding: 10px; border: 3px solid #2176FF; border-radius: 15px; background: #ffffff;">
+        {% if user.is_authenticated %}
+            {% if streakCount > 0 %}
+                <div style="position: absolute; top: 10px; right: 10px; font-size: 18px; font-weight: bold; color: #2176FF;">
+                    Current Streak: {{streakCount}}
+                </div>
+            {% endif %}
+        {% endif %}
+
         {% if active_quiz %}
         <!-- Section for continuing an existing quiz -->
         <div class="card-body d-flex flex-column justify-content-between">
