@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-from .models import Quiz, Member, Question
+from .models import Quiz, Member, Question, WordOfTheDayTracker
 from .forms import CreateUserForm
 from .decorators import unauthenticatedUser
 from django.utils.safestring import mark_safe
@@ -36,6 +36,8 @@ def index(request):
         if selected_goal:
             request.session["selected_goal"] = selected_goal
 
+    member = get_object_or_404(Member, user=request.user)
+    
     # Check if there is an active quiz in the session
     active_quiz = None
     if "quiz_id" in request.session:
@@ -50,6 +52,7 @@ def index(request):
         "selected_length": request.session.get("selected_length", 5),
         "selected_goal": request.session.get("selected_goal", "Travel"),
         "active_quiz": active_quiz,  # Include the active quiz if it exists
+        "streakCount": member.streakCount,
     }
 
     return render(request, "home/index.html", context)
@@ -588,24 +591,45 @@ def next_question(request):
 
 
 # word of the day using openai
+@login_required(login_url='login-page')
 def word_of_the_day(request):
+    # Grab the user that sent the request
+    member = Member.objects.get(user=request.user)
+
+    # Fetch or create a WordOfTheDayTracker object for the logged in user
+    wotd_tracker, created = WordOfTheDayTracker.objects.get_or_create(member=member)
+
+    # Grab selected language with the default choice being arabic
     selected_language = request.session.get('selected_language', 'arabic').lower()  # noqa: E501
 
-    # Fetch word and translation if necessary
-    if 'word_of_the_day' not in request.session or request.session.get('language_for_word') != selected_language:  # noqa: E501
-        word_data = get_word_of_the_day(selected_language)  # noqa: E501
-        word_of_the_day = word_data.get('word_of_the_day')  # noqa: E501
-        english_translation = word_data.get('english_translation')  # noqa: E501
+    # Fetch word and translation if word for this language if it has not been generated for the user yet
+    if request.session.get('language_for_word') != selected_language or selected_language not in wotd_tracker.languagesGenerated.split(','):
+
+        # Fetch the word and translation using a helper function
+        word_data = get_word_of_the_day(selected_language)
+        word_of_the_day = word_data.get('word_of_the_day')
+        english_translation = word_data.get('english_translation') 
         print("Returned from get_word_of_the_day:", word_of_the_day, english_translation)  # noqa: E501
+        print("This is for the language: " + selected_language)
 
         if word_of_the_day:
+            # Save to the session and update the WordOfTheDayTracker model
             request.session['word_of_the_day'] = word_of_the_day  # noqa: E501
             request.session['english_translation'] = english_translation  # noqa: E501
             request.session['language_for_word'] = selected_language  # noqa: E501
-            print("Fetched word of the day:", word_of_the_day)  # noqa: E501
+            print("Fetched word of the day:", word_of_the_day)
+
+            # Add language to list of languages generated for the word of the day
+            wotd_tracker.add_generated_language(selected_language)
         else:
             return render(request, 'home/word_of_the_day.html', {  # noqa: E501
                 'error': "Could not find a word of the day."
+            })
+
+    # Check if user has already completed the WOTD for the selected language
+    if selected_language in wotd_tracker.languagesCompleted.split(','):
+        return render(request, 'home/word_of_the_day.html', {  # noqa: E501
+                'error': f"You already completed the word of the day for {selected_language}. Try again tomorrow!"
             })
 
     # Retrieve values from session
@@ -621,6 +645,12 @@ def word_of_the_day(request):
             result = mark_safe('Correct! <br>&emsp;<strong>ᕦ(ò_óˇ)ᕤ</strong>')  # noqa: E501
         else:
             result = mark_safe(f'Uh oh, the correct answer is: <strong>{english_translation}</strong> <br>Try again tomorrow <br>&emsp;<strong>ʅ（◞‿◟）ʃ</strong>')  # noqa: E501
+
+        if wotd_tracker.languagesCompleted:
+                wotd_tracker.languagesCompleted += f",{selected_language}"
+        else:
+            wotd_tracker.languagesCompleted = selected_language
+        wotd_tracker.save()
 
         # Clear session for a new word on the next visit
         for key in ['word_of_the_day', 'english_translation']:
