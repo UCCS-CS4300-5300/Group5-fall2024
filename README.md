@@ -145,6 +145,10 @@
 	```bash
  	coverage report -m
  	```
+ 4. Alternatively, you can view the latest (12/10/24) coverage report text:
+	```bash
+ 	cat coverage_report.txt
+ 	```
 
 ---
 ## App Changelog
