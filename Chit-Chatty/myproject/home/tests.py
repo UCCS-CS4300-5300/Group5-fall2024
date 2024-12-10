@@ -203,7 +203,7 @@ class QuizExitAndContinueTests(TestCase):
     def setUp(self):
         # Create a test user and log them in
         self.user = User.objects.create_user(username='TestUser', password='TestPass123')  # noqa: E501
-        self.client = Client()
+        self.member = Member.objects.create(user=self.user, streakCount=0)
         self.client.login(username='TestUser', password='TestPass123')  # noqa: E501
 
         # Create a quiz and assign it as an active session quiz
