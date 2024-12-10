@@ -131,7 +131,20 @@
 	- Verifies the mocked day of the year (should be 345 for Dec 10).
 	- Make the request without setting a session language (default to Arabic).
 	- Verifies the expected lesson based on the mocked day of the year.
-	
+
+### How to view Test Coverage
+1. Verify that the Coverage package is installed:
+	```bash
+	pip install coverage
+ 	```
+2. Run your tests while measuring code coverage:
+	```bash
+ 	coverage python manage.py test
+ 	```
+3. After the tests finish, generate a coverage report:
+	```bash
+ 	coverage report -m
+ 	```
 
 ---
 ## App Changelog
