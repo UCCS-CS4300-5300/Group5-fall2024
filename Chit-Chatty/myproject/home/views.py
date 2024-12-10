@@ -11,7 +11,7 @@ from .decorators import unauthenticatedUser
 from django.utils.safestring import mark_safe
 from .services import generate_translation_questions, get_word_of_the_day
 from rest_framework.viewsets import ModelViewSet
-from .serializers import *
+from .serializers import MemberSerializer, QuizSerializer, QuestionSerializer
 import random
 import requests
 import json
@@ -35,7 +35,7 @@ def index(request):
             request.session["selected_length"] = selected_length
         if selected_goal:
             request.session["selected_goal"] = selected_goal
-    
+
     # Check if there is an active quiz in the session
     active_quiz = None
     if "quiz_id" in request.session:
@@ -50,7 +50,7 @@ def index(request):
         "selected_length": request.session.get("selected_length", 5),
         "selected_goal": request.session.get("selected_goal", "Travel"),
         "active_quiz": active_quiz,  # Include the active quiz if it exists
-        "streakCount": get_object_or_404(Member, user=request.user).streakCount if request.user.is_authenticated else 0,
+        "streakCount": get_object_or_404(Member, user=request.user).streakCount if request.user.is_authenticated else 0,  # noqa: E501
     }
 
     return render(request, "home/index.html", context)
@@ -595,18 +595,18 @@ def word_of_the_day(request):
     member = Member.objects.get(user=request.user)
 
     # Fetch or create a WordOfTheDayTracker object for the logged in user
-    wotd_tracker, created = WordOfTheDayTracker.objects.get_or_create(member=member)
+    wotd_tracker, created = WordOfTheDayTracker.objects.get_or_create(member=member)  # noqa: E501
 
     # Grab selected language with the default choice being arabic
     selected_language = request.session.get('selected_language', 'arabic').lower()  # noqa: E501
 
-    # Fetch word and translation if word for this language if it has not been generated for the user yet
-    if request.session.get('language_for_word') != selected_language or selected_language not in wotd_tracker.languagesGenerated.split(','):
+    # Fetch word and translation if word for this language if it has not been generated for the user yet  # noqa: E501
+    if request.session.get('language_for_word') != selected_language or selected_language not in wotd_tracker.languagesGenerated.split(','):  # noqa: E501
 
         # Fetch the word and translation using a helper function
         word_data = get_word_of_the_day(selected_language)
         word_of_the_day = word_data.get('word_of_the_day')
-        english_translation = word_data.get('english_translation') 
+        english_translation = word_data.get('english_translation')
         print("Returned from get_word_of_the_day:", word_of_the_day, english_translation)  # noqa: E501
         print("This is for the language: " + selected_language)
 
@@ -617,7 +617,7 @@ def word_of_the_day(request):
             request.session['language_for_word'] = selected_language  # noqa: E501
             print("Fetched word of the day:", word_of_the_day)
 
-            # Add language to list of languages generated for the word of the day
+            # Add language to list of languages generated for the word of the day  # noqa: E501
             wotd_tracker.add_generated_language(selected_language)
         else:
             return render(request, 'home/word_of_the_day.html', {  # noqa: E501
@@ -627,7 +627,7 @@ def word_of_the_day(request):
     # Check if user has already completed the WOTD for the selected language
     if selected_language in wotd_tracker.languagesCompleted.split(','):
         return render(request, 'home/word_of_the_day.html', {  # noqa: E501
-                'error': f"You already completed the word of the day for {selected_language}. Try again tomorrow!"
+                'error': f"You already completed the word of the day for {selected_language}. Try again tomorrow!"  # noqa: E501
             })
 
     # Retrieve values from session
@@ -645,7 +645,7 @@ def word_of_the_day(request):
             result = mark_safe(f'Uh oh, the correct answer is: <strong>{english_translation}</strong> <br>Try again tomorrow <br>&emsp;<strong>ʅ（◞‿◟）ʃ</strong>')  # noqa: E501
 
         if wotd_tracker.languagesCompleted:
-                wotd_tracker.languagesCompleted += f",{selected_language}"
+            wotd_tracker.languagesCompleted += f",{selected_language}"
         else:
             wotd_tracker.languagesCompleted = selected_language
         wotd_tracker.save()
@@ -696,21 +696,26 @@ def daily_lesson(request):
 
     # to test individual templates
     # template_name = f"daily_lesson/lesson1.html"
-    
+
     return render(request, template_name, context)
-    
+
+
 '''
 REST Viewsets
 '''
+
+
 # Viewset for the Member model
 class MemberViewSet(ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
 
+
 # Viewset for the Quiz Model
 class QuizViewSet(ModelViewSet):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
+
 
 # Viewset for the Question Model
 class QuestionViewSet(ModelViewSet):

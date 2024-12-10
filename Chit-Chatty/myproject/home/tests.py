@@ -362,7 +362,7 @@ class DailyLessonViewTests(TestCase):
     def setUp(self):
         # Set up the client
         self.client = Client()
-    
+
     @patch('datetime.datetime')
     def test_daily_lesson_with_default_language(self, mock_datetime):
         # Mock current day of year (let's assume day 10 for this test)
@@ -375,7 +375,7 @@ class DailyLessonViewTests(TestCase):
         # Make the request without setting a session language
         response = self.client.get(reverse('daily_lesson'))
 
-        # Calculate expected lesson based on the mocked day of the year (10th day of the year)
+        # Calculate expected lesson based on the mocked day of the year (10th day of the year)  # noqa: E501
         lesson_number = (day_of_year % 7) + 1  # This should be lesson 4
         expected_template = f'daily_lesson/lesson{lesson_number}.html'
 

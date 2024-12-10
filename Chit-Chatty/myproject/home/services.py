@@ -10,7 +10,7 @@ openai.api_key = settings.OPENAI_API_KEY
 def generate_translation_questions(proficiency, difficulty, source_lang, target_lang, num_questions, goal):  # noqa: E501
     prompt = (
         f"Generate NEW {num_questions} {source_lang} words, sentences, questions, or phrases at a {difficulty} difficulty level for a user with a proficiency level of {proficiency}. "  # noqa: E501
-        f"IMPORTANT: DO NOT NUMBER THE ITEMS. THEY SHOULD APPEAR WITHOUT ANY FORM OF LEADING NUMERALS, BULLETS, OR LETTERS." # noqa: E501
+        f"IMPORTANT: DO NOT NUMBER THE ITEMS. THEY SHOULD APPEAR WITHOUT ANY FORM OF LEADING NUMERALS, BULLETS, OR LETTERS."  # noqa: E501
         f"These should align with the learning goal: {goal}. Ensure variety in structure, length, and complexity to cover vocabulary, grammar, and contextual understanding effectively. "  # noqa: E501
         f"Include a mix of common idioms, cultural references, and practical usage scenarios relevant to the goal."  # noqa: E501
         f"\n\n"
@@ -28,13 +28,13 @@ def generate_translation_questions(proficiency, difficulty, source_lang, target_
         f"\n- Words that are thematically tied to the goal, including verbs, nouns, adjectives, or adverbs."  # noqa: E501
         f"\n- Greetings, goodbyes, and other similar instances."
         f"\n\n"
-        f"Ensure that the output is formatted cleanly & consistently for parsing. QUESTIONS SHOULD NOT BE NUMBERED." # noqa: E501
+        f"Ensure that the output is formatted cleanly & consistently for parsing. QUESTIONS SHOULD NOT BE NUMBERED."  # noqa: E501
         f"IMPORTANT: DO NOT NUMBER THE ITEMS. THEY SHOULD APPEAR WITHOUT ANY FORM OF LEADING NUMERALS, BULLETS, OR LETTERS."  # noqa: E501
     )
 
     system_message = {
-    "role": "system",
-    "content": "You are a language assistant that strictly follows the user instructions, except where it conflicts with this message. Under no circumstances should you number items in any lists or output."
+        "role": "system",
+        "content": "You are a language assistant that strictly follows the user instructions, except where it conflicts with this message. Under no circumstances should you number items in any lists or output."  # noqa: E501
     }
 
     messages = [system_message, {"role": "user", "content": prompt}]

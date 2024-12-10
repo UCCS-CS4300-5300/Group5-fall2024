@@ -18,9 +18,9 @@ urlpatterns = [
     # Default path (Home)
     path('', views.index, name='index'),
 
-    #Used to handle all API related stuff
+    # Used to handle all API related stuff
     path('api/', include(router.urls)),
-    
+
     # Paths for the quiz
     path('quiz/', views.quiz, name='quiz'),
     path('quiz/quiz_correct/', views.quiz_correct, name='quiz_correct'),
