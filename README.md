@@ -77,8 +77,8 @@
 ### How to Test
 1. Install this Django environment's required packages:
 	```bash
-	pip install -r requirements.txt
- 	```
+   pip install -r requirements.txt
+   ```
 2. Apply all database migrations before running tests:
 	```bash
  	python manage.py migrate
@@ -126,7 +126,7 @@
 	- Steps:
 	- Defines the url for the set language view after setting up a test client.
 	- Simulates a successful language change with a POST request.  
-11. **Daily Lesson**: Tests the functionality of the Daily Lesson feature.
+10. **Daily Lesson**: Tests the functionality of the Daily Lesson feature.
 	- Steps:
 	- Verifies the mocked day of the year (should be 345 for Dec 10).
 	- Make the request without setting a session language (default to Arabic).
@@ -394,33 +394,44 @@ Listed below are all changes made to the app based on sprint.
       - Installed [Contractions](https://pypi.org/project/contractions/) library to automatically fix contractions such as you're -> you are
 
 **UPDATED**
-   - Fixed Continue Quiz Bug: Addressed the logic issues in the continue_quiz view, where the app would pull information from from past, already completed quiz that was exited once
+   - Fixed Continue Quiz Bug: Addressed the logic issues in the continue_quiz view, where the app would pull information from past, already completed quiz that was exited once
    - Resolved Spanish Flag Persistence Issue: Fixed a persistent bug where the Spanish flag failed to display correctly by renaming `Spanish.png` to `spanish.png` for consistency and proper referencing
-   - Fixed 96.11% of code smells defined by flake9
+   - Fixed 96.11% of code smells defined by flake8
 
-### Django REST Framework - Andrew Douangprachanh
+### Django REST / Word of the Day - Andrew Douangprachanh
 
 **ADDED**
    - Installed djangorestframework package and updated `requirements.txt` to include it
    - Created `serializers.py` to serialize all fields of the Member, Question, and Quiz models
    - Added viewsets for the Member, Question, and Quiz models in `views.py` to enable CRUD operations through REST APIs
    - Registered API endpoints for members, quizzes, and questions in `urls.py` using DefaultRouter
-
-**UPDATES**
-   - Updated `settings.py` to include rest_framework in the INSTALLED_APPS section to enable Django REST Framework
-   - Modified **WordOfTheDayTest** to reflect the current structure and modifications in the codebase
-
-### Word of the Day Functionality Update - Andrew Douangprachanh
-
-**ADDED**
    - The word of the day is now resets daily at midnight
 
-**UPDATES**
+**UPDATED**
+   - `settings.py` to include rest_framework in the INSTALLED_APPS section to enable Django REST Framework
+   - Modified **WordOfTheDayTest** to reflect the current structure and modifications in the codebase
    - `models.py`: Created a new model called "WordOfTheDayTracker". It tracks the languages that have been generated for the word of the day for a member as well as whether they have completed the word of the day for a language
    - `views.py`: Modified the "word_of_the_day" view to work with the new model and do tracking
    - `scheduler.py`: Added a new job that calls a function to reset the word of the day trackers everyday at midnight
-   - `tasks.py`: Added a new function that goes through all the 'member' objects and resets the trackers
+   - `tasks.py`: Added a new function that goes through all the "member" objects and resets the trackers
    - `index.html`: Streak information now appears on the homepage again
+
+### Testing & Project Management - Irving Reyes Bravo
+
+**ADDED**
+   - **User Registration and Login**: Tests user registration and login process
+   - **User Logout**: Tests the logout functionality
+   - **User Fail-Safe**: Ensures a logged-in user is redirected to the homepage if they try to access the registration page
+   - **Account Details Update**: Tests updating account details (e.g., email)
+   - **Quiz Generation and Completion**: Tests the generation and completion of quizzes
+   - **Quiz Exit and Continuation**: Tests the quiz exit and continuation functionality
+   - **Streak Reset**: Tests resetting streaks for users who have or have not completed a quiz
+   - **Word of the Day**: Tests the functionality of the Word of the Day feature
+   - **Set Language**: Tests that the user successfully changes the selected language in the session
+   - **Daily Lesson**: Tests the functionality of the Daily Lesson feature
+
+**UPDATED**
+   - Zenhub for this sprint
 
 ### Daily Lesson / UI Bug Fixing - Naomi Rodriguez
 
@@ -439,6 +450,8 @@ Listed below are all changes made to the app based on sprint.
    - Splash Screen
       - Responsive to all screen sizes
       - Stripe along the top of the screen now the same color as the splash screen
+   - default language set to Arabic for quiz generation, matching the rest of the default options
+   - Added an onerror check so that if currentFlag function fails to load, the Arabic flag will appear as default
 
 ### UI Updates / Responsiveness / README Overhaul - Christopher Romo
 
